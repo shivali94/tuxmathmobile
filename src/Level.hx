@@ -30,7 +30,8 @@ class Level extends Sprite
 		stageHeight = Lib.current.stage.stageHeight;    
 		stageWidth = Lib.current.stage.stageWidth;
 		scrollWindow = new Rectangle(0, 0, stageWidth, stageHeight);    // Initializing clipping window 
-		loadBackground();                                               // Loading Background sprite 
+		loadBackground();                                              // Loading Background sprite 
+		loadSpaceship();
 		deltaMovement = 0.02;
 		backroundScrollSpeed = 1 * deltaMovement;
 		nextUpdate = 40;				 								// try to update at 25 FPS in order to lower cpu/gpu load 
@@ -45,6 +46,12 @@ class Level extends Sprite
 		backgroundBitmapImage.scrollRect = scrollWindow;
 		addChild(backgroundBitmapImage);
 		oldtime = Lib.getTimer();                                        // Don't use in constructor else you may notice weird behaviour 
+	}
+	public function loadSpaceship()
+	{
+		var spaceship:Bitmap = new Bitmap(Assets.getBitmapData("assets/spaceship/spaceship.png"));
+		spaceship.y = (Lib.current.stage.stageHeight - spaceship.height) / 2;
+		addChild(spaceship);
 	}
 	public function scrollBackground()
 	{
