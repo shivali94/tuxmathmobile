@@ -19,6 +19,7 @@ public class Deploy{
 		// resizing image
 		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,
 			Scalr.Mode.AUTOMATIC,width,height);
+		resized = Scalr.crop(resized,width,height);
 		try{
 			File outfile = new File(saveas);
 			ImageIO.write(resized,"png",outfile);
@@ -29,12 +30,16 @@ public class Deploy{
 	} 
 	public static void main( String args[])
 	{
+		int sub_level_time= 2;
+		float delta_movement=0.02f;
+		float width;
 		if(args.length<2)
 		{
 			System.out.println("Please provide correct arguments");
 			System.exit(0);
 		}
-		resize("assets/background/background_space.png","../assets/background/background_space.png",
-			Integer.parseInt(args[0])*3,Integer.parseInt(args[1]));
+		width= (sub_level_time*60*1000)*delta_movement +Integer.parseInt(args[0]);    
+ 		resize("assets/background/background_space.png","../assets/background/background_space.png",
+			(int)width,Integer.parseInt(args[1]));
 	}
 }

@@ -19,7 +19,8 @@ class Level extends Sprite
 	private var stageHeight:Int;			// for stage height 
 	private var backgroundBitmapImage:Bitmap;  // for loading background Image 
 	private var scrollWindow:Rectangle;         // Clipping window for background Image 
-	private var oldtime:Int ;                   // Used for time based animation 
+	private var oldtime:Int ;                   // Used for time based animation
+	private var deltaMovement:Float;
 	private var backroundScrollSpeed:Float;     // background scrolling speed 
 	public function new() 
 	{
@@ -28,7 +29,8 @@ class Level extends Sprite
 		stageWidth = Lib.current.stage.stageWidth;
 		scrollWindow = new Rectangle(0, 0, stageWidth, stageHeight);    // Initializing clipping window 
 		loadBackground();                                               // Loading Background sprite 
-		backroundScrollSpeed = 0.03;
+		deltaMovement = 0.02;
+		backroundScrollSpeed = 1*deltaMovement;
 	}
 	
 	/*===================================================================================================
@@ -44,8 +46,7 @@ class Level extends Sprite
 	public function scrollBackground()
 	{
 		var diffTime:Int = Lib.getTimer() - oldtime;
-		oldtime += diffTime;
-		scrollWindow.x += (diffTime) * backroundScrollSpeed;
+		scrollWindow.x = diffTime * backroundScrollSpeed;
 		backgroundBitmapImage.scrollRect = scrollWindow;
 	}
 }
