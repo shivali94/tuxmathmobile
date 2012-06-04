@@ -21,7 +21,9 @@ class Level extends Sprite
 	private var scrollWindow:Rectangle;         // Clipping window for background Image 
 	private var oldtime:Int ;                   // Used for time based animation
 	private var deltaMovement:Float;
-	private var backroundScrollSpeed:Float;     // background scrolling speed 
+	private var backroundScrollSpeed:Float;     // background scrolling speed
+	private var nextUpdateTime:Int ;
+	private var nextUpdate:Int ;
 	public function new() 
 	{
 		super();
@@ -30,7 +32,8 @@ class Level extends Sprite
 		scrollWindow = new Rectangle(0, 0, stageWidth, stageHeight);    // Initializing clipping window 
 		loadBackground();                                               // Loading Background sprite 
 		deltaMovement = 0.02;
-		backroundScrollSpeed = 1*deltaMovement;
+		backroundScrollSpeed = 1 * deltaMovement;
+		nextUpdate = 40;				 								// try to update at 25 FPS in order to lower cpu/gpu load 
 	}
 	
 	/*===================================================================================================
@@ -46,7 +49,10 @@ class Level extends Sprite
 	public function scrollBackground()
 	{
 		var diffTime:Int = Lib.getTimer() - oldtime;
+		if (nextUpdateTime > diffTime)
+			return;
 		scrollWindow.x = diffTime * backroundScrollSpeed;
 		backgroundBitmapImage.scrollRect = scrollWindow;
+		nextUpdateTime += nextUpdate;                                    // Incrementing next screen update time 
 	}
 }

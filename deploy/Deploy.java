@@ -6,20 +6,8 @@ import java.io.File;
 
 public class Deploy{
 	
-	static void resize(String target,String saveas,int width, int height)
+	static void saveImage(String saveas, BufferedImage resized)
 	{
-		BufferedImage img = null;
-		try{
-			img= ImageIO.read(new File(target));
-		}
-		catch(Exception ex){
-			System.out.println("Unable to open file");
-		}
-
-		// resizing image
-		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,
-			Scalr.Mode.AUTOMATIC,width,height);
-		resized = Scalr.crop(resized,width,height);
 		try{
 			File outfile = new File(saveas);
 			ImageIO.write(resized,"png",outfile);
@@ -27,19 +15,55 @@ public class Deploy{
 		catch( Exception ex){
 			System.out.println("Unable to save resized Image");
 		}
-	} 
+	}
+	static BufferedImage loadImage(String target)
+	{
+		try{
+			BufferedImage image= ImageIO.read(new File(target));
+			return image;
+		}
+		catch(Exception ex){
+			System.out.println("Unable to open file");
+			return null;
+		}
+	}
+	static void resizeBackground(int res_width, int res_height)
+	{
+		float sub_level_time= 3.0f;                   // time for which background will move in minutes 
+		float delta_movement=0.02f;                   // pixel at will move in one frame for avoiding flickering. (1/20 second- persistence of vision)
+		int width;
+		int height;
+		
+		// Calculating height and width 
+		height= (int) res_height ;
+		width= (int) ((sub_level_time*60*1000)*delta_movement) +res_width;  
+		
+		BufferedImage img = loadImage("assets/background/background_space.png");    // Loading Image 
+		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,width,height);
+		resized = Scalr.crop(resized,width,height);      							// croping it 
+		saveImage("../assets/background/background_space.png",resized);   			// saving image 
+	}
+	
+	static void resizeSpaceship(int res_width, int res_height)
+	{
+		BufferedImage img = loadImage("assets/spaceship/spaceship.png");    		// Loading Image 
+		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,(int) (res_width * 0.43) ,res_height);				// Spaceship covers 43% of screen width 
+		saveImage("../assets/spaceship/spaceship.png",resized);   					// saving image 
+	}
+	
 	public static void main( String args[])
 	{
-		int sub_level_time= 2;
-		float delta_movement=0.02f;
-		float width;
+		int res_width, res_height ;
 		if(args.length<2)
 		{
 			System.out.println("Please provide correct arguments");
 			System.exit(0);
 		}
-		width= (sub_level_time*60*1000)*delta_movement +Integer.parseInt(args[0]);    
- 		resize("assets/background/background_space.png","../assets/background/background_space.png",
-			(int)width,Integer.parseInt(args[1]));
+		res_width=Integer.parseInt(args[0]);
+		res_height=Integer.parseInt(args[1]);
+		resizeBackground(res_width,res_height);
+		resizeSpaceship(res_width,res_height);
 	}
 }
