@@ -53,6 +53,14 @@ public class Deploy{
 		saveImage("../assets/spaceship/spaceship.png",resized);   					// saving image 
 	}
 	
+	static void resizeAsteroid(int res_width, int res_height)
+	{
+		BufferedImage img = loadImage("assets/asteroid/asteroid.png"); 		   		// Loading Image 
+		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,(int)(res_height/3) ,(int) (res_height/3));					// asteroids will be 1/3rd of the screen height 
+		saveImage("../assets/asteroid/asteroid.png",resized);   					// saving image 
+	}
+	
 	public static void main( String args[])
 	{
 		int res_width, res_height ;
@@ -65,5 +73,6 @@ public class Deploy{
 		res_height=Integer.parseInt(args[1]);
 		resizeBackground(res_width,res_height);
 		resizeSpaceship(res_width,res_height);
+		resizeAsteroid(res_width,res_height);
 	}
 }
