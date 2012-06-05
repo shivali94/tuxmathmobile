@@ -20,10 +20,8 @@ class Main
 		stage.align = StageAlign.TOP_LEFT;
 				var rectangle:Shape = new Shape(); // initializing the variable named rectangle
 		var temp = new Level();
+		temp.play();
 		Lib.current.addChild(temp);
-		Lib.current.addEventListener(Event.ENTER_FRAME, function(ev:Event) {
-				temp.scrollBackground();
-		});
 		
 		
 		// Code for displaying FPS on android screen
