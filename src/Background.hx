@@ -42,7 +42,7 @@ class Background extends Sprite
 	}
 	public function scrollBackground()
 	{
-		scrollWindow.x =levelInstance.diffTime * backroundScrollSpeed;
+		scrollWindow.x +=levelInstance.diffTime * backroundScrollSpeed;
 		backgroundBitmapImage.scrollRect = scrollWindow;
 	}
 	
