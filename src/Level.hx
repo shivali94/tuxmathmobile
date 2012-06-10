@@ -17,14 +17,14 @@ class Level extends Sprite
 	private var oldtime:Int;
 	public  var diffTime:Int ;                   // Used for scrolling window and animating other things
 	private var background:Background;
-	private var asteroid:Asteroid;
+	private var asteroid:AsteroidContainer;
 	
 	public function new() 
 	{
 		super();
 		background = new Background(this);             // passing my reference 
 		addChild(background);
-		asteroid = new Asteroid(this);
+		asteroid = new AsteroidContainer(this);
 		addChild(asteroid);								// Adding main asteroid sprite which will contain all asteroids 
 		asteroid.addAsteroid();
 		loadSpaceship();
