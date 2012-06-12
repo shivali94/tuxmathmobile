@@ -4,8 +4,10 @@ import nme.Assets;
 import nme.display.Bitmap;
 import nme.display.Sprite;
 import nme.events.Event;
+import nme.events.TouchEvent;
 import nme.geom.Rectangle;
 import nme.Lib;
+import nme.text.TextField;
 
 /**
  * ...
@@ -18,6 +20,7 @@ class Level extends Sprite
 	public  var diffTime:Int ;                   // Used for scrolling window and animating other things
 	private var background:Background;
 	private var asteroid:AsteroidContainer;
+	private var numButtton:NumButton;
 	
 	public function new() 
 	{
@@ -26,19 +29,25 @@ class Level extends Sprite
 		addChild(background);
 		asteroid = new AsteroidContainer(this);
 		addChild(asteroid);								// Adding main asteroid sprite which will contain all asteroids 
-		asteroid.addAsteroid();
-		loadSpaceship();
+		asteroid.addAsteroid("2+5");
+		addChild(new Spaceship());
+		numButtton = new NumButton(); 
+		numButtton.addEventListener(TouchEvent.TOUCH_BEGIN, handleNumButton);
+		addChild(numButtton);
 	}
-	public function loadSpaceship()
+	
+	// This function will be responsibe for receving and handling number buttons 
+	public function handleNumButton (ev:TouchEvent)
 	{
-		var spaceship:Bitmap = new Bitmap(Assets.getBitmapData("assets/spaceship/spaceship.png"));
-		spaceship.y = (Lib.current.stage.stageHeight - spaceship.height) / 2;
-		addChild(spaceship);
+		if (Std.is(ev.target,TextField))
+			trace("Button pressed is:" + ev.target.parent.value);
+		else
+			trace("Button pressed is:" + ev.target.value);
 	}
+	
 	public function play()
 	{
-		oldtime = Lib.getTimer();                                        // Don't use in constructor else you may notice weird behaviour 
-		
+		oldtime = Lib.getTimer();                                        // Don't use in constructor else you may notice weird behaviour 	
 		addEventListener(Event.ENTER_FRAME, animate);
 	}
 	

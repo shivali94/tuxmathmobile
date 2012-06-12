@@ -15,41 +15,44 @@ import nme.text.TextFieldAutoSize;
 class Asteroid extends Sprite {
 	private var asteroidBitmap:Bitmap;
 	public var text:TextField;
+	public var active:Bool;									// Indicate whether asteroid is active or not 
 	var answer:Int;
+	private static var text_format:TextFormat;
 	public function new ()
 	{
 		super();
 		asteroidBitmap = new Bitmap(Assets.getBitmapData("assets/asteroid/asteroid.png"));
 		addChild(asteroidBitmap);
 		text = new TextField();
-		var text_format = new TextFormat('Arial', 30, 0xFFFFFF, true);
+		text_format = new TextFormat('Arial', 30, 0xFFFFFF, true);
 		text_format.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = text_format;
 		text.selectable = false;
 		text.autoSize = TextFieldAutoSize.CENTER;
 		addChild(text);
 	}
-	public function initiaize(displayText:String)
+	public function initiaizeText(displayText:String)
 	{
 		text.text = displayText;
-		var textSize:Float = asteroidBitmap.width * 0.6;
-		var format = text.getTextFormat();
+		var textSize:Float = asteroidBitmap.width * 0.5;
 		if (text.textWidth > textSize)
 			while (text.textWidth > textSize)
 			{
-				format.size--;
-				text.setTextFormat(format);
+				text_format.size--;
+				text.setTextFormat(text_format);
 			}
 		else
 			while (text.textWidth < textSize)
 			{
-				format.size++;
-				text.setTextFormat(format);
+				text_format.size++;
+				text.setTextFormat(text_format);
 			}
 		text.y = (asteroidBitmap.height - text.textHeight) / 2;
 		text.x = (asteroidBitmap.width - text.textWidth) / 2;
 	}
 }
+
+
 
 class AsteroidContainer  extends Sprite 
 {
@@ -69,13 +72,13 @@ class AsteroidContainer  extends Sprite
 		adjustDeltaMovement = (Lib.current.stage.stageWidth * 2 / 3) / 320 * deltaMovement;
 		asteroid = new Asteroid();
 	}
-	public function addAsteroid()
+	public function addAsteroid(text:String)
 	{
 		asteroid.x = Lib.current.stage.stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
 		asteroid.y = 130;
-		asteroid.initiaize("Deepak");
+		asteroid.initiaizeText(text);
 		addChild(asteroid);
-		asteroidSpeed = deltaMovement * 1.2;
+		asteroidSpeed = deltaMovement * 1.1;
 	}
 	public function handleAsteroid()						// This function will be responsible for updating and destroying asteroid 
 	{
