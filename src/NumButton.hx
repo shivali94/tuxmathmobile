@@ -64,12 +64,11 @@ class Button extends Sprite
 	{
 		super();
 		shape = new Shape();
-		Constant.initialize() ;            // TODO to be removed 
 		value = val;
 		text = new TextField();
 		text.defaultTextFormat = Constant.text_format;
 		text.selectable = false;
-		text.autoSize = TextFieldAutoSize.CENTER;
+		//text.autoSize = TextFieldAutoSize.CENTER;
 		
 		/*
 		 * for flash below line will be text.x = (Constant.width - text.textWidth) / 2 ;
@@ -102,7 +101,7 @@ class Button extends Sprite
 	}
 	public function touchBegin()
 	{
-		shape.graphics.clear();
+		//shape.graphics.clear();
 		shape.graphics.beginFill(0x96540C);
 		shape.alpha = 0.3;
 		shape.graphics.drawRect(0, 0, Constant.width, Constant.height);
@@ -112,7 +111,7 @@ class Button extends Sprite
 	}
 	public function touchEnd()
 	{
-		shape.graphics.clear();
+		//shape.graphics.clear();
 		shape.graphics.beginFill(0x2068C7);
 		shape.alpha = 0.3;
 		shape.graphics.drawRect(0, 0, Constant.width, Constant.height);

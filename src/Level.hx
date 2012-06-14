@@ -8,6 +8,8 @@ import nme.events.TouchEvent;
 import nme.geom.Rectangle;
 import nme.Lib;
 import nme.text.TextField;
+import nme.utils.Timer;
+import nme.events.TimerEvent;
 
 /**
  * ...
@@ -21,28 +23,40 @@ class Level extends Sprite
 	private var background:Background;
 	private var asteroid:AsteroidContainer;
 	private var numButtton:NumButton;
-	
+	public var laserValue:Int;
+	private var timer:Timer;
 	public function new() 
 	{
 		super();
+		laserValue = 0;
 		background = new Background(this);             // passing my reference 
 		addChild(background);
 		asteroid = new AsteroidContainer(this);
 		addChild(asteroid);								// Adding main asteroid sprite which will contain all asteroids 
-		asteroid.addAsteroid("2+5");
+		asteroid.addAsteroid(2, 5);
+		timer = new Timer(12000,10);
+		timer.addEventListener(TimerEvent.TIMER,generateAsteroid);
+		timer.start();
 		addChild(new Spaceship());
 		numButtton = new NumButton(); 
 		numButtton.addEventListener(TouchEvent.TOUCH_BEGIN, handleNumButton);
 		addChild(numButtton);
 	}
-	
 	// This function will be responsibe for receving and handling number buttons 
 	public function handleNumButton (ev:TouchEvent)
 	{
 		if (Std.is(ev.target,TextField))
-			trace("Button pressed is:" + ev.target.parent.value);
+			laserValue = laserValue * 10 + ev.target.parent.value;
 		else
-			trace("Button pressed is:" + ev.target.value);
+			laserValue = laserValue * 10 + ev.target.value;
+		asteroid.attackAsteroid();
+		if (laserValue > 10)
+			laserValue = 0;							//Reseting Layer value
+	}
+	
+	public function generateAsteroid(ev:TimerEvent)
+	{
+		asteroid.addAsteroid(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10));
 	}
 	
 	public function play()

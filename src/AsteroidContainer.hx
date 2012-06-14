@@ -16,7 +16,7 @@ class Asteroid extends Sprite {
 	private var asteroidBitmap:Bitmap;
 	public var text:TextField;
 	public var active:Bool;									// Indicate whether asteroid is active or not 
-	var answer:Int;
+	public var answer:Int;
 	private static var text_format:TextFormat;
 	public function new ()
 	{
@@ -30,6 +30,7 @@ class Asteroid extends Sprite {
 		text.selectable = false;
 		text.autoSize = TextFieldAutoSize.CENTER;
 		addChild(text);
+		active = false;										// Inactive by default
 	}
 	public function initiaizeText(displayText:String)
 	{
@@ -56,7 +57,7 @@ class Asteroid extends Sprite {
 
 class AsteroidContainer  extends Sprite 
 {
-	var asteroid:Asteroid;
+	var asteroids:Array<Asteroid>;
 	var deltaMovement:Float;
 	// adjustment factor for deltaMovement to that asteroid should cover same distance irrespective of screen resolution 
 	// taking 480X320 as reference (2/3)*480= 320.Maximum time is 16 sec 
@@ -70,19 +71,51 @@ class AsteroidContainer  extends Sprite
 		//Initializing delta movement 
 		deltaMovement = 0.02;
 		adjustDeltaMovement = (Lib.current.stage.stageWidth * 2 / 3) / 320 * deltaMovement;
-		asteroid = new Asteroid();
+		asteroids = new Array<Asteroid>();
+		for (i in 0...3)
+		{
+			var temp = new Asteroid();
+			asteroids.push(temp);
+		}
 	}
-	public function addAsteroid(text:String)
+	public function addAsteroid(val1:Int,val2:Int )
 	{
-		asteroid.x = Lib.current.stage.stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
-		asteroid.y = 130;
-		asteroid.initiaizeText(text);
-		addChild(asteroid);
-		asteroidSpeed = deltaMovement * 1.1;
+		for (asteroid in asteroids)
+		{
+			if (asteroid.active == true)
+				continue;
+			asteroid.x = Lib.current.stage.stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
+			asteroid.y = 130;
+			asteroid.initiaizeText(val1 + "+" + val2);
+			asteroid.answer = val1 + val2;
+			addChild(asteroid);
+			asteroidSpeed = deltaMovement * 1.1;
+			asteroid.active = true;
+			break;
+		}
+	}
+	public function attackAsteroid()
+	{
+		for (asteroid in asteroids)
+		{
+			if (asteroid.active == false)
+				continue;
+			if (asteroid.answer == level.laserValue)
+			{
+				removeChild(asteroid);
+				asteroid.active = false;
+				level.laserValue = 0;										// Reseting value to zero in case if answer in single digit
+			}
+		}
 	}
 	public function handleAsteroid()						// This function will be responsible for updating and destroying asteroid 
 	{
-		asteroid.x -= level.diffTime*adjustDeltaMovement;
+		for (asteroid in asteroids)
+		{
+			if (asteroid.active == false)
+				continue;
+			asteroid.x -= level.diffTime * adjustDeltaMovement;
+		}
 	}
 	
 }
