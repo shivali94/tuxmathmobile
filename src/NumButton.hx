@@ -32,14 +32,16 @@ class Constant
 		border = cast ((Lib.current.stage.stageHeight - height * 5) / 6);
 		consoleButton = Assets.getSound("assets/sounds/tock.wav");
 		
-		// Seting size of content of buttons 
+		// Setting size of content of buttons 
 		var text = new TextField();
 		text_format = new TextFormat('Arial', 30, 0xFFFFFF, true);
-		text_format.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = text_format;
 		text.text = "8";
+		text_format.leftMargin = 0;
+		text_format.rightMargin = 0;
 		var textSize:Float = height ;                         //  Will cover 100% of button height
 															  // TODO check it later if there is some problem in text problem at higher resolution
+		// Setting size of text 
 		if (text.textHeight > textSize)
 			while (text.textHeight > textSize)
 			{
@@ -68,17 +70,10 @@ class Button extends Sprite
 		text = new TextField();
 		text.defaultTextFormat = Constant.text_format;
 		text.selectable = false;
-		//text.autoSize = TextFieldAutoSize.CENTER;
-		
-		/*
-		 * for flash below line will be text.x = (Constant.width - text.textWidth) / 2 ;
-		 * but for android it is behaving a bit different. I still have to check its behaviour in IOS
-		 */
-		text.x = (Constant.width - text.textWidth) / 2 - Constant.width;
-		//text.y = (Constant.height - text.textHeight) / 2;      // TODO no need to do this as it is automatically centered                
-		text.text = value + "";
-		touchEnd();
-		
+		text.text = value + "";          // Setting value make sure you do that before calculating x and y co-orfinate of it.
+		text.x = (Constant.width - text.textWidth) / 2;
+		//text.y = (Constant.height - text.textHeight) / 2;      // TODO no need to do this as it is automatically centered while ajusting height by margin               
+		touchEnd();	
 		addEventListener(TouchEvent.TOUCH_BEGIN,function(ev:TouchEvent){
 			touchBegin();
 			Constant.consoleButton.play();
@@ -101,7 +96,7 @@ class Button extends Sprite
 	}
 	public function touchBegin()
 	{
-		//shape.graphics.clear();
+		shape.graphics.clear();
 		shape.graphics.beginFill(0x96540C);
 		shape.alpha = 0.3;
 		shape.graphics.drawRect(0, 0, Constant.width, Constant.height);
@@ -111,7 +106,7 @@ class Button extends Sprite
 	}
 	public function touchEnd()
 	{
-		//shape.graphics.clear();
+		shape.graphics.clear();
 		shape.graphics.beginFill(0x2068C7);
 		shape.alpha = 0.3;
 		shape.graphics.drawRect(0, 0, Constant.width, Constant.height);
@@ -121,11 +116,8 @@ class Button extends Sprite
 	}
 }
 
-
-
 class NumButton extends Sprite 
 {
-
 	public function new() 
 	{
 		super();

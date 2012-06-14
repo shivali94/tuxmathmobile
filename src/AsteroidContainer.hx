@@ -25,10 +25,10 @@ class Asteroid extends Sprite {
 		addChild(asteroidBitmap);
 		text = new TextField();
 		text_format = new TextFormat('Arial', 30, 0xFFFFFF, true);
-		text_format.align = TextFormatAlign.CENTER;
+		//text_format.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = text_format;
 		text.selectable = false;
-		text.autoSize = TextFieldAutoSize.CENTER;
+		//text.autoSize = TextFieldAutoSize.CENTER;
 		addChild(text);
 		active = false;										// Inactive by default
 	}
