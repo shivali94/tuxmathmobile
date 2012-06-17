@@ -70,13 +70,21 @@ class AsteroidContainer  extends Sprite
 		deltaMovement = 0.02;
 		adjustDeltaMovement = (Lib.current.stage.stageWidth * 2 / 3) / 320 * deltaMovement;
 		asteroids = new Array<Asteroid>();
+		 // Adding three asteroids 
 		for (i in 0...3)
 		{
 			var temp = new Asteroid();
 			asteroids.push(temp);
 		}
 	}
-	public function addAsteroid(val1:Int,val2:Int )
+	
+	// This function will be used to set speed of asteroid based on game level.
+	public function setSpeed(speed:Int)
+	{
+		asteroidSpeed = adjustDeltaMovement * speed; //Adjusting speed of asteroid according to level. Don't manipulate adjustDeltaMovement
+	}
+	// Function for adding asteroids
+	public function addAsteroid(val1:Int,val2:Int, operation:ArithmeticOperation )
 	{
 		for (asteroid in asteroids)
 		{
@@ -84,8 +92,17 @@ class AsteroidContainer  extends Sprite
 				continue;
 			asteroid.x = Lib.current.stage.stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
 			asteroid.y = 130;
-			asteroid.initiaizeText(val1 + "+" + val2);
-			asteroid.answer = val1 + val2;
+			switch(operation)
+			{
+				case sum:				asteroid.answer = val1 + val2;
+										asteroid.initiaizeText(val1 + "+" + val2);
+				case multiplication :	asteroid.answer = val1 * val2;
+										asteroid.initiaizeText(val1 + "X" + val2);
+				case division:			asteroid.answer = cast val1 / val2;
+										asteroid.initiaizeText(val1 + "÷" + val2);
+				case subtraction :		asteroid.answer = val1 - val2;
+										asteroid.initiaizeText(val1 + "-" + val2);
+			}
 			addChild(asteroid);
 			asteroidSpeed = deltaMovement * 1.1;
 			asteroid.active = true;
@@ -107,13 +124,13 @@ class AsteroidContainer  extends Sprite
 		}
 		return false;
 	}
-	public function handleAsteroid()						// This function will be responsible for updating and destroying asteroid 
+	public function handleAsteroid()						// This function will be responsible for updating  asteroid 
 	{
 		for (asteroid in asteroids)
 		{
 			if (asteroid.active == false)
 				continue;
-			asteroid.x -= level.diffTime * adjustDeltaMovement;
+			asteroid.x -= level.diffTime * asteroidSpeed;
 		}
 	}
 	

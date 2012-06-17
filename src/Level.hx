@@ -34,7 +34,6 @@ class Level extends Sprite
 		addChild(background);
 		asteroid = new AsteroidContainer(this);
 		addChild(asteroid);								// Adding main asteroid sprite which will contain all asteroids 
-		asteroid.addAsteroid(2, 5);
 		timer = new Timer(12000,10);
 		timer.addEventListener(TimerEvent.TIMER,generateAsteroid);
 		timer.start();
@@ -60,7 +59,7 @@ class Level extends Sprite
 	
 	public function generateAsteroid(ev:TimerEvent)
 	{
-		asteroid.addAsteroid(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10));
+		asteroid.addAsteroid(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), ArithmeticOperation.sum);
 	}
 	
 	public function play()
