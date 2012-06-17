@@ -1,0 +1,9 @@
+1. There will be 9 levels in the game.
+2. Every level will have 10 sublevel.
+
+Score distribution in every Sublevel
+		Destroyed Asteroid 	- 1250 points
+		Player Speed 		- 500 points
+		Accuracy 			- 250 points
+		
+	Total score - 2000 points

@@ -10,6 +10,7 @@ import nme.Lib;
 import nme.text.TextField;
 import nme.utils.Timer;
 import nme.events.TimerEvent;
+import nme.events.MouseEvent;
 
 /**
  * ...
@@ -22,7 +23,7 @@ class Level extends Sprite
 	public  var diffTime:Int ;                   // Used for scrolling window and animating other things
 	private var background:Background;
 	private var asteroid:AsteroidContainer;
-	private var numButtton:NumButton;
+	private var numButtton:Console;					// Used for handling number button will will also be used for updating console screen 
 	public var laserValue:Int;
 	private var timer:Timer;
 	public function new() 
@@ -38,20 +39,23 @@ class Level extends Sprite
 		timer.addEventListener(TimerEvent.TIMER,generateAsteroid);
 		timer.start();
 		addChild(new Spaceship());
-		numButtton = new NumButton(); 
-		numButtton.addEventListener(TouchEvent.TOUCH_BEGIN, handleNumButton);
+		numButtton = new Console(); 
+		//numButtton.addEventListener(TouchEvent.TOUCH_BEGIN, handleNumButton);
+		numButtton.addEventListener(MouseEvent.MOUSE_DOWN, handleNumButton);
 		addChild(numButtton);
 	}
 	// This function will be responsibe for receving and handling number buttons 
-	public function handleNumButton (ev:TouchEvent)
+	public function handleNumButton (ev:Event)
 	{
 		if (Std.is(ev.target,TextField))
 			laserValue = laserValue * 10 + ev.target.parent.value;
 		else
 			laserValue = laserValue * 10 + ev.target.value;
-		asteroid.attackAsteroid();
+		if (asteroid.attackAsteroid() == true)
+			laserValue = 0;
 		if (laserValue > 10)
-			laserValue = 0;							//Reseting Layer value
+			laserValue = 0;							//Reseting Laser value
+		numButtton.updateConsoleScreen("0" + laserValue);
 	}
 	
 	public function generateAsteroid(ev:TimerEvent)

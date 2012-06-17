@@ -53,14 +53,12 @@ class Asteroid extends Sprite {
 	}
 }
 
-
-
 class AsteroidContainer  extends Sprite 
 {
 	var asteroids:Array<Asteroid>;
 	var deltaMovement:Float;
 	// adjustment factor for deltaMovement to that asteroid should cover same distance irrespective of screen resolution 
-	// taking 480X320 as reference (2/3)*480= 320.Maximum time is 16 sec 
+	// taking 480X320 as reference (2/3)*480= 320.Maximum time is 15 sec - Time for srolling across the screen.
 	var adjustDeltaMovement:Float;               
 	var level:Level; 
 	var asteroidSpeed:Float;
@@ -94,7 +92,7 @@ class AsteroidContainer  extends Sprite
 			break;
 		}
 	}
-	public function attackAsteroid()
+	public function attackAsteroid():Bool
 	{
 		for (asteroid in asteroids)
 		{
@@ -104,9 +102,10 @@ class AsteroidContainer  extends Sprite
 			{
 				removeChild(asteroid);
 				asteroid.active = false;
-				level.laserValue = 0;										// Reseting value to zero in case if answer in single digit
+				return true;
 			}
 		}
+		return false;
 	}
 	public function handleAsteroid()						// This function will be responsible for updating and destroying asteroid 
 	{
