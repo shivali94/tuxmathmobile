@@ -3,6 +3,7 @@ import nme.display.Bitmap;
 import nme.display.Sprite;
 import nme.Assets;
 import nme.Lib;
+import nme.media.Sound;
 import nme.text.TextField;
 import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
@@ -62,10 +63,13 @@ class AsteroidContainer  extends Sprite
 	var adjustDeltaMovement:Float;               
 	var level:Level; 
 	var asteroidSpeed:Float;
+	var asteroid_destruction:Sound;
 	public function new(level_instance:Level) 
 	{
 		super();
 		this.level = level_instance;
+		//Loading asteroid destruction sound
+		asteroid_destruction = Assets.getSound("assets/sounds/AsteroidExplosion.wav");
 		//Initializing delta movement 
 		deltaMovement = 0.02;
 		adjustDeltaMovement = (Lib.current.stage.stageWidth * 2 / 3) / 320 * deltaMovement;
@@ -119,18 +123,26 @@ class AsteroidContainer  extends Sprite
 			{
 				removeChild(asteroid);
 				asteroid.active = false;
+				asteroid_destruction.play();
 				return true;
 			}
 		}
 		return false;
 	}
-	public function handleAsteroid()						// This function will be responsible for updating  asteroid 
+	static var asteroidLimit:Int = cast Lib.current.stage.stageWidth / 3; 
+	public function handleAsteroid()						// This function will be responsible for updating  asteroid and autodestruction
 	{
 		for (asteroid in asteroids)
 		{
 			if (asteroid.active == false)
 				continue;
 			asteroid.x -= level.diffTime * asteroidSpeed;
+			if (asteroid.x < asteroidLimit)
+			{
+				asteroid.active = false;
+				removeChild(asteroid);
+				asteroid_destruction.play();
+			}
 		}
 	}
 	
