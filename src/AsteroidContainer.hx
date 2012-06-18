@@ -83,10 +83,11 @@ class AsteroidContainer  extends Sprite
 	}
 	
 	// This function will be used to set speed of asteroid based on game level.
-	public function setSpeed(speed:Int)
+	public function setAsteroidSpeed(speed:Float)
 	{
 		asteroidSpeed = adjustDeltaMovement * speed; //Adjusting speed of asteroid according to level. Don't manipulate adjustDeltaMovement
 	}
+	
 	// Function for adding asteroids
 	public function addAsteroid(val1:Int,val2:Int, operation:ArithmeticOperation )
 	{
@@ -108,11 +109,11 @@ class AsteroidContainer  extends Sprite
 										asteroid.initiaizeText(val1 + "-" + val2);
 			}
 			addChild(asteroid);
-			asteroidSpeed = deltaMovement * 1.1;
 			asteroid.active = true;
 			break;
 		}
 	}
+	
 	public function attackAsteroid():Bool
 	{
 		for (asteroid in asteroids)
@@ -129,6 +130,7 @@ class AsteroidContainer  extends Sprite
 		}
 		return false;
 	}
+	
 	static var asteroidLimit:Int = cast Lib.current.stage.stageWidth / 3; 
 	public function handleAsteroid()						// This function will be responsible for updating  asteroid and autodestruction
 	{

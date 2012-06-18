@@ -20,6 +20,7 @@ class Main
 		stage.align = StageAlign.TOP_LEFT;
 		var rectangle:Shape = new Shape(); // initializing the variable named rectangles
 		var temp = new Level();
+		temp.initialize();
 		temp.play();
 		Lib.current.addChild(temp);
 		
