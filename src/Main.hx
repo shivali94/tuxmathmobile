@@ -3,6 +3,7 @@ package ;
 import nme.display.Shape;
 import nme.display.StageAlign;
 import nme.display.StageScaleMode;
+import nme.events.Event;
 import nme.Lib;
 import nme.events.MouseEvent;
 import nme.display.FPS;
@@ -22,6 +23,10 @@ class Main
 		var temp = new Level();
 		temp.initialize();
 		temp.play();
+		temp.addEventListener("Level Complete", function(ev:Event) {
+			Lib.current.removeChild(temp);
+			trace("Level completes");
+		});
 		Lib.current.addChild(temp);
 		
 		
@@ -30,9 +35,9 @@ class Main
 		rectangle.graphics.drawRect(100,0, 80,40); // (x spacing, y spacing, width, height)
 		rectangle.graphics.endFill(); // not always needed but I like to put it in to end the fill
 		Lib.current.addChild(rectangle); // adds the rectangle to the stage
-		var temp = new FPS();
-		temp.x = 100;
-		Lib.current.addChild(temp);
+		var tempfps = new FPS();
+		tempfps.x = 100;
+		Lib.current.addChild(tempfps);
 	}
 	
 }
