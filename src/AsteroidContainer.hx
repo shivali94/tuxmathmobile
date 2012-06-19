@@ -32,11 +32,10 @@ class Asteroid extends Sprite {
 		//text.autoSize = TextFieldAutoSize.CENTER;
 		addChild(text);
 		active = false;										// Inactive by default
-	}
-	public function initiaizeText(displayText:String)
-	{
-		text.text = displayText;
-		var textSize:Float = asteroidBitmap.width * 0.5;
+		
+		//Setting size
+		text.text = "00+00=00";
+		var textSize:Float = asteroidBitmap.width * 0.7;
 		if (text.textWidth > textSize)
 			while (text.textWidth > textSize)
 			{
@@ -49,6 +48,11 @@ class Asteroid extends Sprite {
 				text_format.size++;
 				text.setTextFormat(text_format);
 			}
+	}
+	public function initializeText(displayText:String)
+	{
+		text.text = displayText;
+		text.setTextFormat(text_format);
 		text.y = (asteroidBitmap.height - text.textHeight) / 2;
 		text.x = (asteroidBitmap.width - text.textWidth) / 2;
 	}
@@ -89,7 +93,7 @@ class AsteroidContainer  extends Sprite
 	}
 	
 	// Function for adding asteroids
-	public function addAsteroid(val1:Int,val2:Int, operation:ArithmeticOperation )
+	public function addAsteroid(param:Question)
 	{
 		for (asteroid in asteroids)
 		{
@@ -97,16 +101,34 @@ class AsteroidContainer  extends Sprite
 				continue;
 			asteroid.x = Lib.current.stage.stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
 			asteroid.y = 130;
-			switch(operation)
+			if (param.missing == false)
 			{
-				case sum:				asteroid.answer = val1 + val2;
-										asteroid.initiaizeText(val1 + "+" + val2);
-				case multiplication :	asteroid.answer = val1 * val2;
-										asteroid.initiaizeText(val1 + "X" + val2);
-				case division:			asteroid.answer = cast val1 / val2;
-										asteroid.initiaizeText(val1 + "÷" + val2);
-				case subtraction :		asteroid.answer = val1 - val2;
-										asteroid.initiaizeText(val1 + "-" + val2);
+				switch(param.operation)
+				{
+					case sum:				asteroid.answer = param.operand1 + param.operand2;
+											asteroid.initializeText(param.operand1 + "+" + param.operand2);
+					case multiplication :	asteroid.answer = param.operand1 * param.operand2;
+											asteroid.initializeText(param.operand1 + "X" + param.operand2);
+					case division:			asteroid.answer = cast param.operand1 / param.operand2;
+											asteroid.initializeText(param.operand1 + "÷" + param.operand2);
+					case subtraction :		asteroid.answer = param.operand1 - param.operand2;
+											asteroid.initializeText(param.operand1 + "-" + param.operand2);
+				}
+			}
+			else									// If missing is true 
+			{
+				asteroid.answer = param.operand2;    // Same for all case 
+				switch(param.operation)
+				{
+					case sum:	
+											asteroid.initializeText(param.operand1 + "+ ? = " + (param.operand1 + param.operand2));
+					case multiplication :	
+											asteroid.initializeText(param.operand1 + "X ? = " + (param.operand1 * param.operand2));
+					case division:			
+											asteroid.initializeText(param.operand1 + "÷ ? = " + cast(Int)(param.operand1 / param.operand2));
+					case subtraction :		
+											asteroid.initializeText(param.operand1 + "- ? = " + (param.operand1 - param.operand2));
+				}
 			}
 			addChild(asteroid);
 			asteroid.active = true;

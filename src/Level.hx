@@ -20,7 +20,7 @@ import nme.events.MouseEvent;
 class Level extends Sprite
 {
 	private var oldtime:Int;
-	public  var diffTime:Int ;                   // Used for scrolling window and animating other things
+	public  var diffTime:Int ;                   // Used for scrolling window and animating other things and it is shared with other class
 	private var background:Background;
 	private var asteroid:AsteroidContainer;
 	private var numButtton:Console;					// Used for handling number button will will also be used for updating console screen 
@@ -28,10 +28,12 @@ class Level extends Sprite
 	private var asteroid_timer:Timer;
 	static  var level_time:Int=120000;						// Level time 
 	public  var level_timer:Timer;							// Timer for automatically end level;
+	private var question_instance:GenerateQuestion;
 	public function new() 
 	{
 		super();
 		laserValue = 0;
+		question_instance = new GenerateQuestion();
 		// This timer will be responsible for stoping a game level. Reset - initialize, start - play
 		level_timer = new Timer(level_time,1); 
 		level_timer.addEventListener(TimerEvent.TIMER, stop);
@@ -52,7 +54,8 @@ class Level extends Sprite
 		level_timer.reset();
 		asteroid.setAsteroidSpeed(1);
 		asteroid_timer = new Timer(6000,10);
-		asteroid_timer.addEventListener(TimerEvent.TIMER,generateAsteroid);
+		asteroid_timer.addEventListener(TimerEvent.TIMER, generateAsteroid);
+		question_instance.setQuestions(1, 6);										//Setting Level and Sublevel
 	}
 	
 	// This function will be responsibe for receving and handling number buttons 
@@ -71,7 +74,7 @@ class Level extends Sprite
 	
 	public function generateAsteroid(ev:TimerEvent)
 	{
-		asteroid.addAsteroid(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), ArithmeticOperation.sum);
+		asteroid.addAsteroid(question_instance.newQuestion());
 	}
 	
 	// Level will start when this function is called 
