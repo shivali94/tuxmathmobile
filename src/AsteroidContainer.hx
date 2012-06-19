@@ -69,10 +69,12 @@ class AsteroidContainer  extends Sprite
 	var asteroidSpeed:Float;
 	var asteroid_destruction:Sound;
 	var asteroidLimit:Int; 
+	var stageWidth:Int;
 	public function new(level_instance:Level) 
 	{
 		super();
 		this.level = level_instance;
+		stageWidth = Lib.current.stage.stageWidth;
 		//Loading asteroid destruction sound
 		asteroid_destruction = Assets.getSound("assets/sounds/AsteroidExplosion.wav");
 		//Initializing delta movement 
@@ -85,7 +87,7 @@ class AsteroidContainer  extends Sprite
 			var temp = new Asteroid();
 			asteroids.push(temp);
 		}
-		asteroidLimit = cast Lib.current.stage.stageWidth / 3; 
+		asteroidLimit = cast stageWidth / 3; 
 	}
 	
 	// This function will be used to set speed of asteroid based on game level.
@@ -101,7 +103,7 @@ class AsteroidContainer  extends Sprite
 		{
 			if (asteroid.active == true)
 				continue;
-			asteroid.x = Lib.current.stage.stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
+			asteroid.x = stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
 			asteroid.y = 130;
 			if (param.missing == false)
 			{
@@ -139,7 +141,7 @@ class AsteroidContainer  extends Sprite
 		}
 	}
 	
-	public function attackAsteroid():Bool
+	public function attackAsteroid()
 	{
 		for (asteroid in asteroids)
 		{
@@ -150,10 +152,14 @@ class AsteroidContainer  extends Sprite
 				removeChild(asteroid);
 				asteroid.active = false;
 				asteroid_destruction.play();
-				return true;
+				var score = asteroid.x / stageWidth / 0.75;			// Player will get full score in speed if he answer question 
+																	// within 25% of the total time 
+				if (score > 1.0)									// Maximum score is one 
+					score = 1.0;
+				return {result:true,score:score};
 			}
 		}
-		return false;
+		return {result:false,score:0.0};
 	}
 	
 	public function handleAsteroid()						// This function will be responsible for updating  asteroid and autodestruction

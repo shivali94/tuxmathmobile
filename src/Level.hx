@@ -16,10 +16,22 @@ import nme.events.MouseEvent;
  * ...
  * @author Deepak Aggarwal
  */
-class LevelSpec {
-	var total_question_answered:Int;
-	var wrong_attempts:Int;
-	var user_speed:Float;                //  For calculating player speed its value is between 0 to total_no_question 
+class LevelStat {
+	public var total_question_answered:Int;
+	public var wrong_attempts:Int;
+	public var player_speed:Float;                //  For calculating player speed its value is between 0 to total_no_question
+	public function new()
+	{
+		total_question_answered = 0;
+		wrong_attempts = 0;
+		player_speed = 0;
+	}
+	public function reset()
+	{
+		total_question_answered = 0;
+		wrong_attempts = 0;
+		player_speed = 0;
+	}
 }
 
 class Level extends Sprite
@@ -35,6 +47,7 @@ class Level extends Sprite
 	public  var level_timer:Timer;							// Timer for automatically end level;
 	private var question_instance:GenerateQuestion;
 	private static var total_questions:Int = 20;			// Total number of question in subLevel;
+	var stats:LevelStat;                                    // Used to store result of a sublevel 
 	public function new() 
 	{
 		super();
@@ -48,16 +61,18 @@ class Level extends Sprite
 		asteroid = new AsteroidContainer(this);
 		addChild(asteroid);								// Adding main asteroid sprite which will contain all asteroids 
 		addChild(new Spaceship());
-		numButtton = new Console(); 
+		numButtton = new Console();                      // Contains Number Buttons and console screen 
 		//numButtton.addEventListener(TouchEvent.TOUCH_BEGIN, handleNumButton);
 		numButtton.addEventListener(MouseEvent.MOUSE_DOWN, handleNumButton);
 		addChild(numButtton);
+		stats = new LevelStat();
 	}
 	
 	//This function will be called every time new level or sublevel starts  
 	public function initialize()
 	{
-		level_timer.reset();
+		level_timer.reset();								// Reseting level timer 
+		stats.reset();										// Resetting level stats 
 		asteroid.setAsteroidSpeed(1);
 		asteroid_timer = new Timer(level_time/total_questions,total_questions-1);
 		asteroid_timer.addEventListener(TimerEvent.TIMER, generateAsteroid);
@@ -71,10 +86,19 @@ class Level extends Sprite
 			laserValue = laserValue * 10 + ev.target.parent.value;
 		else
 			laserValue = laserValue * 10 + ev.target.value;
-		if (asteroid.attackAsteroid() == true)
-			laserValue = 0;
+		var result = asteroid.attackAsteroid();
+		if (result.result == true)
+			{
+				stats.total_question_answered++;             // Increasing number of questions answered correctly 
+				stats.player_speed += result.score;           // Adding score to overall score 
+				laserValue = 0;
+			}
 		if (laserValue > 10)
-			laserValue = 0;							//Reseting Laser value
+		{
+			laserValue = 0;							//Resetting Laser value
+			if (result.result != true)
+				stats.wrong_attempts++;				// Increasing wrong attemps when user give wrong answer 
+		}
 		numButtton.updateConsoleScreen("0" + laserValue);
 	}
 	
