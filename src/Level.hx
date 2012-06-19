@@ -54,7 +54,7 @@ class Level extends Sprite
 		laserValue = 0;
 		question_instance = new GenerateQuestion();
 		// This timer will be responsible for stoping a game level. Reset - initialize, start - play
-		level_timer = new Timer(level_time,1); 
+		level_timer = new Timer(level_time+5000,1);               // Adding 5 sec more  
 		level_timer.addEventListener(TimerEvent.TIMER, stop);
 		background = new Background(this);             // passing my reference 
 		addChild(background);
@@ -121,8 +121,10 @@ class Level extends Sprite
 	// Level will stop when this function is called implicitly by timer or explicitly using function call
 	public function stop (event:TimerEvent)
 	{
+		removeEventListener(Event.ENTER_FRAME, animate);
 		asteroid_timer.stop();
 		level_timer.stop();
+		this.dispatchEvent( new Event("Level Complete"));
 	}
 	private function animate(event:Event):Void
 	{
