@@ -16,6 +16,11 @@ import nme.events.MouseEvent;
  * ...
  * @author Deepak Aggarwal
  */
+class LevelSpec {
+	var total_question_answered:Int;
+	var wrong_attempts:Int;
+	var user_speed:Float;                //  For calculating player speed its value is between 0 to total_no_question 
+}
 
 class Level extends Sprite
 {
@@ -26,9 +31,10 @@ class Level extends Sprite
 	private var numButtton:Console;					// Used for handling number button will will also be used for updating console screen 
 	public var laserValue:Int;
 	private var asteroid_timer:Timer;
-	static  var level_time:Int=120000;						// Level time 
+	static  var level_time:Int=150000;						// Level time   - 2.5 minutes 
 	public  var level_timer:Timer;							// Timer for automatically end level;
 	private var question_instance:GenerateQuestion;
+	private static var total_questions:Int = 20;			// Total number of question in subLevel;
 	public function new() 
 	{
 		super();
@@ -53,7 +59,7 @@ class Level extends Sprite
 	{
 		level_timer.reset();
 		asteroid.setAsteroidSpeed(1);
-		asteroid_timer = new Timer(6000,10);
+		asteroid_timer = new Timer(level_time/total_questions,total_questions-1);
 		asteroid_timer.addEventListener(TimerEvent.TIMER, generateAsteroid);
 		question_instance.setQuestions(1, 6);										//Setting Level and Sublevel
 	}
@@ -80,6 +86,8 @@ class Level extends Sprite
 	// Level will start when this function is called 
 	public function play()
 	{
+		// Adding first comet as soon as game starts 
+		generateAsteroid(new TimerEvent(TimerEvent.TIMER));
 		asteroid_timer.start();  										 // Starting timer for generating asteroid.
 		level_timer.start();											// starting level timer
 		oldtime = Lib.getTimer();                                        // Don't use in constructor else you may notice weird behaviour 	
