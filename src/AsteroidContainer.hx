@@ -68,6 +68,7 @@ class AsteroidContainer  extends Sprite
 	var level:Level; 
 	var asteroidSpeed:Float;
 	var asteroid_destruction:Sound;
+	var asteroidLimit:Int; 
 	public function new(level_instance:Level) 
 	{
 		super();
@@ -84,6 +85,7 @@ class AsteroidContainer  extends Sprite
 			var temp = new Asteroid();
 			asteroids.push(temp);
 		}
+		asteroidLimit = cast Lib.current.stage.stageWidth / 3; 
 	}
 	
 	// This function will be used to set speed of asteroid based on game level.
@@ -125,7 +127,8 @@ class AsteroidContainer  extends Sprite
 					case multiplication :	
 											asteroid.initializeText(param.operand1 + "X ? = " + (param.operand1 * param.operand2));
 					case division:			
-											asteroid.initializeText(param.operand1 + "÷ ? = " + cast(Int)(param.operand1 / param.operand2));
+											var temp:Int =  cast(param.operand1 / param.operand2);
+											asteroid.initializeText(param.operand1 + "÷ ? = " +temp);
 					case subtraction :		
 											asteroid.initializeText(param.operand1 + "- ? = " + (param.operand1 - param.operand2));
 				}
@@ -153,7 +156,6 @@ class AsteroidContainer  extends Sprite
 		return false;
 	}
 	
-	static var asteroidLimit:Int = cast Lib.current.stage.stageWidth / 3; 
 	public function handleAsteroid()						// This function will be responsible for updating  asteroid and autodestruction
 	{
 		for (asteroid in asteroids)
