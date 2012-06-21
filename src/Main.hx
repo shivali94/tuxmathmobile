@@ -20,16 +20,7 @@ class Main
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
 		var rectangle:Shape = new Shape(); // initializing the variable named rectangles
-		var temp = new Level();
-		temp.initialize();
-		temp.play();
-		temp.addEventListener("Level Complete", function(ev:Event) {
-			Lib.current.removeChild(temp);
-			trace("Level completes");
-		});
-		Lib.current.addChild(temp);
-		
-		
+		new Game();
 		// Code for displaying FPS on android screen
 		rectangle.graphics.beginFill(0xFFFFFF); // choosing the colour for the fill, here it is red
 		rectangle.graphics.drawRect(100,0, 80,40); // (x spacing, y spacing, width, height)

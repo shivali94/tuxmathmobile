@@ -1,5 +1,13 @@
 package ;
 
+/*=============================================================================================================================
+ * This class is used to play game at particular sublevel of level.
+ * Usage:
+	 * First initialize() function is called in order to set Level and sublevel
+	 * Then play() function is used to play game
+	 * Stop() function is used to stop the game.
+ * ===========================================================================================================================*/
+
 import nme.Assets;
 import nme.display.Bitmap;
 import nme.display.Sprite;
@@ -69,14 +77,14 @@ class Level extends Sprite
 	}
 	
 	//This function will be called every time new level or sublevel starts  
-	public function initialize()
+	public function initialize(level:Int , sublevel:Int)
 	{
 		level_timer.reset();								// Reseting level timer 
 		stats.reset();										// Resetting level stats 
 		asteroid.setAsteroidSpeed(1);
 		asteroid_timer = new Timer(level_time/total_questions,total_questions-1);
 		asteroid_timer.addEventListener(TimerEvent.TIMER, generateAsteroid);
-		question_instance.setQuestions(1, 6);										//Setting Level and Sublevel
+		question_instance.setQuestions(level, sublevel);										//Setting Level and Sublevel
 	}
 	
 	// This function will be responsibe for receving and handling number buttons 
