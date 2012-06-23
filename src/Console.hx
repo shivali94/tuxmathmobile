@@ -18,7 +18,7 @@ import nme.feedback.Haptic;
  * @author Deepak Aggarwal
  */
 
-class Constant
+private class Constant
 {
 	public static var width:Int;
 	public static var height:Int;
@@ -125,7 +125,7 @@ class ConsoleScreen extends Sprite
 		text = new TextField();
 		text_format = new TextFormat('Arial', 30, 0x66cae7, true);
 		text_format.align = TextFormatAlign.CENTER;
-		var textSize:Float = Lib.current.stage.stageHeight*0.10;               // It will be 15% of screen height                         
+		var textSize:Float = Lib.current.stage.stageHeight*0.10;               // It will be 10% of screen height                         
 		text.setTextFormat(text_format);
 		text.selectable = false;
 		text.text = "00";  

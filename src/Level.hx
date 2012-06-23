@@ -51,18 +51,16 @@ class Level extends Sprite
 	private var numButtton:Console;					// Used for handling number button will will also be used for updating console screen 
 	public var laserValue:Int;
 	private var asteroid_timer:Timer;
-	static  var level_time:Int=150000;						// Level time   - 2.5 minutes 
 	public  var level_timer:Timer;							// Timer for automatically end level;
 	private var question_instance:GenerateQuestion;
-	private static var total_questions:Int = 20;			// Total number of question in subLevel;
-	var stats:LevelStat;                                    // Used to store result of a sublevel 
+	public var stats:LevelStat;                                    // Used to store result of a sublevel 
 	public function new() 
 	{
 		super();
 		laserValue = 0;
 		question_instance = new GenerateQuestion();
 		// This timer will be responsible for stoping a game level. Reset - initialize, start - play
-		level_timer = new Timer(level_time+5000,1);               // Adding 5 sec more  
+		level_timer = new Timer(GameConstant.level_time+5000,1);               // Adding 5 sec more  
 		level_timer.addEventListener(TimerEvent.TIMER, stop);
 		background = new Background(this);             // passing my reference 
 		addChild(background);
@@ -82,7 +80,7 @@ class Level extends Sprite
 		level_timer.reset();								// Reseting level timer 
 		stats.reset();										// Resetting level stats 
 		asteroid.setAsteroidSpeed(1);
-		asteroid_timer = new Timer(level_time/total_questions,total_questions-1);
+		asteroid_timer = new Timer(GameConstant.level_time/GameConstant.no_of_question,GameConstant.no_of_question-1);
 		asteroid_timer.addEventListener(TimerEvent.TIMER, generateAsteroid);
 		question_instance.setQuestions(level, sublevel);										//Setting Level and Sublevel
 	}

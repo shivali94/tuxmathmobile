@@ -154,8 +154,8 @@ class AsteroidContainer  extends Sprite
 				asteroid_destruction.play();
 				var score = asteroid.x / stageWidth / 0.75;			// Player will get full score in speed if he answer question 
 																	// within 25% of the total time 
-				if (score > 1.0)									// Maximum score is one 
-					score = 1.0;
+				if (score > 1.0)									// Maximum score is one. Total score for speed will be calculate by 
+					score = 1.0;									// total_sum/total_no_of_question 
 				return {result:true,score:score};
 			}
 		}
