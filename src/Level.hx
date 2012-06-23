@@ -130,7 +130,7 @@ class Level extends Sprite
 		removeEventListener(Event.ENTER_FRAME, animate);
 		asteroid_timer.stop();
 		level_timer.stop();
-		this.dispatchEvent( new Event("Level Complete"));
+		this.dispatchEvent( new Event("Game Complete"));
 	}
 	private function animate(event:Event):Void
 	{

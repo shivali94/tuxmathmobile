@@ -69,6 +69,20 @@ public class Deploy{
 		saveImage("../assets/asteroid/asteroid.png",resized);   					// saving image 
 	}
 	
+	static void resizePlanet(int res_width, int res_height)
+	{
+		float ratio = (float) res_height/1536;
+		int i;
+		for(i =0;i<=2;i++)
+		{
+			BufferedImage img = loadImage("assets/planet/planet"+i+".png");    // Loading Image 
+			int size = (int) (img.getHeight()*ratio);
+			BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+				Scalr.Mode.AUTOMATIC,size,size);
+			saveImage("../assets/planet/planet"+i+".png",resized);   			// saving image 
+		}
+	}
+	
 	public static void main( String args[])
 	{
 		int res_width, res_height ;
@@ -83,5 +97,6 @@ public class Deploy{
 		resizeMainBackground(res_width,res_height);
 		resizeSpaceship(res_width,res_height);
 		resizeAsteroid(res_width,res_height);
+		resizePlanet(res_width,res_height);
 	}
 }
