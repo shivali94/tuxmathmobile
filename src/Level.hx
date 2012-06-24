@@ -124,6 +124,27 @@ class Level extends Sprite
 		addEventListener(Event.ENTER_FRAME, animate);
 	}
 	
+	//For pausing game
+	public function pause()
+	{
+		// Stoping all timers
+		level_timer.stop();
+		asteroid_timer.stop();
+		// Stoping animation 
+		removeEventListener(Event.ENTER_FRAME, animate);
+	}
+	
+	// For resuming game 
+	public function resume()
+	{
+		oldtime = Lib.getTimer();      // Important - Updating time to new time so that we can get correct value of diffTime
+		//Starting all timers 
+		level_timer.start();
+		asteroid_timer.start();
+		//Starting animation 
+		addEventListener(Event.ENTER_FRAME, animate);
+	}
+	
 	// Level will stop when this function is called implicitly by timer or explicitly using function call
 	public function stop (event:TimerEvent)
 	{

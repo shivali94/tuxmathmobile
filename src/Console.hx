@@ -56,7 +56,7 @@ private class Constant
 	}
 }
 
-class Button extends Sprite
+private class Button extends Sprite
 {
 	var shape:Shape;
 	var value:Int;

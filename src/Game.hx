@@ -12,6 +12,25 @@ class Game
 {
 	var level_instance:Level;                 // Used for playing game
 	var menu_handler:MenuHandler;			// Used for displaying menu
+	public var isPlaying:Bool;
+	
+	// Pause current game
+	public function pauseGame()
+	{
+		level_instance.pause();
+	}
+	
+	//Resume current game
+	public function resumeGame()
+	{
+		level_instance.resume();
+	}
+	
+	public function stopGame()
+	{
+		isPlaying = false;
+		level_instance.pause(); // It is sufficient as it's value is reset whenever a new sublevel starts 
+	}
 	
 	private function calculate_score()
 	{
@@ -39,6 +58,7 @@ class Game
 		Lib.current.addChild(level_instance);
 		level_instance.play();
 		Lib.current.removeChild(menu_handler);
+		isPlaying = true;
 	}
 	
 	function gameComplete(ev:Event) {
@@ -57,6 +77,7 @@ class Game
 		Lib.current.removeChild(level_instance);
 		menu_handler.refreshScore();							// Refreshing score so that user can see updated score 
 		Lib.current.addChild(menu_handler);
+		isPlaying = false;                               // Setting isPlaying to false
 	}
 	
 	public function new() 
@@ -65,6 +86,7 @@ class Game
 		menu_handler = new MenuHandler();
 		SavedData.initialize();
 		mainGameScreen();
+		isPlaying = false;                            // Setting isPlaying to true 
 	}
 	
 }

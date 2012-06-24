@@ -133,44 +133,6 @@ private class Constant
 		starTile = new Tilesheet( Assets.getBitmapData("assets/star.png"));
 		starTile.addTileRect( new Rectangle(0, 0, star.width, star.height));
 	}
-	
-	// Used for creating button eg BACK button
-	static public function button(content:String,color:Int,width:Float)
-	{
-		var text = new TextField();
-		var text_format = new TextFormat('Arial', 30, 0xFFFFFF, true);
-		text_format.align = TextFormatAlign.CENTER;
-		text.defaultTextFormat = text_format;
-		text.selectable = false;
-		text.text = content;
-		text_format.leftMargin = 0;
-		text_format.rightMargin = 0;
-		// Setting size of text 
-		if (text.textWidth > width)
-			while (text.textWidth > width)
-			{
-				text_format.size--;
-				text.setTextFormat(text_format);
-			}
-		else
-			while (text.textWidth < width)
-			{
-				text_format.size++;
-				text.setTextFormat(text_format); 
-			}
-		text.height = text.textHeight;
-		text.width = width;
-		var shape:Shape = new Shape();
-		var sprite:Sprite = new Sprite();
-		shape.graphics.clear();
-		shape.graphics.beginFill(color);
-		shape.graphics.drawRect(0, 0, text.textWidth, text.textHeight);
-		sprite.addChild(shape);
-		shape.graphics.endFill();
-		// Adding text
-		sprite.addChild(text);
-		return sprite;
-	}
 }
 
 /*============================================================================
@@ -277,7 +239,7 @@ class MenuHandler extends Sprite
 		sublevelmenu.x = Lib.current.stage.stageWidth * 0.1;
 		sublevelmenu.y = Lib.current.stage.stageHeight * 0.1;
 		//Back Button
-		var back_button:Sprite = Constant.button("BACK", 0xED1C1C, Lib.current.stage.stageWidth / 5);
+		var back_button:Sprite = Button.button("BACK", 0xED1C1C, Lib.current.stage.stageWidth / 5);
 		back_button.y = Lib.current.stage.stageHeight - back_button.height;
 		back_button.alpha = 0.7;
 		// Displaying Main menu 
