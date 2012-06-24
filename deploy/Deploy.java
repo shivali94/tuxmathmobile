@@ -81,6 +81,13 @@ public class Deploy{
 				Scalr.Mode.AUTOMATIC,size,size);
 			saveImage("../assets/planet/planet"+i+".png",resized);   			// saving image 
 		}
+		
+		//for Star
+		BufferedImage img = loadImage("assets/star.png");    // Loading Image 
+		int size = (int) (res_height * 0.056);                            // It will be 5.6% of the stage height 
+		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,size,size);
+		saveImage("../assets/star.png",resized);   			// saving image 
 	}
 	
 	public static void main( String args[])

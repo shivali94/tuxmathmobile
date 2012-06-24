@@ -11,13 +11,20 @@ import nme.net.SharedObjectFlushStatus;
 // Used for saving and Loading data 
 class SavedData 
 {
-	public static var score_loader:SharedObject;
+	// I have tried to use 2D array but it is buggy
+	public static var score_loader:Array<SharedObject>;
 	public static var score:Array<Array<Int>>;				// Used for holding score. It's a 2d array
 	public static function initialize() 
 	{
-		score_loader = SharedObject.getLocal("game-score");
-		score = score_loader.data.score;
-		if (score == null)       // No data is present before so initialize everything and store it 
+		score_loader = new Array<SharedObject>();
+		score = new Array<Array<Int>>();
+		for (x in 0...10)
+		{
+			// for level x score data is stored in game-score-level-x kust replace x with corresponding number
+			score_loader.push(SharedObject.getLocal("game-score-level-"+x));
+			score.push(score_loader[x].data.score);
+		}
+		if (score[0] == null)       // No data is present before so initialize everything and store it we are checking first element only
 		{
 			// Initializing array and storing it
 			var temp:Array<Int> = new Array<Int>();
@@ -39,7 +46,8 @@ class SavedData
 	
 	public static function save()
 	{
-		score_loader.data.score = score;            // saving into shared object so that is can be flushed 
+		for(x in 0...10)
+			score_loader[x].data.score = score[x];            // saving into shared object so that is can be flushed 
 		// Prepare to save.. with some checks
 		#if ( cpp || neko )
 				// Android didn't wanted SharedObjectFlushStatus not to be a String
@@ -50,7 +58,8 @@ class SavedData
 		#end
 
 		try {
-				flushStatus = score_loader.flush() ;      // Save the object
+			for(x in 0...10)
+				flushStatus = score_loader[x].flush() ;      // Save the object
 		} catch ( e:Dynamic ) {
 				trace('couldn\'t write...');
 		}

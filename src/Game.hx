@@ -10,8 +10,8 @@ import nme.Assets;
 
 class Game 
 {
-	var level_instance:Level;
-	var menu_handler:MenuHandler;
+	var level_instance:Level;                 // Used for playing game
+	var menu_handler:MenuHandler;			// Used for displaying menu
 	
 	private function calculate_score()
 	{
@@ -55,6 +55,7 @@ class Game
 						SavedData.storeData(menu_handler.level, menu_handler.sublevel, 0);
 			
 		Lib.current.removeChild(level_instance);
+		menu_handler.refreshScore();							// Refreshing score so that user can see updated score 
 		Lib.current.addChild(menu_handler);
 	}
 	

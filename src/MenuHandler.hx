@@ -11,6 +11,7 @@ import nme.display.Shape;
 import nme.display.Sprite;
 import nme.display.StageAlign;
 import nme.display.StageScaleMode;
+import nme.display.Tilesheet;
 import nme.Lib;
 import nme.Assets;
 import nme.events.Event;
@@ -94,6 +95,7 @@ private class Constant
 	public static var vertical_border:Int;
 	public static var text_format;
 	static var text:TextField;
+	public static var starTile:Tilesheet;    // Tile for drawing star 
 	public static function initialize()
 	{
 		var sprite_width = Lib.current.stage.stageWidth * 0.8;
@@ -126,6 +128,10 @@ private class Constant
 				text_format.size++;
 				text.setTextFormat(text_format); 
 			}
+			
+		var star:Bitmap = new Bitmap( Assets.getBitmapData("assets/star.png"));     // For loading star image for accessing its height and width
+		starTile = new Tilesheet( Assets.getBitmapData("assets/star.png"));
+		starTile.addTileRect( new Rectangle(0, 0, star.width, star.height));
 	}
 	
 	// Used for creating button eg BACK button
@@ -175,42 +181,27 @@ class SubLevels extends Sprite
 {
 	public var value:Int;
 	static var shape:Shape;
-	public var star:TextField;
-	public static var text_format:TextFormat;
+	var panel:Sprite;
 	
 	// For drawing stars that player score in a particular sublevel
-	function drawStar()
+	public function drawStar(number:Int)
 	{
-		text_format = new TextFormat('Arial', 30, 0xFFE957, true);
-		text_format.align = TextFormatAlign.CENTER;
-		star.defaultTextFormat = text_format;
-		star.selectable = false;
-		star.text = "★★☆";
-		text_format.leftMargin = 0;
-		text_format.rightMargin = 0;
-		var height = Constant.height * 0.2;
-		// Setting size of text 
-		if (star.textHeight > height)
-			while (star.textHeight > height)
-			{
-				text_format.size--;
-				star.setTextFormat(text_format);
-			}
-		else
-			while (star.textHeight < height)
-			{
-				text_format.size++;
-				star.setTextFormat(text_format); 
-			}
-		star.height = height;
-		star.width = Constant.width;
+		panel.graphics.clear();
+		for (x in 0...number)
+		{
+			var array:Array<Float> = new Array<Float>();
+			array.push(Constant.starTile.nmeBitmap.width*x);
+			array.push(0);
+			Constant.starTile.drawTiles(panel.graphics, array);
+		}
+		panel.x = (Constant.width - panel.width) / 2;
 	}
 	public function new (param:Int)
 	{
 		super();
 		value = param;
 		shape = new Shape();
-		star = new TextField();
+		panel = new Sprite();
 		// Drawing main box
 		shape.graphics.clear();
 		shape.graphics.beginFill(0x2068C7);
@@ -225,7 +216,7 @@ class SubLevels extends Sprite
 		addChild(shape);
 		shape.graphics.endFill();
 		
-		// Adding stars 
+		// Adding text
 		var text:TextField = new TextField();
 		text.text = ""+value;
 		text.setTextFormat(Constant.text_format);
@@ -233,12 +224,13 @@ class SubLevels extends Sprite
 		text.width = Constant.width;
 		text.selectable = false;
 		addChild(text);
-		drawStar();
-		star.y = Constant.height * 0.8;
-		addChild(star);
+		
+		// adding star panel
+		panel.y = Constant.height * 0.8 ;
+		addChild(panel);
 	}
 }
-
+   
 // Sprite containing all the buttons displaying submenus
 class LevelMenu extends Sprite
 {
@@ -266,14 +258,7 @@ class LevelMenu extends Sprite
 	public function initializeScore(param:Array<Int>)
 	{
 		for (x in 0...10)
-		{
-			sublevels[x].star.text = "";
-			for (y in 0...param[x])
-				sublevels[x].star.text += "★";
-			for (y in param[x]...3)
-				sublevels[x].star.text += "☆";
-			sublevels[x].star.setTextFormat(SubLevels.text_format);
-		}
+			sublevels[x].drawStar(param[x]);
 	}
 }
  // Main Sprite that will be responsible for displaying menu and submenus 
@@ -281,13 +266,14 @@ class MenuHandler extends Sprite
 {
 	public var level:Int;
 	public var sublevel:Int;
+	var sublevelmenu:LevelMenu;
 	public function new() 
 	{
 		super();
 		addChild(new Bitmap(Assets.getBitmapData("assets/background/main_background.png")));
 		var main_menu_screen = new MainMenuScreen();
 		// Sublevel menu 
-		var sublevelmenu = new LevelMenu();
+		sublevelmenu = new LevelMenu();
 		sublevelmenu.x = Lib.current.stage.stageWidth * 0.1;
 		sublevelmenu.y = Lib.current.stage.stageHeight * 0.1;
 		//Back Button
@@ -300,6 +286,8 @@ class MenuHandler extends Sprite
 			if (!Std.is(event.target, Planet))
 				return;
 				level = event.target.value;
+				// Initializing star score of sublevels
+				sublevelmenu.initializeScore(SavedData.score[level]);
 				addChild(sublevelmenu);
 				addChild(back_button);
 				removeChild(main_menu_screen);	
@@ -328,6 +316,12 @@ class MenuHandler extends Sprite
 				removeChild(back_button);
 				addChild(main_menu_screen);	
 			});
+	}
+	
+	// This function is used to show updated star score when a game ends and player is redirected to sublevel menu 
+	// screen again.
+	public function refreshScore() {
+		sublevelmenu.initializeScore(SavedData.score[level]);
 	}
 	
 }
