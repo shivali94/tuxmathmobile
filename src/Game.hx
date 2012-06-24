@@ -44,6 +44,7 @@ class Game
 	function gameComplete(ev:Event) {
 		var temp = calculate_score();
 		var total_score = temp.accuracy + temp.answered + temp.speed;
+		//Calculating stars and storing it.
 		if (total_score >= GameConstant.star_3)
 			SavedData.storeData(menu_handler.level, menu_handler.sublevel, 3);
 			else if (total_score >= GameConstant.star_2)

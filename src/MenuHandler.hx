@@ -310,16 +310,12 @@ class MenuHandler extends Sprite
 			if (Std.is(event.target, SubLevels))
 			{
 				sublevel = event.target.value;
-				removeChild(sublevelmenu);
-				removeChild(back_button);
 				trace("Level selected is:" + (level+1) + " and sublevel is: " + (sublevel+1));
 				this.dispatchEvent( new Event("Start Game"));
 			}
 			if (Std.is(event.target.parent, SubLevels))
 			{
 				sublevel = event.target.parent.value;
-				removeChild(sublevelmenu);
-				removeChild(back_button);
 				trace("Level selected is:" + (level+1) + " and sublevel is: " + (sublevel+1));
 				this.dispatchEvent( new Event("Start Game"));
 			}

@@ -8,6 +8,7 @@ package ;
 import nme.net.SharedObject;
 import nme.net.SharedObjectFlushStatus;
 
+// Used for saving and Loading data 
 class SavedData 
 {
 	public static var score_loader:SharedObject;
