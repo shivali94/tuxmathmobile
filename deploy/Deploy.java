@@ -73,7 +73,7 @@ public class Deploy{
 	{
 		float ratio = (float) res_height/1536;
 		int i;
-		for(i =0;i<=2;i++)
+		for(i =0;i<=5;i++)
 		{
 			BufferedImage img = loadImage("assets/planet/planet"+i+".png");    // Loading Image 
 			int size = (int) (img.getHeight()*ratio);

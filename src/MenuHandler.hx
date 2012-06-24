@@ -45,7 +45,7 @@ class Planets extends Sprite
 		// Distance between two adjacent planets  
 		var distance:Int = cast Lib.current.stage.stageWidth / 4;
 		x_scale = 0;                               // For keeping tab on x dimension of sprite 
-		for (x in 0...3)
+		for (x in 0...6)
 		{
 			x_scale += distance;
 			var temp = new Planet(x);
@@ -62,7 +62,7 @@ class MainMenuScreen extends Sprite
 	{
 		super();
 		var planets = new Planets();
-		// Scrolling rectangle s
+		// Scrolling rectangles
 		var bounds:Rectangle = new Rectangle( -planets.x_scale + Lib.current.stage.stageWidth, 0, planets.x_scale-Lib.current.stage.stageWidth, 0);
 		// Necessary so that sprite could be dragged easily 
 		addChild(new Bitmap(Assets.getBitmapData("assets/background/main_background.png")));
