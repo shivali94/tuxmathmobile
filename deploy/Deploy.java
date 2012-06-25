@@ -73,21 +73,30 @@ public class Deploy{
 	{
 		float ratio = (float) res_height/1536;
 		int i;
-		for(i =0;i<=5;i++)
+		
+		// Resizing sun
+		BufferedImage sun_img = loadImage("assets/planet/sun.png");    
+			int sun_size = (int) (sun_img.getHeight()*ratio);
+			BufferedImage resized_sun= Scalr.resize(sun_img,Scalr.Method.QUALITY,            
+				Scalr.Mode.AUTOMATIC,sun_size,sun_size);
+			saveImage("../assets/planet/sun.png",resized_sun);   	
+		
+		// Resizing Planets 
+		for(i =0;i<=4;i++)
 		{
-			BufferedImage img = loadImage("assets/planet/planet"+i+".png");    // Loading Image 
-			int size = (int) (img.getHeight()*ratio);
-			BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
-				Scalr.Mode.AUTOMATIC,size,size);
-			saveImage("../assets/planet/planet"+i+".png",resized);   			// saving image 
+			BufferedImage planet_img = loadImage("assets/planet/planet"+i+".png");    // Loading Image 
+			int planet_size = (int) (planet_img.getHeight()*ratio);
+			BufferedImage resized_planet= Scalr.resize(planet_img,Scalr.Method.QUALITY,            	// resizing image
+				Scalr.Mode.AUTOMATIC,planet_size,planet_size);
+			saveImage("../assets/planet/planet"+i+".png",resized_planet);   			// saving image 
 		}
 		
 		//for Star
-		BufferedImage img = loadImage("assets/star.png");    // Loading Image 
-		int size = (int) (res_height * 0.056);                            // It will be 5.6% of the stage height 
-		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
-			Scalr.Mode.AUTOMATIC,size,size);
-		saveImage("../assets/star.png",resized);   			// saving image 
+		BufferedImage star_img = loadImage("assets/star.png");    // Loading Image 
+		int star_size = (int) (res_height * 0.056);                            // It will be 5.6% of the stage height 
+		BufferedImage resized_star= Scalr.resize(star_img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,star_size,star_size);
+		saveImage("../assets/star.png",resized_star);   			// saving image 
 	}
 	
 	public static void main( String args[])

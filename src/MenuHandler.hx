@@ -46,7 +46,14 @@ class Planets extends Sprite
 		// Distance between two adjacent planets  
 		var distance:Int = cast Lib.current.stage.stageWidth / 4;
 		x_scale = 0;                               // For keeping tab on x dimension of sprite 
-		for (x in 0...6)
+		// First displaying sun
+		var sun = new Bitmap(Assets.getBitmapData("assets/planet/sun.png"));
+		sun.x = -sun.width / 2;				// Only half of it will be visible 
+		x_scale = cast (sun.width / 2);
+		sun.y = (Lib.current.stage.stageHeight - sun.height) / 2;
+		addChild(sun);
+		
+		for (x in 0...5)
 		{
 			x_scale += distance;
 			var temp = new Planet(x);

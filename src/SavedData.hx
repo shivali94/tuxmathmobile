@@ -18,7 +18,7 @@ class SavedData
 	{
 		score_loader = new Array<SharedObject>();
 		score = new Array<Array<Int>>();
-		for (x in 0...10)
+		for (x in 0...9)
 		{
 			// for level x score data is stored in game-score-level-x kust replace x with corresponding number
 			score_loader.push(SharedObject.getLocal("game-score-level-"+x));
@@ -31,7 +31,7 @@ class SavedData
 			var temp_score:Array<Array<Int>> = new Array<Array<Int>>();
 			for (x in 0...10)
 				temp.push(0);
-			for (x in 0...10)
+			for (x in 0...9)
 				temp_score.push(temp);
 			score = temp_score;
 			save();
@@ -46,7 +46,7 @@ class SavedData
 	
 	public static function save()
 	{
-		for(x in 0...10)
+		for(x in 0...9)
 			score_loader[x].data.score = score[x];            // saving into shared object so that is can be flushed 
 		// Prepare to save.. with some checks
 		#if ( cpp || neko )

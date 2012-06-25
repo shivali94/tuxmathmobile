@@ -74,7 +74,7 @@ class Main
 		});
 		yes.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			inMenu = false;
-			Lib.exit();
+			//Lib.exit();
 		});
 		
 	}
