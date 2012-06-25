@@ -543,7 +543,7 @@ class GenerateQuestion
 					{
 						case 1:
 							factroid_prime_number.push(2);
-							operand_2_maxrange = 10;
+							operand_2_maxrange = 4;
 							operand_2_minrange = 0;
 						case 2:
 						case 3:
@@ -632,11 +632,17 @@ class GenerateQuestion
 	{
 		var random:Int = cast (Math.random() * 10000 ) % factroid_prime_number.length;
 		question.operand1 = factroid_prime_number[random];
-		question.operand2 = Math.ceil(Math.random() * operand_2_maxrange) + operand_2_minrange;
+		var temp:Int = cast (Math.random() * 10000 ) % factroid_prime_number.length;  //Used for generating second operand
+		var power:Int = Math.ceil(Math.random() * operand_2_maxrange) + operand_2_minrange;
+		question.operand2 = 1;
+		//Calculating power 
+		for (x in 0...power)
+			question.operand2 *= factroid_prime_number[temp];
 		question.factroid = true;					//It's a factroid question 
 		question.operation = ArithmeticOperation.multiplication;
 		return question;
 	}
+	
 	public function newQuestion()
 	{
 		if(factroid == false)                                        // Generate non factroid question

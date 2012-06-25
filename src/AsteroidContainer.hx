@@ -18,6 +18,7 @@ class Asteroid extends Sprite {
 	public var text:TextField;
 	public var active:Bool;									// Indicate whether asteroid is active or not 
 	public var answer:Int;
+	public var isFactroid:Bool;                              // Whether asteroid is a factroid asteroid or not 
 	private static var text_format:TextFormat;
 	public function new ()
 	{
@@ -137,6 +138,24 @@ class AsteroidContainer  extends Sprite
 			}
 			addChild(asteroid);
 			asteroid.active = true;
+			asteroid.isFactroid = false;         // Not a factor asteroid 
+			break;
+		}
+	}
+	
+	public function addFactroidAsteroid(param:Question)
+	{
+		for (asteroid in asteroids)
+		{
+			if (asteroid.active == true)
+				continue;
+			asteroid.x = stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
+			asteroid.y = 130;
+			asteroid.answer = param.operand1 * param.operand2;            // It is used to check factor instead of just matching it.
+			asteroid.initializeText(""+(param.operand1 * param.operand2));
+			addChild(asteroid);
+			asteroid.active = true;
+			asteroid.isFactroid = true;            // A factor asteroid
 			break;
 		}
 	}
@@ -147,27 +166,48 @@ class AsteroidContainer  extends Sprite
 		if (param.factroid == false)
 			addNonFactroidAsteroid(param);
 		if (param.factroid == true)
-			addNonFactroidAsteroid(param);
+			addFactroidAsteroid(param);
 	}
-	
 	
 	public function attackAsteroid()
 	{
+		// Attacking main asteroid 
 		for (asteroid in asteroids)
 		{
 			if (asteroid.active == false)
 				continue;
-			if (asteroid.answer == level.laserValue)
+			if (asteroid.isFactroid == false)
 			{
-				removeChild(asteroid);
-				asteroid.active = false;
-				asteroid_destruction.play();
-				var score = asteroid.x / stageWidth / 0.75;			// Player will get full score in speed if he answer question 
-																	// within 25% of the total time 
-				if (score > 1.0)									// Maximum score is one. Total score for speed will be calculate by 
-					score = 1.0;									// total_sum/total_no_of_question 
-				return {result:true,score:score};
+				if (asteroid.answer == level.laserValue)
+				{
+					removeChild(asteroid);
+					asteroid.active = false;
+					asteroid_destruction.play();
+					var score = asteroid.x / stageWidth / 0.75;			// Player will get full score in speed if he answer question 
+																		// within 25% of the total time 
+					if (score > 1.0)									// Maximum score is one. Total score for speed will be calculate by 
+						score = 1.0;									// total_sum/total_no_of_question 
+					return {result:true,score:score};
+				}
 			}
+			else                                                         // Attack factor asteroid 
+				{
+					if (level.laserValue == 1)                         
+						return { result:false, score:0.0 };				// Because 1 is factor of every number 
+					else
+					{
+						if (asteroid.answer % level.laserValue == 0)
+						{
+							removeChild(asteroid);
+							asteroid.active = false;
+							asteroid_destruction.play();
+							var score = asteroid.x / stageWidth / 0.75/2;		// Half score only because two more small asteroids will add having 0.25 value each	
+							if (score > 0.5)									// Maximum score is 0.5. Total score for speed will be calculate by 
+								score = 0.5;									// total_sum/total_no_of_question 
+							return {result:true,score:score};
+						}
+					}
+				}
 		}
 		return {result:false,score:0.0};
 	}
