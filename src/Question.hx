@@ -11,6 +11,7 @@ class Question
 	public var operand2:Int;
 	public var missing:Bool;
 	public var operation:ArithmeticOperation;
+	public var factroid :Bool;                     // Whether a question is factroid or not 
 	public function new() 
 	{ 
 		missing = false;

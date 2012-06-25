@@ -96,8 +96,8 @@ class AsteroidContainer  extends Sprite
 		asteroidSpeed = adjustDeltaMovement * speed; //Adjusting speed of asteroid according to level. Don't manipulate adjustDeltaMovement
 	}
 	
-	// Function for adding asteroids
-	public function addAsteroid(param:Question)
+	// Function for adding non factroid asteroids
+	private function addNonFactroidAsteroid(param:Question)
 	{
 		for (asteroid in asteroids)
 		{
@@ -139,6 +139,15 @@ class AsteroidContainer  extends Sprite
 			asteroid.active = true;
 			break;
 		}
+	}
+	
+	// Function for adding asteroids 
+	public function addAsteroid(param:Question)
+	{
+		if (param.factroid == false)
+			addNonFactroidAsteroid(param);
+		if (param.factroid == true)
+			addNonFactroidAsteroid(param);
 	}
 	
 	public function attackAsteroid()

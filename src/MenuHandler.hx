@@ -53,7 +53,7 @@ class Planets extends Sprite
 		sun.y = (Lib.current.stage.stageHeight - sun.height) / 2;
 		addChild(sun);
 		
-		for (x in 0...5)
+		for (x in 0...9)
 		{
 			x_scale += distance;
 			var temp = new Planet(x);

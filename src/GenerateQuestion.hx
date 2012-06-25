@@ -18,19 +18,24 @@ class GenerateQuestion
 	var operand_2_minrange:Int;
 	var arith_operation:ArithmeticOperation;
 	var multi_arith_operation_array:Array<ArithmeticOperation>;
-	var question:Question;
+	var question:Question;							// Used for storing question and returning it.
 	var missing:Bool;								// Missing numbers ?
-	var missing_random:Bool;						// Missing number with general question
+	var missing_random:Bool;						// Missing number with non missing questions
 	var multiple_arith_operation:Bool;              // Whether multiple arithmetic operation is enabled or not 
+	var factroid:Bool;								// Factroid question are enabled or not
+	var factroid_random:Bool;						// Factroid question with non factroid question 
+	var factroid_prime_number:Array<Int>;            // Used to store prime number for generating questions of factroid 
 	public function new() 
 	{
 		question = new Question();
 		multi_arith_operation_array = new Array<ArithmeticOperation>();
+		factroid_prime_number = new Array<Int>();
 	}
 	// unction used to set Level and sublevel
 	public function setQuestions(level:Int , sublevel:Int)
 	{
 		multiple_arith_operation = false;   // Common to most of subcase of cases
+		factroid = false ;
 		switch(level)
 		{
 			case 1:  // Addition
@@ -347,6 +352,7 @@ class GenerateQuestion
 					operand_2_minrange = 0;
 					missing = true;
 					missing_random = true;
+					multiple_arith_operation = true;
 					multi_arith_operation_array.splice(0, multi_arith_operation_array.length - 1);    // Clearing array
 					multi_arith_operation_array.push(ArithmeticOperation.subtraction);
 					multi_arith_operation_array.push(ArithmeticOperation.sum);
@@ -474,6 +480,7 @@ class GenerateQuestion
 					operand_2_minrange = 0;
 					missing = true;
 					missing_random = true;
+					multiple_arith_operation = true;
 					multi_arith_operation_array.splice(0, multi_arith_operation_array.length - 1);    // Clearing array
 					multi_arith_operation_array.push(ArithmeticOperation.subtraction);
 					multi_arith_operation_array.push(ArithmeticOperation.sum);
@@ -529,7 +536,26 @@ class GenerateQuestion
 						case 10: 
 					}
 					
-			case 8: switch(sublevel)
+			case 8: 
+				factroid = true;    // Turning factroid mode true
+				factroid_prime_number.splice(0, factroid_prime_number.length - 1);    // Clearing array
+				switch(sublevel)
+					{
+						case 1:
+							factroid_prime_number.push(2);
+							operand_2_maxrange = 10;
+							operand_2_minrange = 0;
+						case 2:
+						case 3:
+						case 4:
+						case 5:
+						case 6:
+						case 7:
+						case 8:
+						case 9:
+						case 10:
+					}
+			case 9: switch(sublevel)
 					{
 						case 1:
 						case 2:
@@ -546,7 +572,7 @@ class GenerateQuestion
 	}
 	
 	var temp:Float;   //for storing random result
-	public function newQuestion()
+	private function newNonFactroidQuestion()
 	{
 		// Generating operands 
 		for (x in 0...3)                                           // Just doing it in order to generate good random number 
@@ -597,6 +623,25 @@ class GenerateQuestion
 			else
 				question.missing = false;
 		}
+		
+		question.factroid = false ;                                   // Not a factroid question
 		return question;
+	}
+	
+	private function newFactroidQuestion()
+	{
+		var random:Int = cast (Math.random() * 10000 ) % factroid_prime_number.length;
+		question.operand1 = factroid_prime_number[random];
+		question.operand2 = Math.ceil(Math.random() * operand_2_maxrange) + operand_2_minrange;
+		question.factroid = true;					//It's a factroid question 
+		question.operation = ArithmeticOperation.multiplication;
+		return question;
+	}
+	public function newQuestion()
+	{
+		if(factroid == false)                                        // Generate non factroid question
+			return( newNonFactroidQuestion());
+		else														// Generate factroid question 
+			return (newFactroidQuestion());
 	}
 }
