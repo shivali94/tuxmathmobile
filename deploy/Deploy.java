@@ -67,6 +67,11 @@ public class Deploy{
 		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
 			Scalr.Mode.AUTOMATIC,(int)(res_height/3) ,(int) (res_height/3));					// asteroids will be 1/3rd of the screen height 
 		saveImage("../assets/asteroid/asteroid.png",resized);   					// saving image 
+		//Resizing small asteroids 
+		img = loadImage("assets/asteroid/small_asteroid.png"); 		   		// Loading Image 
+		resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,(int)(res_height/5) ,(int) (res_height/5));					// asteroids will be 1/5th of the screen height 
+		saveImage("../assets/asteroid/small_asteroid.png",resized);   					// saving image 
 	}
 	
 	static void resizePlanet(int res_width, int res_height)

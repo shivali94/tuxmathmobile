@@ -19,11 +19,11 @@ class Asteroid extends Sprite {
 	public var active:Bool;									// Indicate whether asteroid is active or not 
 	public var answer:Int;
 	public var isFactroid:Bool;                              // Whether asteroid is a factroid asteroid or not 
-	private static var text_format:TextFormat;
-	public function new ()
+	private var text_format:TextFormat;
+	public function new (path:String,initialize_text:String)
 	{
 		super();
-		asteroidBitmap = new Bitmap(Assets.getBitmapData("assets/asteroid/asteroid.png"));
+		asteroidBitmap = new Bitmap(Assets.getBitmapData(path));
 		addChild(asteroidBitmap);
 		text = new TextField();
 		text_format = new TextFormat('Arial', 30, 0xFFFFFF, true);
@@ -35,7 +35,7 @@ class Asteroid extends Sprite {
 		active = false;										// Inactive by default
 		
 		//Setting size
-		text.text = "00+00=00";
+		text.text = initialize_text;
 		var textSize:Float = asteroidBitmap.width * 0.7;
 		if (text.textWidth > textSize)
 			while (text.textWidth > textSize)
@@ -59,9 +59,19 @@ class Asteroid extends Sprite {
 	}
 }
 
+// Used for displaying small asteroids 
+private class SmallAsteroid extends Asteroid
+{
+	public function new()
+	{
+		super("assets/asteroid/small_asteroid.png","888");
+	}
+}
+
 class AsteroidContainer  extends Sprite 
 {
 	var asteroids:Array<Asteroid>;
+	var small_asteroids:Array<SmallAsteroid>;
 	var deltaMovement:Float;
 	// adjustment factor for deltaMovement to that asteroid should cover same distance irrespective of screen resolution 
 	// taking 480X320 as reference (2/3)*480= 320.Maximum time is 15 sec - Time for srolling across the screen.
@@ -82,12 +92,20 @@ class AsteroidContainer  extends Sprite
 		deltaMovement = 0.02;
 		adjustDeltaMovement = (Lib.current.stage.stageWidth * 2 / 3) / 320 * deltaMovement;
 		asteroids = new Array<Asteroid>();
+		small_asteroids = new Array<SmallAsteroid>();
 		 // Adding three asteroids 
 		for (i in 0...3)
 		{
-			var temp = new Asteroid();
+			var temp = new Asteroid("assets/asteroid/asteroid.png","00+00=00");
 			asteroids.push(temp);
 		}
+		 // Adding 6 small asteroids 
+		for (i in 0...6)
+		{
+			var temp = new SmallAsteroid();
+			small_asteroids.push(temp);
+		}
+		 
 		asteroidLimit = cast stageWidth / 3; 
 	}
 	
@@ -143,6 +161,7 @@ class AsteroidContainer  extends Sprite
 		}
 	}
 	
+	//Function for adding factroid Asteroids 
 	public function addFactroidAsteroid(param:Question)
 	{
 		for (asteroid in asteroids)
@@ -169,14 +188,55 @@ class AsteroidContainer  extends Sprite
 			addFactroidAsteroid(param);
 	}
 	
+	public function addSmallAsteroids(param:Asteroid)
+	{
+		//Adding first asteroid
+		for (small_asteroid in small_asteroids)
+		{
+			if (small_asteroid.active == true)
+				continue;
+			small_asteroid.x =  param.x;                                 
+			small_asteroid.y = param.y - param.width * 0.3;
+			small_asteroid.answer = level.laserValue;  
+			small_asteroid.initializeText(small_asteroid.answer + "");
+			addChild(small_asteroid);
+			small_asteroid.active = true;
+			break;
+		}
+		for (small_asteroid in small_asteroids)
+		{
+			if (small_asteroid.active == true)
+				continue;
+			small_asteroid.x =  param.x;                              
+			small_asteroid.y = param.y + param.width * 0.3;
+			small_asteroid.answer = cast param.answer / level.laserValue;  
+			small_asteroid.initializeText(small_asteroid.answer + "");
+			addChild(small_asteroid);
+			small_asteroid.active = true;
+			break;
+		}
+	}
+	
 	public function attackAsteroid()
 	{
+		for (small_asteroid in small_asteroids)
+		{
+			if (small_asteroid.active == false)
+				continue;
+			if (small_asteroid.answer == level.laserValue)
+			{
+				removeChild(small_asteroid);
+				small_asteroid.active = false;
+				asteroid_destruction.play();
+				return { result:true, score:0.25 };
+			}
+		}
 		// Attacking main asteroid 
 		for (asteroid in asteroids)
 		{
 			if (asteroid.active == false)
 				continue;
-			if (asteroid.isFactroid == false)
+			if (asteroid.isFactroid == false)								// Not a factor asteroid
 			{
 				if (asteroid.answer == level.laserValue)
 				{
@@ -192,8 +252,8 @@ class AsteroidContainer  extends Sprite
 			}
 			else                                                         // Attack factor asteroid 
 				{
-					if (level.laserValue == 1)                         
-						return { result:false, score:0.0 };				// Because 1 is factor of every number 
+					if (level.laserValue == 1 || asteroid.answer == level.laserValue)                         
+						return { result:false, score:0.0 };				// Because 1 is factor of every number and a number is a factor of itself
 					else
 					{
 						if (asteroid.answer % level.laserValue == 0)
@@ -201,6 +261,7 @@ class AsteroidContainer  extends Sprite
 							removeChild(asteroid);
 							asteroid.active = false;
 							asteroid_destruction.play();
+							addSmallAsteroids(asteroid);                        // Adding small asteroids 
 							var score = asteroid.x / stageWidth / 0.75/2;		// Half score only because two more small asteroids will add having 0.25 value each	
 							if (score > 0.5)									// Maximum score is 0.5. Total score for speed will be calculate by 
 								score = 0.5;									// total_sum/total_no_of_question 
@@ -209,11 +270,12 @@ class AsteroidContainer  extends Sprite
 					}
 				}
 		}
-		return {result:false,score:0.0};
+		return {result:false,score:0.0};           //Nothing found return 
 	}
 	
 	public function handleAsteroid()						// This function will be responsible for updating  asteroid and autodestruction
 	{
+		// For big main asteroids 
 		for (asteroid in asteroids)
 		{
 			if (asteroid.active == false)
@@ -223,6 +285,20 @@ class AsteroidContainer  extends Sprite
 			{
 				asteroid.active = false;
 				removeChild(asteroid);
+				asteroid_destruction.play();
+			}
+		}
+		
+		// For small asteroids 
+		for (small_asteroid in small_asteroids)
+		{
+			if (small_asteroid.active == false)
+				continue;
+			small_asteroid.x -= level.diffTime * asteroidSpeed;
+			if (small_asteroid.x < asteroidLimit)
+			{
+				small_asteroid.active = false;
+				removeChild(small_asteroid);
 				asteroid_destruction.play();
 			}
 		}
