@@ -87,7 +87,7 @@ public class Deploy{
 			saveImage("../assets/planet/sun.png",resized_sun);   	
 		
 		// Resizing Planets 
-		for(i =0;i<=4;i++)
+		for(i =0;i<=8;i++)
 		{
 			BufferedImage planet_img = loadImage("assets/planet/planet"+i+".png");    // Loading Image 
 			int planet_size = (int) (planet_img.getHeight()*ratio);
