@@ -150,6 +150,7 @@ class AsteroidContainer  extends Sprite
 			addNonFactroidAsteroid(param);
 	}
 	
+	
 	public function attackAsteroid()
 	{
 		for (asteroid in asteroids)
