@@ -1,5 +1,7 @@
 package ;
 
+import haxe.Timer;
+import nme.events.TimerEvent;
 import nme.Lib;
 import nme.events.Event;
 import nme.Assets;
@@ -26,10 +28,12 @@ class Game
 		level_instance.resume();
 	}
 	
-	public function stopGame()
+	public function forceStopGame()
 	{
 		isPlaying = false;
-		level_instance.pause(); // It is sufficient as it's value is reset whenever a new sublevel starts 
+		level_instance.forceQuit();
+		Lib.current.removeChild(level_instance);
+		Lib.current.addChild(menu_handler);
 	}
 	
 	private function calculate_score()

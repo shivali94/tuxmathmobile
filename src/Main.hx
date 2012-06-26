@@ -30,10 +30,11 @@ class Main
 			if (game.isPlaying == true)                        // Display Pause menu 
 			{
 				game.pauseGame();
+				Lib.current.addChild(inGameSprite);
 			}
 			else                                                // Display exit menu 
 			{
-				
+				Lib.current.addChild(inMenuSprite);
 			}
 		}
 	}
@@ -45,28 +46,37 @@ class Main
 		// Initializing inGame and inMenu Sprites
 		var shape:Shape = new Shape();
 		shape.graphics.clear();
-		shape.graphics.beginFill(0xFFFFFF);
-		shape.alpha = 0.4;
+		shape.graphics.beginFill(0x000000);
+		shape.alpha = 0.75;
 		shape.graphics.drawRect(0, 0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
+		shape.graphics.endFill();
+		var shape1:Shape = new Shape();
+		shape1.graphics.clear();
+		shape1.graphics.beginFill(0x000000);
+		shape1.alpha = 0.75;
+		shape1.graphics.drawRect(0, 0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
+		shape1.graphics.endFill();
 		
 		// Adding background overlay (opaque)
 		inGameSprite.addChild(shape);
-		inMenuSprite.addChild(shape);
+		inMenuSprite.addChild(shape1);
 		
 		//Initialzing Buttons 
-		var resume:Sprite = Button.button("RESUME", 0x14B321, Lib.current.stage.width / 6);
-		var quit:Sprite = Button.button("QUIT", 0xFC4949, Lib.current.stage.width / 6);
-		var no:Sprite = Button.button("NO", 0x14B321, Lib.current.stage.width / 6);
-		var yes:Sprite = Button.button("YES", 0xFC4949, Lib.current.stage.width / 6);
+		var resume:Sprite = Button.button("RESUME", 0x14B321, Lib.current.stage.stageHeight / 6);
+		var quit:Sprite = Button.button("QUIT", 0xFC4949, Lib.current.stage.stageHeight / 6);
+		var no:Sprite = Button.button("NO", 0x14B321, Lib.current.stage.stageHeight / 6);
+		var yes:Sprite = Button.button("YES", 0xFC4949, Lib.current.stage.stageHeight / 6);
+		
 		//Adding event listener to them
 		resume.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			Lib.current.removeChild(inGameSprite);
-			game.resumeGame();
-			inMenu = false;
+			game.resumeGame();									// Resuming game
+			inMenu = false;										// Not in menu
+			game.isPlaying = true;								// Game is started again
 		});
 		quit.addEventListener(MouseEvent.CLICK, function(ev:Event) {
-			game.stopGame();
-			inMenu = false;
+			game.forceStopGame();
+			inMenu = false;   
 		});
 		no.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			Lib.current.removeChild(inMenuSprite);
@@ -74,21 +84,34 @@ class Main
 		});
 		yes.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			inMenu = false;
-			//Lib.exit();
+			Lib.exit();
 		});
+		
+		//Adding Buttons to their corresponding sprites
+		//In Game
+		quit.x = 0;
+		quit.y = inGameSprite.height - quit.height;
+		inGameSprite.addChild(quit);
+		resume.x = inGameSprite.width - resume.width;
+		resume.y = inGameSprite.height - resume.height;
+		inGameSprite.addChild(resume);
+		//In Menu
+		yes.x = 0;
+		yes.y = inMenuSprite.height - yes.height;
+		inMenuSprite.addChild(yes);
+		no.x = inMenuSprite.width - no.width;
+		no.y = inMenuSprite.height - no.height;
+		inMenuSprite.addChild(no);
 		
 	}
 	
 	static public function main() 
 	{
-		
 		var stage = Lib.current.stage;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
 		var rectangle:Shape = new Shape(); // initializing the variable named rectangles
 		game = new Game();
-		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
-		
 		// Code for displaying FPS on android screen
 		rectangle.graphics.beginFill(0xFFFFFF); // choosing the colour for the fill, here it is red
 		rectangle.graphics.drawRect(100,0, 80,40); // (x spacing, y spacing, width, height)
@@ -97,5 +120,9 @@ class Main
 		var tempfps = new FPS();
 		tempfps.x = 100;
 		Lib.current.addChild(tempfps);	
+		//First rendering sprites
+		renderSprite();
+		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
+		
 	}
 }

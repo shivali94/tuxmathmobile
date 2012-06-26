@@ -304,4 +304,24 @@ class AsteroidContainer  extends Sprite
 		}
 	}
 	
+	// It is used to refresh everything and stop everything  
+	public function stop()
+	{
+		for (asteroid in asteroids)
+		{
+			if (asteroid.active == false)
+				continue;
+			asteroid.active = false;
+			removeChild(asteroid);
+		}
+		// For small asteroids 
+		for (small_asteroid in small_asteroids)
+		{
+			if (small_asteroid.active == false)
+				continue;
+			small_asteroid.active = false;
+			removeChild(small_asteroid);
+		}
+	}
+	
 }

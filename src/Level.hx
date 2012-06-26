@@ -153,6 +153,15 @@ class Level extends Sprite
 		level_timer.stop();
 		this.dispatchEvent( new Event("Game Complete"));
 	}
+	
+	//Called when player choose to quit game 
+	public function forceQuit()
+	{
+		removeEventListener(Event.ENTER_FRAME, animate);
+		asteroid_timer.stop();
+		level_timer.stop();
+		asteroid.stop();		// Making all asteroids inactive 
+	}
 	private function animate(event:Event):Void
 	{
 		diffTime= Lib.getTimer() - oldtime;

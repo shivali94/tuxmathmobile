@@ -258,7 +258,7 @@ class MenuHandler extends Sprite
 		sublevelmenu.x = Lib.current.stage.stageWidth * 0.1;
 		sublevelmenu.y = Lib.current.stage.stageHeight * 0.1;
 		//Back Button
-		var back_button:Sprite = Button.button("BACK", 0xED1C1C, Lib.current.stage.stageWidth / 5);
+		var back_button:Sprite = Button.button("BACK", 0xED1C1C, Lib.current.stage.stageHeight/ 6);
 		back_button.y = Lib.current.stage.stageHeight - back_button.height;
 		back_button.alpha = 0.7;
 		// Displaying Main menu 
