@@ -58,7 +58,7 @@ class SavedData
 		#end
 
 		try {
-			for(x in 0...10)
+			for(x in 0...9)
 				flushStatus = score_loader[x].flush() ;      // Save the object
 		} catch ( e:Dynamic ) {
 				trace('couldn\'t write...');
