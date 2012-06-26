@@ -103,6 +103,7 @@ private class Constant
 	public static var text_format;
 	static var text:TextField;
 	public static var starTile:Tilesheet;    // Tile for drawing star 
+	public static var empty_starTile: Tilesheet;                      // Tile for drawing empty star
 	public static function initialize()
 	{
 		var sprite_width = Lib.current.stage.stageWidth * 0.8;
@@ -135,10 +136,12 @@ private class Constant
 				text_format.size++;
 				text.setTextFormat(text_format); 
 			}
-			
-		var star:Bitmap = new Bitmap( Assets.getBitmapData("assets/star.png"));     // For loading star image for accessing its height and width
+		// Loading star tile	
 		starTile = new Tilesheet( Assets.getBitmapData("assets/star.png"));
-		starTile.addTileRect( new Rectangle(0, 0, star.width, star.height));
+		starTile.addTileRect( new Rectangle(0, 0, starTile.nmeBitmap.width, starTile.nmeBitmap.height));
+		//Loading empty star tile 
+		empty_starTile = new Tilesheet( Assets.getBitmapData("assets/empty_star.png"));
+		empty_starTile.addTileRect( new Rectangle(0, 0, empty_starTile.nmeBitmap.width, empty_starTile.nmeBitmap.height));
 	}
 }
 
@@ -162,6 +165,13 @@ class SubLevels extends Sprite
 			array.push(Constant.starTile.nmeBitmap.width*x);
 			array.push(0);
 			Constant.starTile.drawTiles(panel.graphics, array);
+		}
+		for (x in number...3)
+		{
+			var array:Array<Float> = new Array<Float>();
+			array.push(Constant.starTile.nmeBitmap.width*x);
+			array.push(0);
+			Constant.empty_starTile.drawTiles(panel.graphics, array);
 		}
 		panel.x = (Constant.width - panel.width) / 2;
 	}

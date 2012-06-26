@@ -102,6 +102,11 @@ public class Deploy{
 		BufferedImage resized_star= Scalr.resize(star_img,Scalr.Method.QUALITY,            	// resizing image
 			Scalr.Mode.AUTOMATIC,star_size,star_size);
 		saveImage("../assets/star.png",resized_star);   			// saving image 
+		// Empty star
+		star_img = loadImage("assets/empty_star.png");                               // It will be 5.6% of the stage height 
+		resized_star= Scalr.resize(star_img,Scalr.Method.QUALITY,           
+			Scalr.Mode.AUTOMATIC,star_size,star_size);
+		saveImage("../assets/empty_star.png",resized_star);   			
 	}
 	
 	public static void main( String args[])
