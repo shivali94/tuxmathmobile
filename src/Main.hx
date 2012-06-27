@@ -63,9 +63,9 @@ class Main
 		
 		//Initialzing Buttons 
 		var resume:Sprite = Button.button("RESUME", 0x14B321, Lib.current.stage.stageHeight / 6);
+		var main_menu:Sprite = Button.button("MAIN MENU", 0xFC4949, Lib.current.stage.stageHeight / 6);
+		var play:Sprite = Button.button("PLAY", 0x14B321, Lib.current.stage.stageHeight / 6);
 		var quit:Sprite = Button.button("QUIT", 0xFC4949, Lib.current.stage.stageHeight / 6);
-		var no:Sprite = Button.button("NO", 0x14B321, Lib.current.stage.stageHeight / 6);
-		var yes:Sprite = Button.button("YES", 0xFC4949, Lib.current.stage.stageHeight / 6);
 		
 		//Adding event listener to them
 		resume.addEventListener(MouseEvent.CLICK, function(ev:Event) {
@@ -74,34 +74,34 @@ class Main
 			inMenu = false;										// Not in menu
 			game.isPlaying = true;								// Game is started again
 		});
-		quit.addEventListener(MouseEvent.CLICK, function(ev:Event) {
+		main_menu.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			game.forceStopGame();
 			inMenu = false;   
 		});
-		no.addEventListener(MouseEvent.CLICK, function(ev:Event) {
+		play.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			Lib.current.removeChild(inMenuSprite);
 			inMenu = false;
 		});
-		yes.addEventListener(MouseEvent.CLICK, function(ev:Event) {
+		quit.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			inMenu = false;
 			Lib.exit();
 		});
 		
 		//Adding Buttons to their corresponding sprites
 		//In Game
-		quit.x = 0;
-		quit.y = inGameSprite.height - quit.height;
-		inGameSprite.addChild(quit);
-		resume.x = inGameSprite.width - resume.width;
-		resume.y = inGameSprite.height - resume.height;
+		main_menu.x = (inGameSprite.width-main_menu.width)/2;
+		main_menu.y = inGameSprite.height/2  + inGameSprite.height/8;
+		inGameSprite.addChild(main_menu);
+		resume.x = (inGameSprite.width-resume.width)/2;
+		resume.y = inGameSprite.height/2  - inGameSprite.height/8;
 		inGameSprite.addChild(resume);
 		//In Menu
-		yes.x = 0;
-		yes.y = inMenuSprite.height - yes.height;
-		inMenuSprite.addChild(yes);
-		no.x = inMenuSprite.width - no.width;
-		no.y = inMenuSprite.height - no.height;
-		inMenuSprite.addChild(no);
+		quit.x = (inMenuSprite.width-quit.width)/2;
+		quit.y = inMenuSprite.height/2 + inMenuSprite.height/8;
+		inMenuSprite.addChild(quit);
+		play.x = (inMenuSprite.width - play.width)/2;
+		play.y = inMenuSprite.height/2 - inMenuSprite.height/8;
+		inMenuSprite.addChild(play);
 		
 	}
 	
@@ -123,6 +123,6 @@ class Main
 		//First rendering sprites
 		renderSprite();
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
-		
+		 
 	}
 }
