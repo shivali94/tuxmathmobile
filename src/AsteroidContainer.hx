@@ -123,7 +123,7 @@ class AsteroidContainer  extends Sprite
 			if (asteroid.active == true)
 				continue;
 			asteroid.x = stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
-			asteroid.y = 130;
+			asteroid.y = (Lib.current.stage.stageHeight-asteroid.height)/2;
 			if (param.missing == false)
 			{
 				switch(param.operation)
@@ -169,7 +169,7 @@ class AsteroidContainer  extends Sprite
 			if (asteroid.active == true)
 				continue;
 			asteroid.x = stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
-			asteroid.y = 130;
+			asteroid.y = (Lib.current.stage.stageHeight-asteroid.height)/2;
 			asteroid.answer = param.operand1 * param.operand2;            // It is used to check factor instead of just matching it.
 			asteroid.initializeText(""+(param.operand1 * param.operand2));
 			addChild(asteroid);
@@ -225,6 +225,7 @@ class AsteroidContainer  extends Sprite
 				continue;
 			if (small_asteroid.answer == level.laserValue)
 			{
+				level.spaceship.show_laser(small_asteroid.x + small_asteroid.height / 2 , small_asteroid.y + small_asteroid.width / 2);
 				removeChild(small_asteroid);
 				small_asteroid.active = false;
 				asteroid_destruction.play();
@@ -240,6 +241,7 @@ class AsteroidContainer  extends Sprite
 			{
 				if (asteroid.answer == level.laserValue)
 				{
+					level.spaceship.show_laser(asteroid.x + asteroid.height / 2 , asteroid.y + asteroid.width / 2);
 					removeChild(asteroid);
 					asteroid.active = false;
 					asteroid_destruction.play();
@@ -258,6 +260,7 @@ class AsteroidContainer  extends Sprite
 					{
 						if (asteroid.answer % level.laserValue == 0)
 						{
+							level.spaceship.show_laser(asteroid.x + asteroid.height / 2 , asteroid.y + asteroid.width / 2);
 							removeChild(asteroid);
 							asteroid.active = false;
 							asteroid_destruction.play();

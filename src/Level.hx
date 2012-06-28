@@ -54,6 +54,7 @@ class Level extends Sprite
 	public  var level_timer:Timer;							// Timer for automatically end level;
 	private var question_instance:GenerateQuestion;
 	public var stats:LevelStat;                                    // Used to store result of a sublevel 
+	public var spaceship:Spaceship;                                // so that it's value can be used by AsteroidContainer
 	public function new() 
 	{
 		super();
@@ -66,7 +67,8 @@ class Level extends Sprite
 		addChild(background);
 		asteroid = new AsteroidContainer(this);
 		addChild(asteroid);								// Adding main asteroid sprite which will contain all asteroids 
-		addChild(new Spaceship());
+		spaceship = new Spaceship();
+		addChild(spaceship);
 		numButtton = new Console();                      // Contains Number Buttons and console screen 
 		//numButtton.addEventListener(TouchEvent.TOUCH_BEGIN, handleNumButton);
 		numButtton.addEventListener(MouseEvent.MOUSE_DOWN, handleNumButton);
