@@ -27,7 +27,7 @@ private class Constant
 	public static var consoleButton:Sound;
 	public static function initialize()
 	{
-		width = cast Lib.current.stage.stageWidth * 0.2 / 2;                   // Will be 10% of screen size
+		width = cast Lib.current.stage.stageWidth * 0.15 / 2;                   // Will be 10% of screen size
 		height =cast Lib.current.stage.stageHeight * 0.95 / 5;					// Will cover about 95% of screen height 
 		border = cast ((Lib.current.stage.stageHeight - height * 5) / 6);
 		consoleButton = Assets.getSound("assets/sounds/tock.wav");
@@ -37,8 +37,6 @@ private class Constant
 		text_format = new TextFormat('Arial', 30, 0xFFFFFF, true);
 		text.defaultTextFormat = text_format;
 		text.text = "8";
-		text_format.leftMargin = 0;
-		text_format.rightMargin = 0;
 		var textSize:Float = height ;                         //  Will cover 100% of button height
 		// Setting size of text 
 		if (text.textHeight > textSize)
@@ -53,6 +51,8 @@ private class Constant
 				text_format.size++;
 				text.setTextFormat(text_format);
 			}
+		if (Constant.width < text.textWidth)
+			Constant.width = cast text.textWidth;
 	}
 }
 
