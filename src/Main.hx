@@ -84,7 +84,7 @@ class Main
 		});
 		quit.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			inMenu = false;
-			Lib.exit();
+			//Lib.exit();
 		});
 		
 		//Adding Buttons to their corresponding sprites

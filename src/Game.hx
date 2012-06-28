@@ -14,6 +14,7 @@ class Game
 {
 	var level_instance:Level;                 // Used for playing game
 	var menu_handler:MenuHandler;			// Used for displaying menu
+	var game_tutorial:GameTutorial;
 	public var isPlaying:Bool;
 	
 	// Pause current game
@@ -58,11 +59,16 @@ class Game
 	
 	function startGame(ev:Event){
 		// +1 because values are starting from 0
-		level_instance.initialize(menu_handler.level+1, menu_handler.sublevel+1);
-		Lib.current.addChild(level_instance);
-		level_instance.play();
-		Lib.current.removeChild(menu_handler);
-		isPlaying = true;
+		game_tutorial.initializeText(menu_handler.level + 1, menu_handler.sublevel + 1);
+		Lib.current.removeChild(menu_handler);							// removing menu handler 
+		Lib.current.addChild(game_tutorial);
+		// Adding event listener 
+		game_tutorial.addEventListener("OK",function(ev:Event){
+			level_instance.initialize(menu_handler.level + 1, menu_handler.sublevel + 1);
+			Lib.current.addChild(level_instance);
+			level_instance.play();
+			isPlaying = true;
+		});
 	}
 	
 	function gameComplete(ev:Event) {
@@ -88,9 +94,10 @@ class Game
 	{
 		level_instance = new Level();
 		menu_handler = new MenuHandler();
+		game_tutorial = new GameTutorial();
 		SavedData.initialize();
 		mainGameScreen();
-		isPlaying = false;                            // Setting isPlaying to true 
+		isPlaying = false;                            // Setting isPlaying to false
 	}
 	
 }
