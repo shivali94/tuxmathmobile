@@ -68,7 +68,6 @@ class Game
 			Lib.current.addChild(level_instance);          										// Adding level sprite 
 			level_instance.play();
 			isPlaying = true;
-			Lib.current.removeChild(game_tutorial);
 		});
 	}
 	
