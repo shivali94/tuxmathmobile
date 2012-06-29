@@ -81,6 +81,7 @@ class Level extends Sprite
 	{
 		level_timer.reset();								// Reseting level timer 
 		stats.reset();										// Resetting level stats 
+		asteroid.stop();									// Making sure everything is clean before starting 
 		asteroid.setAsteroidSpeed(1);
 		asteroid_timer = new Timer(GameConstant.level_time/GameConstant.no_of_question,GameConstant.no_of_question-1);
 		asteroid_timer.addEventListener(TimerEvent.TIMER, generateAsteroid);

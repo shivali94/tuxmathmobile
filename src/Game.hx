@@ -64,10 +64,11 @@ class Game
 		Lib.current.addChild(game_tutorial);
 		// Adding event listener 
 		game_tutorial.addEventListener("OK",function(ev:Event){
-			level_instance.initialize(menu_handler.level + 1, menu_handler.sublevel + 1);
-			Lib.current.addChild(level_instance);
+			level_instance.initialize(menu_handler.level + 1, menu_handler.sublevel + 1);        // Initializing Handler
+			Lib.current.addChild(level_instance);          										// Adding level sprite 
 			level_instance.play();
 			isPlaying = true;
+			Lib.current.removeChild(game_tutorial);
 		});
 	}
 	
