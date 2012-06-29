@@ -7,8 +7,8 @@ package ;
 
 class GameConstant 
 {
-	public static var no_of_question:Int = 2;
-	public static var level_time = 15000;					// Level time   - 2.5 minutes 
+	public static var no_of_question:Int = 20;
+	public static var level_time = 150000;					// Level time   - 2.5 minutes 
 	
 	// Used for calculating numbers of star which a player get in sublevel
 	public static var star_3 = 1800;

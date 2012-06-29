@@ -63,6 +63,9 @@ class Level extends Sprite
 		// This timer will be responsible for stoping a game level. Reset - initialize, start - play
 		level_timer = new Timer(GameConstant.level_time+5000,1);               // Adding 5 sec more  
 		level_timer.addEventListener(TimerEvent.TIMER, stop);
+		//Timerfor generating asteroid
+		asteroid_timer = new Timer(GameConstant.level_time/GameConstant.no_of_question,GameConstant.no_of_question-1);
+		asteroid_timer.addEventListener(TimerEvent.TIMER, generateAsteroid);
 		background = new Background(this);             // passing my reference 
 		addChild(background);
 		asteroid = new AsteroidContainer(this);
@@ -83,8 +86,7 @@ class Level extends Sprite
 		stats.reset();										// Resetting level stats 
 		asteroid.stop();									// Making sure everything is clean before starting 
 		asteroid.setAsteroidSpeed(1);
-		asteroid_timer = new Timer(GameConstant.level_time/GameConstant.no_of_question,GameConstant.no_of_question-1);
-		asteroid_timer.addEventListener(TimerEvent.TIMER, generateAsteroid);
+		asteroid_timer.reset();								// reset timer 
 		question_instance.setQuestions(level, sublevel);										//Setting Level and Sublevel
 	}
 	
