@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	<!-- metadata, make sure 'package' is at least 2 segments (ie. com.myproject) -->
-	<app file="tux" title="tux" main="Main" package="tuxkids.math.app" 
+	<app file="Tuxmath" title="Tuxmath" main="Main" package="tuxkids.math.app" 
 		version="1.0.0" company="Deepak Aggarwal" />
 		
 	<!-- output -->

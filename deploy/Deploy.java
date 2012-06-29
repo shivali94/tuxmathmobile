@@ -53,6 +53,14 @@ public class Deploy{
 		saveImage("../assets/background/main_background.png",resized);   			// saving image 
 	}
 	
+	static void credits(int res_width, int res_height)
+	{
+		BufferedImage img = loadImage("assets/credits/credits.png");    // Loading Image 
+		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,res_width,res_height);
+		resized = Scalr.crop(resized,res_width,res_height);      							// croping it 
+		saveImage("../assets/credits/credits.png",resized);   			// saving image 
+	}
 	static void resizeSpaceship(int res_width, int res_height)
 	{
 		BufferedImage img = loadImage("assets/spaceship/spaceship.png");    		// Loading Image 
@@ -121,6 +129,7 @@ public class Deploy{
 		res_height=Integer.parseInt(args[1]);
 		resizeBackground(res_width,res_height);
 		resizeMainBackground(res_width,res_height);
+		credits(res_width,res_height);
 		resizeSpaceship(res_width,res_height);
 		resizeAsteroid(res_width,res_height);
 		resizePlanet(res_width,res_height);

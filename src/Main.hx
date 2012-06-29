@@ -1,5 +1,6 @@
 package ;
 
+import nme.display.Bitmap;
 import nme.display.Shape;
 import nme.display.Sprite;
 import nme.display.StageAlign;
@@ -9,6 +10,7 @@ import nme.events.KeyboardEvent;
 import nme.Lib;
 import nme.events.MouseEvent;
 import nme.display.FPS;
+import nme.Assets;
 /**
  * ...
  * @author Deepak Aggarwal
@@ -31,10 +33,12 @@ class Main
 			{
 				game.pauseGame();
 				Lib.current.addChild(inGameSprite);
+				inMenu = true;
 			}
 			else                                                // Display exit menu 
 			{
 				Lib.current.addChild(inMenuSprite);
+				inMenu = true;
 			}
 		}
 	}
@@ -66,6 +70,7 @@ class Main
 		var main_menu:Sprite = Button.button("MAIN MENU", 0xFC4949, Lib.current.stage.stageHeight / 6);
 		var play:Sprite = Button.button("PLAY", 0x14B321, Lib.current.stage.stageHeight / 6);
 		var quit:Sprite = Button.button("QUIT", 0xFC4949, Lib.current.stage.stageHeight / 6);
+		var credits:Sprite = Button.button("CREDITS", 0xf8964f, Lib.current.stage.stageHeight / 6);
 		
 		//Adding event listener to them
 		resume.addEventListener(MouseEvent.CLICK, function(ev:Event) {
@@ -75,16 +80,29 @@ class Main
 			game.isPlaying = true;								// Game is started again
 		});
 		main_menu.addEventListener(MouseEvent.CLICK, function(ev:Event) {
+			Lib.current.removeChild(inGameSprite);
 			game.forceStopGame();
 			inMenu = false;   
 		});
+		
 		play.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			Lib.current.removeChild(inMenuSprite);
 			inMenu = false;
 		});
 		quit.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			inMenu = false;
-			//Lib.exit();
+			Lib.exit();
+		});
+		// Adding and removing credit sprite 
+		credits.addEventListener(MouseEvent.CLICK, function(ev:Event) {
+			var credit:Sprite = new Sprite();
+			var credit_image:Bitmap = new Bitmap(Assets.getBitmapData("assets/credits/credits.png"));    //Loading images
+			credit.addChild(credit_image);
+			credit.addEventListener(MouseEvent.CLICK, function(ev:Event) {
+				Lib.current.removeChild(credit);
+			});
+			inMenu = true;                                                         // We are in menu
+			Lib.current.addChild(credit);
 		});
 		
 		//Adding Buttons to their corresponding sprites
@@ -97,12 +115,14 @@ class Main
 		inGameSprite.addChild(resume);
 		//In Menu
 		quit.x = (inMenuSprite.width-quit.width)/2;
-		quit.y = inMenuSprite.height/2 + inMenuSprite.height/8;
+		quit.y = inMenuSprite.height/2 + inMenuSprite.height/4;
 		inMenuSprite.addChild(quit);
 		play.x = (inMenuSprite.width - play.width)/2;
-		play.y = inMenuSprite.height/2 - inMenuSprite.height/8;
+		play.y = inMenuSprite.height/2 - inMenuSprite.height/4;
 		inMenuSprite.addChild(play);
-		
+		credits.x = (inMenuSprite.width - credits.width)/2;            // In the middle
+		credits.y = inMenuSprite.height/2;
+		inMenuSprite.addChild(credits);
 	}
 	
 	static public function main() 
