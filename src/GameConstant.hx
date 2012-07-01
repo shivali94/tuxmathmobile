@@ -1,5 +1,7 @@
 package ;
 
+import nme.Lib;
+
 /**
  * ...
  * @author Deepak Aggarwal
@@ -14,4 +16,19 @@ class GameConstant
 	public static var star_3 = 1800;
 	public static var star_2 = 1500;
 	public static var star_1 = 1200;
+	public static var stageWidth:Int;
+	public static var stageHeight:Int;
+	
+	public static function initialize()
+	{
+		// stageWidth and stage height
+		#if (iphone)
+			// Width and Height of stage are swapped in IOS 
+			stageWidth = Lib.current.stage.stageHeight;
+			stageHeight = Lib.current.stage.stageWidth;
+		#else
+			stageWidth = Lib.current.stage.stageWidth;
+			stageHeight = Lib.current.stage.stageHeight;
+		#end 
+	}
 }

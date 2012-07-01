@@ -19,7 +19,7 @@ class Spaceship extends Sprite
 	{
 		super();
 		spaceship = new Bitmap(Assets.getBitmapData("assets/spaceship/spaceship.png"));
-		spaceship.y = (Lib.current.stage.stageHeight - spaceship.height) / 2;
+		spaceship.y = (GameConstant.stageHeight - spaceship.height) / 2;
 		addChild(spaceship);
 	}
 	public function show_laser(x:Float,y:Float)

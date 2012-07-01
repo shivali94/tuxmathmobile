@@ -27,9 +27,9 @@ private class Constant
 	public static var consoleButton:Sound;
 	public static function initialize()
 	{
-		width = cast Lib.current.stage.stageWidth * 0.15 / 2;                   // Will be 10% of screen size
-		height =cast Lib.current.stage.stageHeight * 0.95 / 5;					// Will cover about 95% of screen height 
-		border = cast ((Lib.current.stage.stageHeight - height * 5) / 6);
+		width = cast GameConstant.stageWidth * 0.15 / 2;                   // Will be 10% of screen size
+		height =cast GameConstant.stageHeight * 0.95 / 5;					// Will cover about 95% of screen height 
+		border = cast ((GameConstant.stageHeight - height * 5) / 6);
 		consoleButton = Assets.getSound("assets/sounds/tock.wav");
 		
 		// Setting size of content of buttons 
@@ -125,7 +125,7 @@ class ConsoleScreen extends Sprite
 		text = new TextField();
 		text_format = new TextFormat('Arial', 30, 0x66cae7, true);
 		text_format.align = TextFormatAlign.CENTER;
-		var textSize:Float = Lib.current.stage.stageHeight*0.10;               // It will be 10% of screen height                         
+		var textSize:Float = GameConstant.stageHeight*0.10;               // It will be 10% of screen height                         
 		text.setTextFormat(text_format);
 		text.selectable = false;
 		text.text = "00";  
@@ -171,13 +171,13 @@ class Console extends Sprite
 			if (x < 5)
 				temp.x = 0
 			else
-				temp.x = Lib.current.stage.stageWidth - Constant.width;
+				temp.x = GameConstant.stageWidth - Constant.width;
 			temp.y = Constant.height * (x%5) + Constant.border * (x%5 + 1);
 			addChild(temp);
 		}
 		console_screen = new ConsoleScreen();
-		console_screen.x = (Lib.current.stage.stageWidth - console_screen.width) / 2;
-		console_screen.y = Lib.current.stage.stageHeight - console_screen.height;
+		console_screen.x = (GameConstant.stageWidth - console_screen.width) / 2;
+		console_screen.y = GameConstant.stageHeight - console_screen.height;
 		addChild(console_screen);
 	}
 	public function updateConsoleScreen(string:String)

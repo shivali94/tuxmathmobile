@@ -85,12 +85,12 @@ class AsteroidContainer  extends Sprite
 	{
 		super();
 		this.level = level_instance;
-		stageWidth = Lib.current.stage.stageWidth;
+		stageWidth = GameConstant.stageWidth;
 		//Loading asteroid destruction sound
 		asteroid_destruction = Assets.getSound("assets/sounds/AsteroidExplosion.wav");
 		//Initializing delta movement 
 		deltaMovement = 0.02;
-		adjustDeltaMovement = (Lib.current.stage.stageWidth * 2 / 3) / 320 * deltaMovement;
+		adjustDeltaMovement = (GameConstant.stageWidth * 2 / 3) / 320 * deltaMovement;
 		asteroids = new Array<Asteroid>();
 		small_asteroids = new Array<SmallAsteroid>();
 		 // Adding three asteroids 
@@ -123,7 +123,7 @@ class AsteroidContainer  extends Sprite
 			if (asteroid.active == true)
 				continue;
 			asteroid.x = stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
-			asteroid.y = (Lib.current.stage.stageHeight-asteroid.height)/2;
+			asteroid.y = (GameConstant.stageHeight-asteroid.height)/2;
 			if (param.missing == false)
 			{
 				switch(param.operation)
@@ -169,7 +169,7 @@ class AsteroidContainer  extends Sprite
 			if (asteroid.active == true)
 				continue;
 			asteroid.x = stageWidth + 10;                                 // Start scrolling asteroid from the right side of the screen 
-			asteroid.y = (Lib.current.stage.stageHeight-asteroid.height)/2;
+			asteroid.y = (GameConstant.stageHeight-asteroid.height)/2;
 			asteroid.answer = param.operand1 * param.operand2;            // It is used to check factor instead of just matching it.
 			asteroid.initializeText(""+(param.operand1 * param.operand2));
 			addChild(asteroid);

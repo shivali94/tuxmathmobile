@@ -52,13 +52,13 @@ class Main
 		shape.graphics.clear();
 		shape.graphics.beginFill(0x000000);
 		shape.alpha = 0.75;
-		shape.graphics.drawRect(0, 0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
+		shape.graphics.drawRect(0, 0, GameConstant.stageWidth, GameConstant.stageHeight);
 		shape.graphics.endFill();
 		var shape1:Shape = new Shape();
 		shape1.graphics.clear();
 		shape1.graphics.beginFill(0x000000);
 		shape1.alpha = 0.75;
-		shape1.graphics.drawRect(0, 0, Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
+		shape1.graphics.drawRect(0, 0, GameConstant.stageWidth, GameConstant.stageHeight);
 		shape1.graphics.endFill();
 		
 		// Adding background overlay (opaque)
@@ -66,11 +66,11 @@ class Main
 		inMenuSprite.addChild(shape1);
 		
 		//Initialzing Buttons 
-		var resume:Sprite = Button.button("RESUME", 0x14B321, Lib.current.stage.stageHeight / 6);
-		var main_menu:Sprite = Button.button("MAIN MENU", 0xFC4949, Lib.current.stage.stageHeight / 6);
-		var play:Sprite = Button.button("PLAY", 0x14B321, Lib.current.stage.stageHeight / 6);
-		var quit:Sprite = Button.button("QUIT", 0xFC4949, Lib.current.stage.stageHeight / 6);
-		var credits:Sprite = Button.button("CREDITS", 0xf8964f, Lib.current.stage.stageHeight / 6);
+		var resume:Sprite = Button.button("RESUME", 0x14B321, GameConstant.stageHeight / 6);
+		var main_menu:Sprite = Button.button("MAIN MENU", 0xFC4949, GameConstant.stageHeight / 6);
+		var play:Sprite = Button.button("PLAY", 0x14B321, GameConstant.stageHeight / 6);
+		var quit:Sprite = Button.button("QUIT", 0xFC4949, GameConstant.stageHeight / 6);
+		var credits:Sprite = Button.button("CREDITS", 0xf8964f, GameConstant.stageHeight / 6);
 		
 		//Adding event listener to them
 		resume.addEventListener(MouseEvent.CLICK, function(ev:Event) {
@@ -130,6 +130,7 @@ class Main
 		var stage = Lib.current.stage;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
+		GameConstant.initialize();
 		var rectangle:Shape = new Shape(); // initializing the variable named rectangles
 		game = new Game();
 		// Code for displaying FPS on android screen
@@ -142,7 +143,6 @@ class Main
 		Lib.current.addChild(tempfps);	
 		//First rendering sprites
 		renderSprite();
-		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
-		 
+		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyHandler);	 
 	}
 }

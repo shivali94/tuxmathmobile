@@ -44,13 +44,13 @@ class Planets extends Sprite
 	{
 		super();
 		// Distance between two adjacent planets  
-		var distance:Int = cast Lib.current.stage.stageWidth / 4;
+		var distance:Int = cast GameConstant.stageWidth / 4;
 		x_scale = 0;                               // For keeping tab on x dimension of sprite 
 		// First displaying sun
 		var sun = new Bitmap(Assets.getBitmapData("assets/planet/sun.png"));
 		sun.x = -sun.width / 2;				// Only half of it will be visible 
 		x_scale = cast (sun.width / 2);
-		sun.y = (Lib.current.stage.stageHeight - sun.height) / 2;
+		sun.y = (GameConstant.stageHeight - sun.height) / 2;
 		addChild(sun);
 		
 		for (x in 0...9)
@@ -58,7 +58,7 @@ class Planets extends Sprite
 			x_scale += distance;
 			var temp = new Planet(x);
 			temp.x = x_scale;
-			temp.y = (Lib.current.stage.stageHeight - temp.height) / 2;     // Puting it in middle
+			temp.y = (GameConstant.stageHeight - temp.height) / 2;     // Puting it in middle
 			x_scale += cast temp.width;
 			addChild(temp);
  		}
@@ -71,7 +71,7 @@ class MainMenuScreen extends Sprite
 		super();
 		var planets = new Planets();
 		// Scrolling rectangles
-		var bounds:Rectangle = new Rectangle( -planets.x_scale + Lib.current.stage.stageWidth, 0, planets.x_scale-Lib.current.stage.stageWidth, 0);
+		var bounds:Rectangle = new Rectangle( -planets.x_scale + GameConstant.stageWidth, 0, planets.x_scale-GameConstant.stageWidth, 0);
 		// Necessary so that sprite could be dragged easily 
 		addChild(new Bitmap(Assets.getBitmapData("assets/background/main_background.png")));
 		
@@ -106,8 +106,8 @@ private class Constant
 	public static var empty_starTile: Tilesheet;                      // Tile for drawing empty star
 	public static function initialize()
 	{
-		var sprite_width = Lib.current.stage.stageWidth * 0.8;
-		var sprite_height = Lib.current.stage.stageHeight * 0.8;
+		var sprite_width = GameConstant.stageWidth * 0.8;
+		var sprite_height = GameConstant.stageHeight * 0.8;
 	
 		// Just calculating some stuffs to display things nicely
 		width = cast sprite_width * 0.8 / 5;             
@@ -255,11 +255,11 @@ class MenuHandler extends Sprite
 		var main_menu_screen = new MainMenuScreen();
 		// Sublevel menu 
 		sublevelmenu = new LevelMenu();
-		sublevelmenu.x = Lib.current.stage.stageWidth * 0.1;
-		sublevelmenu.y = Lib.current.stage.stageHeight * 0.1;
+		sublevelmenu.x = GameConstant.stageWidth * 0.1;
+		sublevelmenu.y = GameConstant.stageHeight * 0.1;
 		//Back Button
-		var back_button:Sprite = Button.button("BACK", 0xED1C1C, Lib.current.stage.stageHeight/ 6);
-		back_button.y = Lib.current.stage.stageHeight - back_button.height;
+		var back_button:Sprite = Button.button("BACK", 0xED1C1C, GameConstant.stageHeight/ 6);
+		back_button.y = GameConstant.stageHeight - back_button.height;
 		back_button.alpha = 0.7;
 		// Displaying Main menu 
 		addChild(main_menu_screen);

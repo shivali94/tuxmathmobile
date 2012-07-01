@@ -162,10 +162,10 @@ class GameTutorial extends Sprite
 		addChild(new Bitmap(Assets.getBitmapData("assets/background/main_background.png")));
 		text.text = "tuxkids tuxkids tux";
 		text.text += text.text;
-		text.width = Lib.current.stage.stageWidth * 0.7;
-		text.height = Lib.current.stage.stageHeight * 0.6;
+		text.width = GameConstant.stageWidth * 0.7;
+		text.height = GameConstant.stageHeight * 0.6;
 		text.wordWrap = true;
-		var textSize:Float = Lib.current.stage.stageWidth * 0.65;                         //  Will cover 100% of button height
+		var textSize:Float = GameConstant.stageWidth * 0.65;                         //  Will cover 100% of button height
 		// Setting size of text 
 		if (text.textWidth > textSize)
 			while (text.textWidth > textSize)
@@ -179,12 +179,12 @@ class GameTutorial extends Sprite
 				text_format.size++;
 				text.setTextFormat(text_format); 
 			}
-		text.x = Lib.current.stage.stageWidth * 0.15;
-		text.y = Lib.current.stage.stageHeight * 0.2;
+		text.x = GameConstant.stageWidth * 0.15;
+		text.y = GameConstant.stageHeight * 0.2;
 		addChild(text);
-		var ok_button:Sprite = Button.button("OK", 0x14B321, Lib.current.stage.stageHeight * 0.2);
-		ok_button.x = Lib.current.stage.stageWidth - ok_button.width;
-		ok_button.y = Lib.current.stage.stageHeight - ok_button.height;
+		var ok_button:Sprite = Button.button("OK", 0x14B321, GameConstant.stageHeight * 0.2);
+		ok_button.x = GameConstant.stageWidth - ok_button.width;
+		ok_button.y = GameConstant.stageHeight - ok_button.height;
 		ok_button.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			dispatchEvent(new Event("OK"));
 		});

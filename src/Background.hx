@@ -27,8 +27,8 @@ class Background extends Sprite
 	public function new(param:Level) 
 	{
 		super();
-		stageHeight = Lib.current.stage.stageHeight;    
-		stageWidth = Lib.current.stage.stageWidth;
+		stageHeight = GameConstant.stageHeight;    
+		stageWidth = GameConstant.stageWidth;
 		levelInstance = param;
 		deltaMovement = 0.02;
 		backroundScrollSpeed = 1 * deltaMovement;
