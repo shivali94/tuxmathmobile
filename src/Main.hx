@@ -91,7 +91,9 @@ class Main
 		});
 		quit.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 			inMenu = false;
-			Lib.exit();
+			#if(!flash)
+				Lib.exit();
+			#end 
 		});
 		// Adding and removing credit sprite 
 		credits.addEventListener(MouseEvent.CLICK, function(ev:Event) {
@@ -131,6 +133,7 @@ class Main
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
 		GameConstant.initialize();
+		Transition.intialize();
 		var rectangle:Shape = new Shape(); // initializing the variable named rectangles
 		game = new Game();
 		// Code for displaying FPS on android screen

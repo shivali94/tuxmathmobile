@@ -26,7 +26,7 @@ class Asteroid extends Sprite {
 		asteroidBitmap = new Bitmap(Assets.getBitmapData(path));
 		addChild(asteroidBitmap);
 		text = new TextField();
-		text_format = new TextFormat('Arial', 30, 0xFFFFFF, true);
+		text_format = new TextFormat('Arial', 90, 0xFFFFFF, true);
 		//text_format.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = text_format;
 		text.selectable = false;
@@ -40,13 +40,13 @@ class Asteroid extends Sprite {
 		if (text.textWidth > textSize)
 			while (text.textWidth > textSize)
 			{
-				text_format.size--;
+				text_format.size-=2;
 				text.setTextFormat(text_format);
 			}
 		else
 			while (text.textWidth < textSize)
 			{
-				text_format.size++;
+				text_format.size+=2;
 				text.setTextFormat(text_format);
 			}
 	}

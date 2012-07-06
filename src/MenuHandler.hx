@@ -116,7 +116,7 @@ private class Constant
 		vertical_border = cast ((sprite_height - height * 2) / 3);
 		
 		text = new TextField();
-		text_format = new TextFormat('Arial', 30, 0xFFFFFF, true);
+		text_format = new TextFormat('Arial', 90, 0xFFFFFF, true);
 		text_format.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = text_format;
 		text.text = "8";
@@ -127,13 +127,13 @@ private class Constant
 		if (text.textHeight > textSize)
 			while (text.textHeight > textSize)
 			{
-				text_format.size--;
+				text_format.size-=2;
 				text.setTextFormat(text_format);
 			}
 		else
 			while (text.textHeight < textSize)
 			{
-				text_format.size++;
+				text_format.size+=2;
 				text.setTextFormat(text_format); 
 			}
 		// Loading star tile	
@@ -269,9 +269,12 @@ class MenuHandler extends Sprite
 				level = event.target.value;
 				// Initializing star score of sublevels
 				sublevelmenu.initializeScore(SavedData.score[level]);
+				Transition.zoomIn([sublevelmenu, back_button], [main_menu_screen], this);
+				/*
 				addChild(sublevelmenu);
 				addChild(back_button);
 				removeChild(main_menu_screen);	
+				*/
 			});
 			
 		//sublevel handler 
@@ -304,5 +307,4 @@ class MenuHandler extends Sprite
 	public function refreshScore() {
 		sublevelmenu.initializeScore(SavedData.score[level]);
 	}
-	
 }

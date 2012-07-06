@@ -16,7 +16,7 @@ class Button
 	static public function button(content:String,color:Int,Height:Float)
 	{
 		var text = new TextField();
-		var text_format = new TextFormat('Arial', 30, 0xFFFFFF, true);
+		var text_format = new TextFormat('Arial', 90, 0xFFFFFF, true);
 		text_format.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = text_format;
 		text.selectable = false;
@@ -25,13 +25,13 @@ class Button
 		if (text.textHeight > Height)
 			while (text.textHeight > Height)
 			{
-				text_format.size--;
+				text_format.size-=2;
 				text.setTextFormat(text_format);
 			}
 		else
 			while (text.textHeight < Height)
 			{
-				text_format.size++;
+				text_format.size+=2;
 				text.setTextFormat(text_format); 
 			}
 		text.height = text.textHeight;

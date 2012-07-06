@@ -34,7 +34,7 @@ private class Constant
 		
 		// Setting size of content of buttons 
 		var text = new TextField();
-		text_format = new TextFormat('Arial', 30, 0xFFFFFF, true);
+		text_format = new TextFormat('Arial', 90, 0xFFFFFF, true);
 		text.defaultTextFormat = text_format;
 		text.text = "8";
 		var textSize:Float = height ;                         //  Will cover 100% of button height
@@ -42,13 +42,13 @@ private class Constant
 		if (text.textHeight > textSize)
 			while (text.textHeight > textSize)
 			{
-				text_format.size--;
+				text_format.size-=2;
 				text.setTextFormat(text_format);
 			}
 		else
 			while (text.textHeight < textSize)
 			{
-				text_format.size++;
+				text_format.size+=2;
 				text.setTextFormat(text_format);
 			}
 		if (Constant.width < text.textWidth)
@@ -87,7 +87,9 @@ private class Button extends Sprite
 		addEventListener(MouseEvent.MOUSE_DOWN,function(ev:MouseEvent){
 			touchBegin();
 			Constant.consoleButton.play();
+			#if(!flash)
 			Haptic.vibrate(0, 100);
+			#end 
 		});
 		addEventListener(MouseEvent.MOUSE_UP,function(ev:MouseEvent){
 			touchEnd();
