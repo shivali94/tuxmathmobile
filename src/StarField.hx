@@ -53,7 +53,7 @@ private class Star extends Sprite
 			// draw circle
 			this.graphics.clear();
 			this.graphics.beginFill(0xFFFFFF);
-			this.graphics.drawCircle(0, 0, speed * Lib.current.stage.stageHeight/10);
+			this.graphics.drawCircle(0, 0, speed * Lib.current.stage.stageHeight/30);
 		}
 	} 
 	
