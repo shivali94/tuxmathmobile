@@ -67,10 +67,20 @@ class Planets extends Sprite
 }
 class MainMenuScreen extends Sprite
 {
+	var start_x:Int;
+	var stop_x:Int;
+	var start_time:Int;
+	var stop_time:Int;
+	var friction:Float;
+	var planets:Planets;
+	var velocity:Float;
+	var velocity_limit:Float;    // Threshold value of velocity for terminate scrolling of sprite 
 	public function new()
 	{
 		super();
-		var planets = new Planets();
+		friction = 0.95;
+		velocity_limit = 0.5 * GameConstant.stageWidth / 480;            // Taking 480 X 320 resolution as reference point 
+		planets = new Planets();
 		// Scrolling rectangles
 		var bounds:Rectangle = new Rectangle( -planets.x_scale + GameConstant.stageWidth, 0, planets.x_scale-GameConstant.stageWidth, 0);
 		// Necessary so that sprite could be dragged easily 
@@ -79,21 +89,54 @@ class MainMenuScreen extends Sprite
 		  // For sprite scrolling 
 		addEventListener(MouseEvent.MOUSE_DOWN, function(ev:MouseEvent) {
 			planets.startDrag(false, bounds);
+			start_x = ev.target.mouseX;
+			start_time = Lib.getTimer();
+			if (this.hasEventListener(Event.ENTER_FRAME))
+				this.removeEventListener(Event.ENTER_FRAME, startMove);
 		});
 		addEventListener(MouseEvent.MOUSE_UP, function(ev:MouseEvent) {
 			planets.stopDrag();
+			stop_time = Lib.getTimer();
+			stop_x = ev.target.mouseX;
+			// Calculating velocity of sprite 
+			velocity =  (stop_x - start_x) / GameConstant.stageWidth / (stop_time - start_time) * 20000 ;
+			this.addEventListener(Event.ENTER_FRAME, startMove);
 		}); 
 		addEventListener(MouseEvent.MOUSE_OUT, function(ev:MouseEvent) {
 			planets.stopDrag();
+			stop_time = Lib.getTimer();
+			stop_x = ev.target.mouseX;
+			// Calculating velocity of sprite 
+			velocity =  (stop_x - start_x) / GameConstant.stageWidth / (stop_time - start_time) * 20000 ;
+			this.addEventListener(Event.ENTER_FRAME, startMove);
 		});
 		addChild(planets);
+	}
+	
+	// Function for moving sprite according  to the velocity possed by it.
+	private function startMove(ev:Event)
+	{
+		// Function for checking if velocity false below threshold value of velocity 
+		if ( Math.abs(velocity) <= velocity_limit ) {
+			this.removeEventListener(Event.ENTER_FRAME, startMove);
+			return;
+		}
+		// Limits imposed on the movement of sprite 
+		if (planets.x < -(planets.x_scale- GameConstant.stageWidth)  || planets.x > 0 ) {
+			this.removeEventListener(Event.ENTER_FRAME, startMove);
+			return;
+		}
+		// Updating position of sprite 
+		planets.x += velocity;
+		// Decreasing velocity 
+		velocity *= friction;
 	}
 }
 
 /*===================== For showing various sublevels=============================================
  * 
  * 
- * =============================================================================================*/
+ * ===============================================================================================*/
 
 private class Constant
 {
