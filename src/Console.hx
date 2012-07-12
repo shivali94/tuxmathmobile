@@ -72,6 +72,7 @@ private class Button extends Sprite
 		text.text = value + "";          // Setting value make sure you do that before calculating x and y co-orfinate of it.
 		text.x = (Constant.width - text.textWidth) / 2;
 		//text.y = (Constant.height - text.textHeight) / 2;      // TODO no need to do this as it is automatically centered while ajusting height by margin               
+		text.height = text.textHeight;
 		touchEnd();	
 		
 		/*

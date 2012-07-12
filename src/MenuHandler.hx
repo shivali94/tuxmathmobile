@@ -4,6 +4,7 @@ package ;
  * ...
  * @author Deepak Aggarwal
  */
+import com.eclecticdesignstudio.motion.actuators.FilterActuator;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import nme.display.Bitmap;
@@ -104,6 +105,7 @@ private class Constant
 	static var text:TextField;
 	public static var starTile:Tilesheet;    // Tile for drawing star 
 	public static var empty_starTile: Tilesheet;                      // Tile for drawing empty star
+	public static var scale:Float;									// Used to scale text field 
 	public static function initialize()
 	{
 		var sprite_width = GameConstant.stageWidth * 0.8;
@@ -116,7 +118,7 @@ private class Constant
 		vertical_border = cast ((sprite_height - height * 2) / 3);
 		
 		text = new TextField();
-		text_format = new TextFormat('Arial', 90, 0xFFFFFF, true);
+		text_format = new TextFormat('Arial', 127, 0xFFFFFF, true);
 		text_format.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = text_format;
 		text.text = "8";
@@ -129,12 +131,12 @@ private class Constant
 			{
 				text_format.size-=2;
 				text.setTextFormat(text_format);
+				scale = 1;
 			}
 		else
-			while (text.textHeight < textSize)
+			if(text.textHeight < textSize)
 			{
-				text_format.size+=2;
-				text.setTextFormat(text_format); 
+				scale = textSize / text.textHeight;				
 			}
 		// Loading star tile	
 		starTile = new Tilesheet( Assets.getBitmapData("assets/star.png"));
@@ -201,6 +203,7 @@ class SubLevels extends Sprite
 		var text:TextField = new TextField();
 		text.text = ""+value;
 		text.setTextFormat(Constant.text_format);
+		text.scaleX = text.scaleY = Constant.scale;
 		text.height = Constant.height * 0.8;
 		text.width = Constant.width;
 		text.selectable = false;

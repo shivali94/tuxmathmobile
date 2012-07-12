@@ -56,6 +56,8 @@ class Asteroid extends Sprite {
 		text.setTextFormat(text_format);
 		text.y = (asteroidBitmap.height - text.textHeight) / 2;
 		text.x = (asteroidBitmap.width - text.textWidth) / 2;
+		text.width = text.textWidth * 1.1;
+		text.height = text.textHeight;
 	}
 }
 

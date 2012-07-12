@@ -35,12 +35,12 @@ class Button
 				text.setTextFormat(text_format); 
 			}
 		text.height = text.textHeight;
-		text.width = text.textWidth;
+		text.width = text.textWidth * 1.1;
 		var shape:Shape = new Shape();
 		var sprite:Sprite = new Sprite();
 		shape.graphics.clear();
 		shape.graphics.beginFill(color);
-		shape.graphics.drawRect(0, 0, text.textWidth, text.textHeight);
+		shape.graphics.drawRect(0, 0, text.width, text.height);
 		sprite.addChild(shape);
 		shape.graphics.endFill();
 		// Adding text
