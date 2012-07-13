@@ -19,6 +19,7 @@ import nme.events.Event;
 import nme.events.MouseEvent;
 import nme.events.TouchEvent;
 import nme.geom.Rectangle;
+import nme.media.SoundChannel;
 import nme.text.TextField;
 import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
@@ -294,11 +295,12 @@ class MenuHandler extends Sprite
 	public var level:Int;
 	public var sublevel:Int;
 	var sublevelmenu:LevelMenu;
+	var main_menu_screen:MainMenuScreen;
 	public function new() 
 	{
 		super();
 		addChild(new Bitmap(Assets.getBitmapData("assets/background/main_background.png")));
-		var main_menu_screen = new MainMenuScreen();
+		main_menu_screen = new MainMenuScreen();
 		// Sublevel menu 
 		sublevelmenu = new LevelMenu();
 		sublevelmenu.x = GameConstant.stageWidth * 0.1;
@@ -309,14 +311,20 @@ class MenuHandler extends Sprite
 		back_button.alpha = 0.7;
 		// Displaying Main menu 
 		addChild(main_menu_screen);
+		// Play sound when added to stage
+		var sound_instance:SoundChannel;							// Used for stopping playing sound
+		main_menu_screen.addEventListener(Event.ADDED_TO_STAGE,function(ev:Event){
+			sound_instance = GameConstant.background_sound.play(0, 1000);                   // Playing background sound 
+		});
 		addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {
 			if (!Std.is(event.target, Planet))
 				return;
 				level = event.target.value;
 				// Initializing star score of sublevels
 				sublevelmenu.initializeScore(SavedData.score[level]);
+				sound_instance.stop();
 				Transition.zoomIn([sublevelmenu, back_button], [main_menu_screen], this);
-				/*
+				/*     To be replaced with transition statement if we don't want any transitions 
 				addChild(sublevelmenu);
 				addChild(back_button);
 				removeChild(main_menu_screen);	

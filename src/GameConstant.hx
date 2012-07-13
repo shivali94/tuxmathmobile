@@ -1,6 +1,8 @@
 package ;
 
 import nme.Lib;
+import nme.media.Sound;
+import nme.Assets;
 
 /**
  * ...
@@ -19,6 +21,8 @@ class GameConstant
 	public static var stageWidth:Int;
 	public static var stageHeight:Int;
 	
+	public static var background_sound:Sound;
+	
 	public static function initialize()
 	{
 		// stageWidth and stage height
@@ -30,5 +34,7 @@ class GameConstant
 			stageWidth = Lib.current.stage.stageWidth;
 			stageHeight = Lib.current.stage.stageHeight;
 		#end 
+		
+		background_sound = Assets.getSound("assets/sounds/background.wav");
 	}
 }

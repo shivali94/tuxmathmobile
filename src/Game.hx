@@ -62,7 +62,7 @@ class Game
 		game_tutorial.initializeText(menu_handler.level + 1, menu_handler.sublevel + 1);
 		Lib.current.removeChild(menu_handler);							// removing menu handler 
 		Lib.current.addChild(game_tutorial);
-		// Adding event listener 
+		// Adding event listener for OK button 
 		game_tutorial.addEventListener("OK",function(ev:Event){
 			level_instance.initialize(menu_handler.level + 1, menu_handler.sublevel + 1);        // Initializing Handler
 			Lib.current.addChild(level_instance);          										// Adding level sprite 

@@ -20,7 +20,7 @@ private class Star extends Sprite
 		public function new()
 		{
 			super();
-			this.alpha = 0;
+			this.alpha = 1;
 			init();
 		}
 		public function play()
@@ -36,7 +36,6 @@ private class Star extends Sprite
 		private function update(e:Event)
 		{
 			d*= acceleration + (speed*0.25);
-			alpha= d/500; // fades in the stars as they get closer.
 			x = stageCenter.x + Math.cos(r) * d/2;
 			y = stageCenter.y + Math.sin(r) * d / 2;
 			// loop star when it goes off the stage.
@@ -53,7 +52,7 @@ private class Star extends Sprite
 			// draw circle
 			this.graphics.clear();
 			this.graphics.beginFill(0xFFFFFF);
-			this.graphics.drawCircle(0, 0, speed * 10);
+			this.graphics.drawCircle(0, 0, speed * GameConstant.stageWidth/100);
 		}
 	} 
 	
