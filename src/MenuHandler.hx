@@ -49,8 +49,8 @@ class Planets extends Sprite
 		x_scale = 0;                               // For keeping tab on x dimension of sprite 
 		// First displaying sun
 		var sun = new Bitmap(Assets.getBitmapData("assets/planet/sun.png"));
-		sun.x = -sun.width / 2;				// Only half of it will be visible 
-		x_scale = cast (sun.width / 2);
+		x_scale = cast sun.width;
+		sun.x = 0;
 		sun.y = (GameConstant.stageHeight - sun.height) / 2;
 		addChild(sun);
 		
@@ -78,7 +78,7 @@ class MainMenuScreen extends Sprite
 	public function new()
 	{
 		super();
-		friction = 0.95;
+		friction = 0.90;
 		velocity_limit = 0.5 * GameConstant.stageWidth / 480;            // Taking 480 X 320 resolution as reference point 
 		planets = new Planets();
 		// Scrolling rectangles
@@ -99,7 +99,7 @@ class MainMenuScreen extends Sprite
 			stop_time = Lib.getTimer();
 			stop_x = ev.target.mouseX;
 			// Calculating velocity of sprite 
-			velocity =  (stop_x - start_x) / GameConstant.stageWidth / (stop_time - start_time) * 20000 ;
+			velocity =  (stop_x - start_x) / GameConstant.stageWidth / (stop_time - start_time) * 25000 ;
 			this.addEventListener(Event.ENTER_FRAME, startMove);
 		}); 
 		addEventListener(MouseEvent.MOUSE_OUT, function(ev:MouseEvent) {
@@ -107,7 +107,7 @@ class MainMenuScreen extends Sprite
 			stop_time = Lib.getTimer();
 			stop_x = ev.target.mouseX;
 			// Calculating velocity of sprite 
-			velocity =  (stop_x - start_x) / GameConstant.stageWidth / (stop_time - start_time) * 20000 ;
+			velocity =  (stop_x - start_x) / GameConstant.stageWidth / (stop_time - start_time) * 25000 ;
 			this.addEventListener(Event.ENTER_FRAME, startMove);
 		});
 		addChild(planets);
@@ -122,7 +122,7 @@ class MainMenuScreen extends Sprite
 			return;
 		}
 		// Limits imposed on the movement of sprite 
-		if (planets.x < -(planets.x_scale- GameConstant.stageWidth)  || planets.x > 0 ) {
+		if (planets.x < -(planets.x_scale- GameConstant.stageWidth + velocity)  || planets.x + velocity >= 0 ) {
 			this.removeEventListener(Event.ENTER_FRAME, startMove);
 			return;
 		}

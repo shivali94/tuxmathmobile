@@ -53,7 +53,7 @@ private class Star extends Sprite
 			// draw circle
 			this.graphics.clear();
 			this.graphics.beginFill(0xFFFFFF);
-			this.graphics.drawCircle(0, 0, speed * Lib.current.stage.stageHeight/30);
+			this.graphics.drawCircle(0, 0, speed * 10);
 		}
 	} 
 	
@@ -67,7 +67,7 @@ class StarField  extends Sprite
 		this.graphics.beginFill(0x000000);
 		this.graphics.drawRect(0, 0, GameConstant.stageWidth, GameConstant.stageHeight);
 		this.graphics.endFill();
-		for(x in 0... cast GameConstant.stageHeight/2) {
+		for(x in 0... cast GameConstant.stageWidth/2) {
 				var s:Star = new Star();
 				s.x = Math.random() * 1000;
 				s.y = Math.random() * 650;

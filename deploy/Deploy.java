@@ -91,7 +91,7 @@ public class Deploy{
 		BufferedImage sun_img = loadImage("assets/planet/sun.png");    
 			int sun_size = (int) (sun_img.getHeight()*ratio);
 			BufferedImage resized_sun= Scalr.resize(sun_img,Scalr.Method.QUALITY,            
-				Scalr.Mode.AUTOMATIC,sun_size,sun_size);
+				Scalr.Mode.AUTOMATIC  ,(int) (sun_img.getWidth()*ratio)  ,(int) (sun_img.getHeight()*ratio));
 			saveImage("../assets/planet/sun.png",resized_sun);   	
 		
 		// Resizing Planets 

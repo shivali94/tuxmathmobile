@@ -41,19 +41,22 @@ class Transition
 		
 		//Animation
 		// Zomming captured image. 
-		Actuate.tween(image, 1, { scaleX:20, scaleY:20, alpha:0 } ).onUpdate(function() {
+		Actuate.tween(image, 2, { scaleX:20, scaleY:20, alpha:0 } ).onUpdate(function() {
 			image.x = -GameConstant.stageWidth * (image.scaleX-1) / 2;
 			image.y = -GameConstant.stageHeight * (image.scaleY - 1) / 2;
 		}).onComplete(function() {			
 			// Removing captured image 
 			target.removeChild(image);
-			// Zooming out target 
-			Actuate.tween(target, 4.0, { scaleX:1, scaleY:1 } ).onUpdate(function() {
-				target.x = -GameConstant.stageWidth * (target.scaleX-1) / 2;
-				target.y = -GameConstant.stageHeight * (target.scaleY-1) / 2;
-			});
 			// Fading starfield 
-			Actuate.tween(star_field, 4.5, { alpha:0 } ).onComplete(function() { target.removeChild(star_field); star_field.stop(); } );
+			Actuate.tween(star_field, 1,{}).onComplete(function() { 
+				Actuate.tween(star_field, 1, { alpha:0 } ).onComplete(function() { 
+					target.removeChild(star_field); 
+					star_field.stop(); } );
+				// Zooming out target 
+				Actuate.tween(target, 1, { scaleX:1, scaleY:1 } ).onUpdate(function() {
+					target.x = -GameConstant.stageWidth * (target.scaleX-1) / 2;
+					target.y = -GameConstant.stageHeight * (target.scaleY-1) / 2;});
+			});
 		});
 		star_field.play();
 		
