@@ -35,6 +35,6 @@ class GameConstant
 			stageHeight = Lib.current.stage.stageHeight;
 		#end 
 		
-		background_sound = Assets.getSound("assets/sounds/background.wav");
+		background_sound = Assets.getSound("assets/sounds/background.mp3");
 	}
 }

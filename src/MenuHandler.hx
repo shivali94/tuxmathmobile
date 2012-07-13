@@ -314,7 +314,7 @@ class MenuHandler extends Sprite
 		// Play sound when added to stage
 		var sound_instance:SoundChannel;							// Used for stopping playing sound
 		main_menu_screen.addEventListener(Event.ADDED_TO_STAGE,function(ev:Event){
-			sound_instance = GameConstant.background_sound.play(0, 1000);                   // Playing background sound 
+			sound_instance = GameConstant.background_sound.play(0,-1);                   // Playing background sound 
 		});
 		addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {
 			if (!Std.is(event.target, Planet))
