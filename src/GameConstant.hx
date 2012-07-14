@@ -23,6 +23,7 @@ class GameConstant
 	
 	public static var background_sound:Sound;
 	public static var space_travel:Sound;
+	public static var transition_end:Sound;
 	public static function initialize()
 	{
 		// stageWidth and stage height
@@ -37,5 +38,6 @@ class GameConstant
 		
 		background_sound = Assets.getSound("assets/sounds/background.mp3");
 		space_travel = Assets.getSound("assets/sounds/space_travel.mp3");
+		transition_end = Assets.getSound("assets/sounds/transition_end.mp3");
 	}
 }
