@@ -207,19 +207,11 @@ class SubLevels extends Sprite
 		panel.graphics.clear();
 		for (x in 0...number)
 		{
-			var array:Array<Float> = new Array<Float>();
-			array.push(Constant.starTile.nmeBitmap.width*x);
-			array.push(0);
-			array.push(0);
-			Constant.starTile.drawTiles(panel.graphics, array);
+			Constant.starTile.drawTiles(panel.graphics,[Constant.starTile.nmeBitmap.width*x,0,0]);
 		}
 		for (x in number...3)
 		{
-			var array:Array<Float> = new Array<Float>();
-			array.push(Constant.starTile.nmeBitmap.width*x);
-			array.push(0);
-			array.push(0);
-			Constant.empty_starTile.drawTiles(panel.graphics, array);
+			Constant.empty_starTile.drawTiles(panel.graphics,[Constant.starTile.nmeBitmap.width*x,0,0]);
 		}
 		panel.x = (Constant.width - panel.width) / 2;
 	}
