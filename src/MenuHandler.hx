@@ -85,7 +85,12 @@ class MainMenuScreen extends Sprite
 		// Scrolling rectangles
 		var bounds:Rectangle = new Rectangle( -planets.x_scale + GameConstant.stageWidth, 0, planets.x_scale-GameConstant.stageWidth, 0);
 		// Necessary so that sprite could be dragged easily 
-		addChild(new Bitmap(Assets.getBitmapData("assets/background/main_background.png")));
+		var shape:Shape = new Shape();
+		shape.graphics.beginFill(0x000000);
+		shape.graphics.drawRect(0, 0, GameConstant.stageWidth, GameConstant.stageHeight);
+		shape.graphics.endFill();
+		shape.alpha = 0;
+		addChild(shape);
 		
 		  // For sprite scrolling 
 		addEventListener(MouseEvent.MOUSE_DOWN, function(ev:MouseEvent) {
@@ -301,13 +306,17 @@ class MenuHandler extends Sprite
 		var back_button:Sprite = Button.button("BACK", 0xED1C1C, GameConstant.stageHeight/ 6);
 		back_button.y = GameConstant.stageHeight - back_button.height;
 		back_button.alpha = 0.7;
+		// Adding stardust 
+		addChild(GameConstant.star_dust);
 		// Displaying Main menu 
 		addChild(main_menu_screen);
+		// Playing stardust
+		GameConstant.star_dust.play();
 		// Play sound when added to stage
 		var sound_instance:SoundChannel;							// Used for stopping playing sound
-		main_menu_screen.addEventListener(Event.ADDED_TO_STAGE,function(ev:Event){
-			sound_instance = GameConstant.background_sound.play(0,-1);                   // Playing background sound 
-		});
+		sound_instance = GameConstant.background_sound.play(0, -1);                   // Playing background sound
+		
+		// Displaying sublevels 
 		addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {
 			if (!Std.is(event.target, Planet))
 				return;
@@ -315,7 +324,14 @@ class MenuHandler extends Sprite
 				// Initializing star score of sublevels
 				sublevelmenu.initializeScore(SavedData.score[level]);
 				sound_instance.stop();
-				Transition.zoomIn([sublevelmenu, back_button], [main_menu_screen], this);
+				GameConstant.star_dust.stop();								// Stoping stardust for better performance 
+				Transition.zoomIn([sublevelmenu, back_button], [main_menu_screen], this);			// No need to remove stardust
+				function temp_function(ev:Event)
+				{
+					GameConstant.star_dust.play();
+					Transition.dispatch.removeEventListener(Transition.TRANSITION_COMPLETE, temp_function);
+				}
+				Transition.dispatch.addEventListener(Transition.TRANSITION_COMPLETE, temp_function); 
 				/*     To be replaced with transition statement if we don't want any transitions 
 				addChild(sublevelmenu);
 				addChild(back_button);
@@ -342,7 +358,16 @@ class MenuHandler extends Sprite
 		// Back button handler 
 		back_button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {
 				level = -1;                     // No vaid choice has been made
+				GameConstant.star_dust.stop();							// Stoping stardust for better performance
 				Transition.zoomIn([main_menu_screen], [sublevelmenu, back_button], this);
+				// Waiting for transition to be finished 
+				function temp_function(ev:Event)
+				{
+					sound_instance = GameConstant.background_sound.play(0, -1);
+					GameConstant.star_dust.play();										// Playing stardust again
+					Transition.dispatch.removeEventListener(Transition.TRANSITION_COMPLETE, temp_function);
+				}
+				Transition.dispatch.addEventListener(Transition.TRANSITION_COMPLETE, temp_function); 
 				/*
 				removeChild(sublevelmenu);
 				removeChild(back_button);

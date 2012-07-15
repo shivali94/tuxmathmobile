@@ -1,6 +1,4 @@
 package ;
-import nme.display.Bitmap;
-
 /**
  * ...
  * @author Deepak Aggarwal
@@ -9,15 +7,21 @@ import nme.display.Bitmap;
 import nme.display.Bitmap;
 import nme.display.BitmapData;
 import nme.Lib;
+import nme.events.EventDispatcher;
+import nme.events.Event;
 import com.eclecticdesignstudio.motion.Actuate;
 class Transition 
 {
 	static var star_field:StarField;
 	static var capture:BitmapData;
+	static public var dispatch:EventDispatcher;
+	static public var TRANSITION_COMPLETE:String;
 	public static function intialize()
 	{
 		star_field = new StarField();
 		capture = new BitmapData(GameConstant.stageWidth, GameConstant.stageHeight);
+		dispatch = new EventDispatcher();
+		TRANSITION_COMPLETE = "transition completed";
 	}
 	public static function zoomIn(add:Array<Dynamic>,remove:Array<Dynamic>,target:Dynamic) 
 	{
@@ -64,7 +68,10 @@ class Transition
 					Actuate.tween(pos_image, 2, { scaleX:1, scaleY:1 }).onUpdate(function() {
 						pos_image.x = -GameConstant.stageWidth * (pos_image.scaleX-1) / 2;
 						pos_image.y = -GameConstant.stageHeight * (pos_image.scaleY - 1) / 2;
-					}).onComplete(function () {  target.removeChild(pos_image); } );
+					}).onComplete(function () {  
+						target.removeChild(pos_image); 
+						dispatch.dispatchEvent(new Event(TRANSITION_COMPLETE));
+					});
 			});
 		});
 		star_field.play();
