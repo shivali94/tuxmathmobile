@@ -43,7 +43,6 @@ class Background extends Sprite
 		addChild(sprite1);
 		addChild(sprite2);
 		initializeBackground();												// Loading Background
-		current_sheet = 2;
 	}
 	
 	/*===================================================================================================
@@ -51,16 +50,11 @@ class Background extends Sprite
 	====================================================================================================*/
 	public  function initializeBackground()
 	{
-		var array = new Array<Float>();
-		array.push(0);
-		array.push(0);
-		array.push(0);
-		tilesheet.drawTiles(sprite1.graphics, array);
-		array.pop();
-		array.push(1);
-		tilesheet.drawTiles(sprite2.graphics, array);
+		tilesheet.drawTiles(sprite1.graphics, [0,0,0]);
+		tilesheet.drawTiles(sprite2.graphics, [0,0,1]);
 		sprite1.x = 0;
 		sprite2.x = sprite1.x + sprite1.width;
+		current_sheet = 2;
 	}
 	public function scrollBackground()
 	{
@@ -68,20 +62,12 @@ class Background extends Sprite
 		sprite2.x -= levelInstance.diffTime * backroundScrollSpeed;  
 
 		if (sprite1.x < -sprite1.width) {
-			var array = new Array<Float>();
-			array.push(0);
-			array.push(0);
-			array.push(current_sheet);
-			tilesheet.drawTiles(sprite1.graphics, array);					 // Drawing new background to sprite 
+			tilesheet.drawTiles(sprite1.graphics, [0,0,current_sheet]);					 // Drawing new background to sprite 
 			sprite1.x = sprite2.x + sprite2.width;								// Placing sprite 
 			current_sheet++;
 		}else 
 			if (sprite2.x < -sprite2.width) {
-				var array = new Array<Float>();
-				array.push(0);
-				array.push(0);
-				array.push(current_sheet);
-				tilesheet.drawTiles(sprite2.graphics, array);					 // Drawing new background to sprite 
+				tilesheet.drawTiles(sprite2.graphics,[0,0,current_sheet]);					 // Drawing new background to sprite 
 				sprite2.x = sprite1.x + sprite1.width;								// Placing sprite 
 				current_sheet++;
 			}

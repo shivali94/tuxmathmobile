@@ -342,9 +342,12 @@ class MenuHandler extends Sprite
 		// Back button handler 
 		back_button.addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {
 				level = -1;                     // No vaid choice has been made
+				Transition.zoomIn([main_menu_screen], [sublevelmenu, back_button], this);
+				/*
 				removeChild(sublevelmenu);
 				removeChild(back_button);
 				addChild(main_menu_screen);	
+				*/
 			});
 	}
 	

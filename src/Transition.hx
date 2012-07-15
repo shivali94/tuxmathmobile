@@ -22,6 +22,7 @@ class Transition
 	public static function zoomIn(add:Array<Dynamic>,remove:Array<Dynamic>,target:Dynamic) 
 	{
 		star_field.alpha = 1;
+		star_field.visible = true;
 		capture.draw(Lib.current.stage);
 		var pre_image:Bitmap = new Bitmap(capture);
 		// Removing all image and sprites that are to be remove 
@@ -41,7 +42,6 @@ class Transition
 		target.addChild(pos_image);
 		
 		//Adding starfield 
-		var star_field = new StarField();
 		target.addChild(star_field);
 		//Adding captured screen
 		target.addChild(pre_image);

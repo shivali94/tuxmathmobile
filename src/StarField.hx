@@ -80,8 +80,6 @@ class StarField  extends Sprite
 	}
 	public function play()
 	{
-		drawList[0] = drawList[1] = drawList[2] = 0;
-		starTile.drawTiles(graphics,drawList);
 		addEventListener(Event.ENTER_FRAME, update);
 	}
 	public function stop()
