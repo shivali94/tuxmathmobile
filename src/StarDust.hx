@@ -12,6 +12,9 @@ import nme.display.Shape;
 import nme.geom.Rectangle;
 import nme.Lib;
 import nme.events.Event;
+import nme.ui.Acceleration;
+import nme.ui.Accelerometer;
+import nme.geom.Point;
 private class Dust 
 {
 	public var x:Float;
@@ -30,6 +33,7 @@ class StarDust extends Sprite
 	private var containerWidth:Int;
 	private var containerHeight:Int;
 	private var dustTile:Tilesheet;
+	private var update_vector:Point;
 	public function createStarDust()
 	{
 		var tempStar;		
@@ -40,6 +44,10 @@ class StarDust extends Sprite
 			tempStar.y = (Math.random() * containerHeight ) + containerY;
 			starsArray.push(tempStar);
 		}
+		update_vector = new Point();
+		update_vector.x = 0.3;          //x = 0.2 * cos(0)^2
+		update_vector.y = 0;			 //y = 0.2 * sin(0)^2
+
 	}
 	public function new ()
 	{
@@ -55,7 +63,7 @@ class StarDust extends Sprite
 		var shape = new Sprite();
 		shape.graphics.clear();
 		shape.graphics.beginFill(0x525252);
-		shape.graphics.drawCircle(0, 0, 0.02810 * Lib.current.stage.stageHeight / 18);
+		shape.graphics.drawCircle(0, 0, 0.02810 * Lib.current.stage.stageHeight / 15);
 		shape.graphics.endFill();
 		// Creating dust
 		createStarDust();
@@ -88,16 +96,28 @@ class StarDust extends Sprite
 	
 	var index:Int;
 	var tempStar:Dust;
+	#if !flash
+		var temp:Acceleration;
+	#end
 	private function updateDust(ev:Event)
 	{
 		graphics.clear();
-		// run for loop
+		#if !flash
+			temp = Accelerometer.get();
+			if (temp.x < -0)									// Rotate only when mobile is tilted 
+			{
+				// r(cosx^2 + sinx^2) = r ,    angle = temp.y * 100 *1.2
+				update_vector.y = 0.6 * Math.sin(temp.y * Math.PI / 1.8);     
+				//update_vector.x = 0.2 * Math.cos(temp.y * Math.PI/1.8);
+			}
+		#end
+
 		for(i in 0...starArrayLength)
 		{
 			index = i * 3;
 			tempStar = starsArray[i];
-			drawList[index] = tempStar.x += 0.2;
-			drawList[index+1] = tempStar.y += 0 ;
+			drawList[index] = tempStar.x += update_vector.x;
+			drawList[index + 1] = tempStar.y += update_vector.y;
 			//Star boundres
 			//check X boudries
 			if (tempStar.x >= containerWidth + containerX)
