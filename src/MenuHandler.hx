@@ -73,7 +73,7 @@ class MainMenuScreen extends Sprite
 	var start_time:Int;
 	var stop_time:Int;
 	var friction:Float;
-	var planets:Planets;
+	public var planets:Planets;
 	var velocity:Float;
 	var velocity_limit:Float;    // Threshold value of velocity for terminate scrolling of sprite 
 	public function new()
@@ -316,6 +316,7 @@ class MenuHandler extends Sprite
 		var sound_instance:SoundChannel;							// Used for stopping playing sound
 		sound_instance = GameConstant.background_sound.play(0, -1);                   // Playing background sound
 		
+		GameConstant.star_dust.register(main_menu_screen.planets);			// Registering planet sprite so that stardust move wih respect to it
 		// Displaying sublevels 
 		addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {
 			if (!Std.is(event.target, Planet))

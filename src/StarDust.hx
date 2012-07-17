@@ -34,6 +34,9 @@ class StarDust extends Sprite
 	private var containerHeight:Int;
 	private var dustTile:Tilesheet;
 	private var update_vector:Point;
+	private var register_sprite:Dynamic;					// Used for stardust movement effect with respect to a sprite
+	private var register_sprite_old_x:Float;
+	private var parallax_factor:Float;						// Used for parallax effect
 	public function createStarDust()
 	{
 		var tempStar;		
@@ -45,7 +48,7 @@ class StarDust extends Sprite
 			starsArray.push(tempStar);
 		}
 		update_vector = new Point();
-		update_vector.x = 0.3;          //x = 0.2 * cos(0)^2
+		update_vector.x = 0.4;          //x = 0.2 * cos(0)^2
 		update_vector.y = 0;			 //y = 0.2 * sin(0)^2
 
 	}
@@ -54,16 +57,18 @@ class StarDust extends Sprite
 		super();
 		starsArray = new Array<Dust>();
 		drawList = new Array<Float>();
-		starArrayLength = cast Lib.current.stage.stageWidth ;
+		starArrayLength = cast GameConstant.stageWidth * 1.2;
+		parallax_factor = 1 - 1 / (GameConstant.stageWidth * 0.5);
+		trace(parallax_factor);
 		containerX = 0;
 		containerY = 0;
-		containerWidth = Lib.current.stage.stageWidth;
-		containerHeight = Lib.current.stage.stageHeight;
+		containerWidth = GameConstant.stageWidth;
+		containerHeight = GameConstant.stageHeight;
 		
 		var shape = new Sprite();
 		shape.graphics.clear();
-		shape.graphics.beginFill(0x525252);
-		shape.graphics.drawCircle(0, 0, 0.02810 * Lib.current.stage.stageHeight / 15);
+		shape.graphics.beginFill(0xD6C35E);
+		shape.graphics.drawCircle(0, 0, 0.02810 * GameConstant.stageHeight / 15);
 		shape.graphics.endFill();
 		// Creating dust
 		createStarDust();
@@ -94,8 +99,19 @@ class StarDust extends Sprite
 		removeEventListener(Event.ENTER_FRAME, updateDust);
 	}
 	
+	// Function used to register sprite so that star dust scroll or move with it 
+	public function register(param:Dynamic)
+	{
+		register_sprite = param;
+		register_sprite_old_x = param.x;
+	}
+	public function unregister()
+	{
+		register_sprite = null;
+	}
 	var index:Int;
 	var tempStar:Dust;
+	var delta:Float;
 	#if !flash
 		var temp:Acceleration;
 	#end
@@ -111,12 +127,21 @@ class StarDust extends Sprite
 				//update_vector.x = 0.2 * Math.cos(temp.y * Math.PI/1.8);
 			}
 		#end
-
+		
+		if (register_sprite != null)								// If a sprite is registered 
+		{
+			delta = register_sprite.x - register_sprite_old_x;
+			register_sprite_old_x += delta;							//Updating old x value. 
+		}
+		else
+			delta = 0;
+		delta = update_vector.x + delta;      // Adding costant update x to delta 
 		for(i in 0...starArrayLength)
 		{
 			index = i * 3;
 			tempStar = starsArray[i];
-			drawList[index] = tempStar.x += update_vector.x;
+			delta *= parallax_factor;                                          // Used for producing parallax effect
+			drawList[index] = tempStar.x += delta;         
 			drawList[index + 1] = tempStar.y += update_vector.y;
 			//Star boundres
 			//check X boudries
