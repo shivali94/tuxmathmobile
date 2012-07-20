@@ -37,23 +37,24 @@ private class Constant
 {
 	public static var width:Int;
 	public static var height:Int;
-	public static var horizontal_border:Int;
-	public static var vertical_border:Int;
 	public static var text_format;
 	static var text:TextField;
 	public static var starTile:Tilesheet;    // Tile for drawing star 
 	public static var empty_starTile: Tilesheet;                      // Tile for drawing empty star
 	public static var scale:Float;									// Used to scale text field 
+	public static var center:Int;
+	public static var radius:Int;
 	public static function initialize()
 	{
 		var sprite_width = GameConstant.stageWidth * 0.8;
 		var sprite_height = GameConstant.stageHeight * 0.8;
 	
 		// Just calculating some stuffs to display things nicely
-		width = cast sprite_width * 0.8 / 5;             
-		height =cast sprite_height * 0.7 / 2;
-		horizontal_border = cast ((sprite_width - width * 5) / 6);
-		vertical_border = cast ((sprite_height - height * 2) / 3);
+		width = cast sprite_width / 4;             
+		height =cast sprite_height / 2;
+		center = cast GameConstant.stageWidth * 0.4;
+		center -= cast (width / 3);					// Necessary inorder to set correct center
+		radius = cast sprite_width / 2;
 		
 		text = new TextField();
 		text_format = new TextFormat('Arial', 127, 0xFFFFFF, true);
@@ -118,7 +119,7 @@ class SubLevels extends Sprite
 		// Drawing main box
 		shape.graphics.clear();
 		shape.graphics.beginFill(0x2068C7);
-		shape.alpha = 0.5;
+		shape.alpha = 0.7;
 		shape.graphics.drawRect(0, 0, Constant.width, Constant.height);
 		addChild(shape);
 		shape.graphics.endFill();
@@ -135,7 +136,7 @@ class SubLevels extends Sprite
 		text.setTextFormat(Constant.text_format);
 		text.scaleX = text.scaleY = Constant.scale;
 		text.height = Constant.height * 0.8;
-		text.width = Constant.width;
+		text.x = (Constant.width - text.width) / 2;
 		text.selectable = false;
 		addChild(text);
 		
@@ -158,14 +159,30 @@ class SubLevelMenu extends Sprite
 		for ( x in 0...10)
 		{
 			var temp = new SubLevels(x);
-			temp.x = Constant.horizontal_border * ((x%5) + 1) + Constant.width * (x%5);
-			if (x < 5)
-				temp.y = Constant.vertical_border;
-			else
-				temp.y = Constant.vertical_border * 2 + Constant.height;
+			temp.y = GameConstant.stageHeight / 10;
 			addChild(temp);
 			sublevels.push(temp);
 		}
+		var angle:Float = 0;
+		var temp:SubLevels;
+		var effective_angle:Float;
+		this.addEventListener(Event.ADDED_TO_STAGE, function(ev:Event)
+		{
+			this.addEventListener(Event.ENTER_FRAME, function(ev:Event)
+			{
+				if (angle > =360)
+						angle = 0;
+				for (x in 0...10)
+				{
+					temp = sublevels[x];
+					effective_angle = Math.PI * (angle + 36 * x) / 180;
+					temp.x = Constant.center - Math.cos(effective_angle) * Constant.radius;
+					temp.alpha = temp.scaleX = temp.scaleY = (Math.sin(effective_angle) +2) / 3;
+				}
+				angle++;
+				trace("altering"+angle);
+			});
+		});
 	}
 	
 	// Changing stars/ score based on parameters passed for particular level

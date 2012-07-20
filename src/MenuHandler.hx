@@ -40,6 +40,7 @@ class MenuHandler extends Sprite
 		main_menu_screen = new MainMenu();
 		// Sublevel menu 
 		sublevelmenu = new SubLevelMenu();
+		//Centering it 
 		sublevelmenu.x = GameConstant.stageWidth * 0.1;
 		sublevelmenu.y = GameConstant.stageHeight * 0.1;
 		//Back Button
