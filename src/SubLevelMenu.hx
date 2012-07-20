@@ -8,6 +8,7 @@ package ;
 import com.eclecticdesignstudio.motion.actuators.FilterActuator;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import jeash.ui.Mouse;
 import nme.display.Bitmap;
 import nme.display.Shape;
 import nme.display.Sprite;
@@ -155,23 +156,37 @@ class SubLevelMenu extends Sprite
 		super();
 		Constant.initialize();
 		sublevels = new Array<SubLevels>();
+		var effective_angle:Float;
+		// Necessary so that sprites can easily rotate 
+		var shape:Shape = new Shape();
+		shape.graphics.beginFill(0x000000);
+		shape.graphics.drawRect(0, 0, GameConstant.stageWidth, GameConstant.stageHeight);
+		shape.graphics.endFill();
+		shape.alpha = 0;
+		addChild(shape);
 		// Placing sublevel buttons
 		for ( x in 0...10)
 		{
 			var temp = new SubLevels(x);
 			temp.y = GameConstant.stageHeight / 10;
+			effective_angle = Math.PI * (36 * x) / 180;
+			temp.x = Constant.center - Math.cos(effective_angle) * Constant.radius;
+			temp.alpha = temp.scaleX = temp.scaleY = (Math.sin(effective_angle) +2) / 3;
 			addChild(temp);
 			sublevels.push(temp);
 		}
+		
 		var angle:Float = 0;
 		var temp:SubLevels;
-		var effective_angle:Float;
-		this.addEventListener(Event.ADDED_TO_STAGE, function(ev:Event)
-		{
-			this.addEventListener(Event.ENTER_FRAME, function(ev:Event)
-			{
-				if (angle > =360)
-						angle = 0;
+		var old_x:Int;
+		this.addEventListener(MouseEvent.MOUSE_DOWN, function(param:MouseEvent) {
+			old_x = param.target.mouseX;
+		});
+		this.addEventListener(MouseEvent.MOUSE_MOVE, function(param:MouseEvent) {
+			angle += (param.target.mouseX - old_x)/2;
+			old_x = param.target.mouseX;
+			if (angle > =360 || angle <= -360)
+				angle = 0;
 				for (x in 0...10)
 				{
 					temp = sublevels[x];
@@ -179,9 +194,6 @@ class SubLevelMenu extends Sprite
 					temp.x = Constant.center - Math.cos(effective_angle) * Constant.radius;
 					temp.alpha = temp.scaleX = temp.scaleY = (Math.sin(effective_angle) +2) / 3;
 				}
-				angle++;
-				trace("altering"+angle);
-			});
 		});
 	}
 	
