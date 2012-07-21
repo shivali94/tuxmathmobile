@@ -23,6 +23,7 @@ import nme.events.TouchEvent;
 import nme.geom.Rectangle;
 import nme.media.SoundChannel;
 import nme.text.TextField;
+import nme.text.Font;
 import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
 /**
@@ -45,6 +46,7 @@ private class Constant
 	public static var scale:Float;									// Used to scale text field 
 	public static var center:Int;
 	public static var radius:Int;
+	public static var angle_per_pixel:Float;						// angle moved when user swipe finger one pixel
 	public static function initialize()
 	{
 		var sprite_width = GameConstant.stageWidth * 0.8;
@@ -58,7 +60,8 @@ private class Constant
 		radius = cast sprite_width / 2;
 		
 		text = new TextField();
-		text_format = new TextFormat('Arial', 127, 0xFFFFFF, true);
+		var temp:Font = Assets.getFont("assets/fonts/BadMofo.ttf");
+		text_format = new TextFormat(temp.fontName, 127, 0xFFFFFF);
 		text_format.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = text_format;
 		text.text = "8";
@@ -84,6 +87,8 @@ private class Constant
 		//Loading empty star tile 
 		empty_starTile = new Tilesheet( Assets.getBitmapData("assets/empty_star.png"));
 		empty_starTile.addTileRect( new Rectangle(0, 0, empty_starTile.nmeBitmap.width, empty_starTile.nmeBitmap.height));
+		
+		angle_per_pixel = 0.5 * 480 / GameConstant.stageWidth;       // Taking 480 X 320 as a reference 
 	}
 }
 
@@ -183,7 +188,7 @@ class SubLevelMenu extends Sprite
 			old_x = param.target.mouseX;
 		});
 		this.addEventListener(MouseEvent.MOUSE_MOVE, function(param:MouseEvent) {
-			angle += (param.target.mouseX - old_x)/2;
+			angle += (param.target.mouseX - old_x) * Constant.angle_per_pixel;
 			old_x = param.target.mouseX;
 			if (angle > =360 || angle <= -360)
 				angle = 0;
