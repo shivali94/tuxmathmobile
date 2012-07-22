@@ -1,5 +1,6 @@
 package ;
 
+import flash.geom.Point;
 import nme.display.Bitmap;
 import nme.display.Shape;
 import nme.display.Sprite;
@@ -11,6 +12,7 @@ import nme.Lib;
 import nme.events.MouseEvent;
 import nme.display.FPS;
 import nme.Assets;
+import com.eclecticdesignstudio.motion.Actuate;
 /**
  * ...
  * @author Deepak Aggarwal
@@ -22,6 +24,12 @@ class Main
 	static var inMenu:Bool = false ;    //Whether in "In Game" menu (Pause) or "In Menu" menu (exit)
 	static var inGameSprite:Sprite;
 	static var inMenuSprite:Sprite;
+	static var center:Point;
+	static	var resume:Sprite;
+	static	var main_menu:Sprite;
+	static	var play:Sprite;
+	static	var quit:Sprite;
+	static	var credits:Sprite;
 	static function keyHandler(event:KeyboardEvent)
 	{
 		if (event.keyCode == 27)
@@ -37,10 +45,49 @@ class Main
 			}
 			else                                                // Display exit menu 
 			{
-				Lib.current.addChild(inMenuSprite);
+				showMainMenu();
 				inMenu = true;
 			}
 		}
+	}
+	
+	static function showMainMenu()
+	{
+		inMenuSprite.scaleX = inMenuSprite.scaleY = 0.01;
+		inMenuSprite.alpha = 0.1;
+		Lib.current.addChild(inMenuSprite);
+		Actuate.tween(inMenuSprite, 0.2, { scaleX:1, scaleY:1,alpha:1 } ).onUpdate(function() {
+			inMenuSprite.x = (1 - inMenuSprite.scaleX) * center.x;
+			inMenuSprite.y = (1 - inMenuSprite.scaleY) * center.y;
+		}).onComplete(function() {
+			Actuate.timer(0.1).onComplete(function() {
+				inMenuSprite.addChild(play);
+				Actuate.timer(0.1).onComplete(function() {
+					inMenuSprite.addChild(credits);
+					Actuate.timer(0.1).onComplete(function(){
+						inMenuSprite.addChild(quit);
+					});
+				});
+			});
+		});
+	}
+	
+	static function hideMainMenu()
+	{
+		inMenuSprite.scaleX = inMenuSprite.scaleY =1;
+		Actuate.timer(0.1).onComplete(function() {
+			inMenuSprite.removeChild(play);
+			Actuate.timer(0.1).onComplete(function() {
+				inMenuSprite.removeChild(credits);
+				Actuate.timer(0.1).onComplete(function(){
+					inMenuSprite.removeChild(quit);
+					Actuate.tween(inMenuSprite, 0.2, { scaleX:0.01, scaleY:0.01 ,alpha:0.1} ).onUpdate(function() {
+						inMenuSprite.x = (1 - inMenuSprite.scaleX) * center.x;
+						inMenuSprite.y = (1 - inMenuSprite.scaleY) * center.y;
+					}).onComplete(function() { Lib.current.removeChild(inMenuSprite); } );
+				});
+			});
+		});
 	}
 	
 	static function renderSprite()
@@ -66,11 +113,11 @@ class Main
 		inMenuSprite.addChild(shape1);
 		
 		//Initialzing Buttons 
-		var resume:Sprite = Button.button("RESUME", 0x14B321, GameConstant.stageHeight / 6);
-		var main_menu:Sprite = Button.button("MAIN MENU", 0xFC4949, GameConstant.stageHeight / 6);
-		var play:Sprite = Button.button("PLAY", 0x14B321, GameConstant.stageHeight / 6);
-		var quit:Sprite = Button.button("QUIT", 0xFC4949, GameConstant.stageHeight / 6);
-		var credits:Sprite = Button.button("CREDITS", 0xf8964f, GameConstant.stageHeight / 6);
+		resume = Button.button("RESUME", 0x14B321, GameConstant.stageHeight / 6);
+		main_menu = Button.button("MAIN MENU", 0xFC4949, GameConstant.stageHeight / 6);
+		play = Button.button("PLAY", 0x14B321, GameConstant.stageHeight / 6);
+		quit = Button.button("QUIT", 0xFC4949, GameConstant.stageHeight / 6);
+		credits = Button.button("CREDITS", 0xf8964f, GameConstant.stageHeight / 6);
 		
 		//Adding event listener to them
 		resume.addEventListener(MouseEvent.CLICK, function(ev:Event) {
@@ -86,7 +133,7 @@ class Main
 		});
 		
 		play.addEventListener(MouseEvent.CLICK, function(ev:Event) {
-			Lib.current.removeChild(inMenuSprite);
+			hideMainMenu();
 			inMenu = false;
 		});
 		quit.addEventListener(MouseEvent.CLICK, function(ev:Event) {
@@ -103,7 +150,7 @@ class Main
 			credit.addEventListener(MouseEvent.CLICK, function(ev:Event) {
 				Lib.current.removeChild(credit);
 			});
-			inMenu = true;                                                         // We are in menu
+			inMenu = true;                                                         // We are in me
 			Lib.current.addChild(credit);
 		});
 		
@@ -118,13 +165,10 @@ class Main
 		//In Menu
 		quit.x = (inMenuSprite.width-quit.width)/2;
 		quit.y = inMenuSprite.height/2 + inMenuSprite.height/4;
-		inMenuSprite.addChild(quit);
 		play.x = (inMenuSprite.width - play.width)/2;
 		play.y = inMenuSprite.height/2 - inMenuSprite.height/4;
-		inMenuSprite.addChild(play);
 		credits.x = (inMenuSprite.width - credits.width)/2;            // In the middle
 		credits.y = inMenuSprite.height/2;
-		inMenuSprite.addChild(credits);
 	}
 	
 	static public function main() 
@@ -143,7 +187,8 @@ class Main
 		Lib.current.addChild(rectangle); // adds the rectangle to the stage
 		var tempfps = new FPS();
 		tempfps.x = 100;
-		Lib.current.addChild(tempfps);	
+		Lib.current.addChild(tempfps);
+		center = new Point(GameConstant.stageWidth / 2, GameConstant.stageHeight / 2);
 		//First rendering sprites
 		renderSprite();
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyHandler);	 

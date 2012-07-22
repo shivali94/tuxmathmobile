@@ -6,8 +6,8 @@
     <movie input="" />
     <movie path="application.nmml" />
     <movie fps="60" />
-    <movie width="845" />
-    <movie height="480" />
+    <movie width="480" />
+    <movie height="320" />
     <movie version="3" />
     <movie minorVersion="0" />
     <movie platform="NME" />
