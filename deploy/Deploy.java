@@ -33,16 +33,21 @@ public class Deploy{
 		float delta_movement=0.02f;                   // pixel at will move in one frame for avoiding flickering. (1/20 second- persistence of vision)
 		int width;
 		int height;
+		int no_of_images;
 		
 		// Calculating height and width 
 		height= (int) res_height ;
 		width= (int) ((sub_level_time*60*1000)*delta_movement) +res_width;  
-		
+		no_of_images = width / res_width;
 		BufferedImage img = loadImage("assets/background/background_space.png");    // Loading Image 
 		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
 			Scalr.Mode.AUTOMATIC,width,height);
-		resized = Scalr.crop(resized,width,height);      							// croping it 
-		saveImage("../assets/background/background_space.png",resized);   			// saving image 
+		int x;
+		for(x=0;x<no_of_images;x++)
+		{
+			BufferedImage temp = Scalr.crop(resized,x*res_width,0,res_width,res_height);     // croping it 
+			saveImage("../assets/background/background_space"+x+".png",temp);   			// saving image 
+		}
 	}
 	static void resizeMainBackground(int res_width, int res_height)
 	{
