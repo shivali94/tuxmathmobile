@@ -4,6 +4,8 @@ package ;
  * ...
  * @author Deepak Aggarwal
  */
+import nme.filters.DropShadowFilter;
+import nme.filters.GlowFilter;
 import nme.text.TextField;
 import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
@@ -45,6 +47,7 @@ class Button
 		shape.graphics.endFill();
 		// Adding text
 		sprite.addChild(text);
+		sprite.filters = [new GlowFilter(color,1,6,6,2,1)];
 		return sprite;
 	}
 }

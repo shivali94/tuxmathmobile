@@ -1,6 +1,6 @@
 package ;
 
-import flash.geom.Point;
+import nme.geom.Point;
 import nme.display.Bitmap;
 import nme.display.Shape;
 import nme.display.Sprite;
@@ -40,7 +40,7 @@ class Main
 			if (game.isPlaying == true)                        // Display Pause menu 
 			{
 				game.pauseGame();
-				Lib.current.addChild(inGameSprite);
+				showGameSprite();
 				inMenu = true;
 			}
 			else                                                // Display exit menu 
@@ -54,38 +54,75 @@ class Main
 	static function showMainMenu()
 	{
 		inMenuSprite.scaleX = inMenuSprite.scaleY = 0.01;
+		play.rotation = credits.rotation = quit.rotation = 45;
+		play.alpha = credits.alpha = quit.alpha = 0;
 		inMenuSprite.alpha = 0.1;
 		Lib.current.addChild(inMenuSprite);
 		Actuate.tween(inMenuSprite, 0.2, { scaleX:1, scaleY:1,alpha:1 } ).onUpdate(function() {
 			inMenuSprite.x = (1 - inMenuSprite.scaleX) * center.x;
 			inMenuSprite.y = (1 - inMenuSprite.scaleY) * center.y;
 		}).onComplete(function() {
-			Actuate.timer(0.1).onComplete(function() {
-				inMenuSprite.addChild(play);
-				Actuate.timer(0.1).onComplete(function() {
-					inMenuSprite.addChild(credits);
-					Actuate.timer(0.1).onComplete(function(){
-						inMenuSprite.addChild(quit);
-					});
+			inMenuSprite.addChild(play);
+			Actuate.tween(play, 0.2, { rotation:0, alpha:1 } ).onComplete(function() {
+				inMenuSprite.addChild(credits);
+				Actuate.tween(credits, 0.2, { rotation:0, alpha:1 } ).onComplete(function() {
+					inMenuSprite.addChild(quit);
+					Actuate.tween(quit, 0.2, { rotation:0, alpha:1 } );
 				});
+			});
+		});
+	}
+	static function showGameSprite()
+	{
+		inGameSprite.scaleX = inGameSprite.scaleY = 0.01;
+		main_menu.rotation = resume.rotation = 45;
+		main_menu.alpha = resume.alpha = 0;
+		inGameSprite.alpha = 0.1;
+		Lib.current.addChild(inGameSprite);
+		Actuate.tween(inGameSprite, 0.2, { scaleX:1, scaleY:1,alpha:1 } ).onUpdate(function() {
+			inGameSprite.x = (1 - inGameSprite.scaleX) * center.x;
+			inGameSprite.y = (1 - inGameSprite.scaleY) * center.y;
+		}).onComplete(function() {
+			inGameSprite.addChild(resume);
+			Actuate.tween(resume, 0.2, { rotation:0, alpha:1 } ).onComplete(function() {
+				inGameSprite.addChild(main_menu);
+				Actuate.tween(main_menu, 0.2, { rotation:0, alpha:1 } );
 			});
 		});
 	}
 	
 	static function hideMainMenu()
 	{
-		inMenuSprite.scaleX = inMenuSprite.scaleY =1;
-		Actuate.timer(0.1).onComplete(function() {
+		inMenuSprite.scaleX = inMenuSprite.scaleY = 1;
+		play.rotation = credits.rotation = quit.rotation = 0;
+		Actuate.tween(play, 0.2, { rotation:-20, alpha:0 } ).onComplete(function() {
 			inMenuSprite.removeChild(play);
-			Actuate.timer(0.1).onComplete(function() {
+			Actuate.tween(credits, 0.2, { rotation:-20, alpha:0 } ).onComplete(function() {
 				inMenuSprite.removeChild(credits);
-				Actuate.timer(0.1).onComplete(function(){
+				Actuate.tween(quit, 0.2, { rotation:-20, alpha:0 } ).onComplete(function(){
 					inMenuSprite.removeChild(quit);
 					Actuate.tween(inMenuSprite, 0.2, { scaleX:0.01, scaleY:0.01 ,alpha:0.1} ).onUpdate(function() {
 						inMenuSprite.x = (1 - inMenuSprite.scaleX) * center.x;
 						inMenuSprite.y = (1 - inMenuSprite.scaleY) * center.y;
 					}).onComplete(function() { Lib.current.removeChild(inMenuSprite); } );
 				});
+			});
+		});
+	}
+	
+	static function hideGameSprite()
+	{
+		inGameSprite.scaleX = inGameSprite.scaleY = 1;
+		main_menu.rotation = resume.rotation = 0;
+		main_menu.alpha = resume.alpha = 1;
+		Actuate.tween(resume, 0.2, { rotation:-20, alpha:0 } ).onComplete(function() {
+			inGameSprite.removeChild(resume);
+			Actuate.tween(main_menu, 0.2, { rotation:-20, alpha:0 } ).onComplete(function() {
+				inGameSprite.removeChild(main_menu);
+				Actuate.tween(inGameSprite, 0.2, { scaleX:0.01, scaleY:0.01 ,alpha:0.1} ).onUpdate(function() {
+					inGameSprite.x = (1 - inGameSprite.scaleX) * center.x;
+					inGameSprite.y = (1 - inGameSprite.scaleY) * center.y;
+				}).onComplete(function() { Lib.current.removeChild(inGameSprite); } );
 			});
 		});
 	}
@@ -116,18 +153,18 @@ class Main
 		resume = Button.button("RESUME", 0x14B321, GameConstant.stageHeight / 6);
 		main_menu = Button.button("MAIN MENU", 0xFC4949, GameConstant.stageHeight / 6);
 		play = Button.button("PLAY", 0x14B321, GameConstant.stageHeight / 6);
-		quit = Button.button("QUIT", 0xFC4949, GameConstant.stageHeight / 6);
+		quit = Button.button("QUIT", 0xDD0000, GameConstant.stageHeight / 6);
 		credits = Button.button("CREDITS", 0xf8964f, GameConstant.stageHeight / 6);
 		
 		//Adding event listener to them
 		resume.addEventListener(MouseEvent.CLICK, function(ev:Event) {
-			Lib.current.removeChild(inGameSprite);
+			hideGameSprite();
 			game.resumeGame();									// Resuming game
 			inMenu = false;										// Not in menu
 			game.isPlaying = true;								// Game is started again
 		});
 		main_menu.addEventListener(MouseEvent.CLICK, function(ev:Event) {
-			Lib.current.removeChild(inGameSprite);
+			hideGameSprite();
 			game.forceStopGame();
 			inMenu = false;   
 		});
@@ -158,10 +195,8 @@ class Main
 		//In Game
 		main_menu.x = (inGameSprite.width-main_menu.width)/2;
 		main_menu.y = inGameSprite.height/2  + inGameSprite.height/8;
-		inGameSprite.addChild(main_menu);
 		resume.x = (inGameSprite.width-resume.width)/2;
 		resume.y = inGameSprite.height/2  - inGameSprite.height/8;
-		inGameSprite.addChild(resume);
 		//In Menu
 		quit.x = (inMenuSprite.width-quit.width)/2;
 		quit.y = inMenuSprite.height/2 + inMenuSprite.height/4;
