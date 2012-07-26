@@ -6,9 +6,8 @@ package ;
  */
 
 import com.eclecticdesignstudio.motion.actuators.FilterActuator;
-import flash.geom.Point;
-import flash.geom.Rectangle;
-import jeash.ui.Mouse;
+import nme.geom.Point;
+import nme.geom.Rectangle;
 import nme.display.Bitmap;
 import nme.display.Shape;
 import nme.display.Sprite;
@@ -26,6 +25,8 @@ import nme.text.TextField;
 import nme.text.Font;
 import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
+import nme.display.BitmapData;
+
 /**
  * ...
  * @author Deepak Aggarwal
@@ -40,13 +41,15 @@ private class Constant
 	public static var width:Int;
 	public static var height:Int;
 	public static var text_format;
-	static var text:TextField;
 	public static var starTile:Tilesheet;    // Tile for drawing star 
 	public static var empty_starTile: Tilesheet;                      // Tile for drawing empty star
 	public static var scale:Float;									// Used to scale text field 
 	public static var center:Int;
 	public static var radius:Int;
 	public static var angle_per_pixel:Float;						// angle moved when user swipe finger one pixel
+	public static var shape:Shape;
+	public static var text:TextField;
+	public static var render_sprite:Sprite;
 	public static function initialize()
 	{
 		var sprite_width = GameConstant.stageWidth * 0.8;
@@ -89,6 +92,30 @@ private class Constant
 		empty_starTile.addTileRect( new Rectangle(0, 0, empty_starTile.nmeBitmap.width, empty_starTile.nmeBitmap.height));
 		
 		angle_per_pixel = 0.5 * 480 / GameConstant.stageWidth;       // Taking 480 X 320 as a reference 
+		
+		shape = new Shape();
+		// Drawing main box
+		shape.graphics.clear();
+		shape.graphics.beginFill(0x2068C7);
+		shape.alpha = 0.6;
+		shape.graphics.drawRect(0, 0, Constant.width, Constant.height);
+		shape.graphics.endFill();
+		// Drawing bottom strip that will contain stars 
+		shape.graphics.beginFill(0x2068C7);
+		shape.alpha = 0.5;
+		shape.graphics.drawRect(0, Constant.height * 0.8, Constant.width, Constant.height * 0.2);
+		shape.graphics.endFill();
+		
+		text = new TextField();
+		text.text = ""+0;
+		text.setTextFormat(Constant.text_format);
+		text.scaleX = text.scaleY = Constant.scale;
+		text.height = Constant.height * 0.8;
+		text.x = (Constant.width - text.width) / 2;
+		text.selectable = false;
+		
+		render_sprite = new Sprite();
+		render_sprite.addChild(shape);
 	}
 }
 
@@ -99,9 +126,9 @@ private class Constant
 class SubLevels extends Sprite
 {
 	public var value:Int;
-	static var shape:Shape;
 	var panel:Sprite;
-	
+	var image:Bitmap;
+	var capture_bitmap:BitmapData;
 	// For drawing stars that player score in a particular sublevel
 	public function drawStar(number:Int)
 	{
@@ -115,40 +142,33 @@ class SubLevels extends Sprite
 			Constant.empty_starTile.drawTiles(panel.graphics,[Constant.starTile.nmeBitmap.width*x,0,0]);
 		}
 		panel.x = (Constant.width - panel.width) / 2;
+		refresh();
 	}
 	public function new (param:Int)
 	{
 		super();
 		value = param;
-		shape = new Shape();
 		panel = new Sprite();
-		// Drawing main box
-		shape.graphics.clear();
-		shape.graphics.beginFill(0x2068C7);
-		shape.alpha = 0.7;
-		shape.graphics.drawRect(0, 0, Constant.width, Constant.height);
-		addChild(shape);
-		shape.graphics.endFill();
-		// Drawing bottom strip that will contain stars 
-		shape.graphics.beginFill(0x2068C7);
-		shape.alpha = 0.5;
-		shape.graphics.drawRect(0, Constant.height*0.8, Constant.width, Constant.height*0.2);
-		addChild(shape);
-		shape.graphics.endFill();
-		
+		capture_bitmap = new BitmapData(Constant.width, Constant.height,true,0x00FFFFFF);
+		image = new Bitmap(capture_bitmap);
+		addChild(image);
+		refresh();
+	}
+	private function refresh()
+	{
+		Constant.text.text = "" + value;
+		Constant.text.setTextFormat(Constant.text_format);
+		Constant.text.scaleX = Constant.text.scaleY = Constant.scale;
 		// Adding text
-		var text:TextField = new TextField();
-		text.text = ""+value;
-		text.setTextFormat(Constant.text_format);
-		text.scaleX = text.scaleY = Constant.scale;
-		text.height = Constant.height * 0.8;
-		text.x = (Constant.width - text.width) / 2;
-		text.selectable = false;
-		addChild(text);
-		
+		Constant.render_sprite.addChild(Constant.text);
 		// adding star panel
+		Constant.render_sprite.addChild(panel);
 		panel.y = Constant.height * 0.8 ;
-		addChild(panel);
+		capture_bitmap.draw(Constant.render_sprite);
+		
+		// Removing all display object
+		Constant.render_sprite.removeChild(Constant.text);
+		Constant.render_sprite.removeChild(panel);
 	}
 }
    
