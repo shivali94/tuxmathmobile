@@ -59,7 +59,6 @@ class StarDust extends Sprite
 		drawList = new Array<Float>();
 		starArrayLength = cast GameConstant.stageWidth * 1.2;
 		parallax_factor = 1 - 1 / (GameConstant.stageWidth * 0.5);
-		trace(parallax_factor);
 		containerX = 0;
 		containerY = 0;
 		containerWidth = GameConstant.stageWidth;

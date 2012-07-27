@@ -1,4 +1,5 @@
 package ;
+import nme.display.BitmapData;
 import nme.display.Bitmap;
 import nme.display.Sprite;
 import nme.Assets;
@@ -8,11 +9,49 @@ import nme.text.TextField;
 import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
 import nme.text.TextFieldAutoSize;
+import nme.display.Tilesheet;
+import nme.events.Event;
+import nme.geom.Rectangle;
+import com.eclecticdesignstudio.motion.Actuate;
 
 /**
  * ...
  * @author Deepak Aggarwal
  */
+
+ class AsteroidConstant
+ {
+	public static var dimension:Float;													// Dimension of each side of the cell of matrix
+	public static var matrix_dimesion:Int;                                                  // Dimension of square matrix in which it will be broken
+	public static var updateList:Array<Float>;											// Used for updating asteroid pieces 
+	public static var total_values ;
+	public static function initialize()
+	{
+		matrix_dimesion = 25;                                       // It will ne divided into 25X25 matrix
+		var temp:BitmapData = Assets.getBitmapData("assets/asteroid/asteroid.png");
+		dimension = temp.width / matrix_dimesion;		// Dimension of individual cell side
+		updateList = new Array<Float>();
+			// Calculating update list
+		var center:Int = cast temp.width / 2;
+		var vy:Int;
+		var vx:Int;
+		var index;
+		var distance;
+		total_values = 4;
+		for (y in 0...matrix_dimesion)
+			for (x in 0...matrix_dimesion)
+			{
+				vx = cast (x * dimension - center);
+				vy = cast (y * dimension - center);
+				distance = cast Math.sqrt(vx * vx + vy * vy);
+				index = (y * matrix_dimesion + x) * total_values;
+				updateList[index] = (Math.random() + 0.1) * vx / distance;
+				updateList[index + 1] = (Math.random() + 0.1) * vy / distance;
+				updateList[index + 2] = 0;								// Do not change this value
+				updateList[index + 3] = Math.random() * 0.04;
+			}
+	}
+ }
 class Asteroid extends Sprite {
 	private var asteroidBitmap:Bitmap;
 	public var text:TextField;
@@ -20,20 +59,26 @@ class Asteroid extends Sprite {
 	public var answer:Int;
 	public var isFactroid:Bool;                              // Whether asteroid is a factroid asteroid or not 
 	private var text_format:TextFormat;
+	var drawList:Array<Float>;
+	var tiles:Tilesheet;
 	public function new (path:String,initialize_text:String)
 	{
 		super();
-		asteroidBitmap = new Bitmap(Assets.getBitmapData(path));
-		addChild(asteroidBitmap);
+		tiles = new Tilesheet(Assets.getBitmapData(path));
+		asteroidBitmap = new Bitmap(tiles.nmeBitmap);
+		drawList = new Array<Float>();										// Initialize drawlist
+		// Adding rectangles to tile 
+		for (y in 0...AsteroidConstant.matrix_dimesion)
+			for (x in 0...AsteroidConstant.matrix_dimesion)
+			{
+				tiles.addTileRect(new Rectangle(x * AsteroidConstant.dimension, y * AsteroidConstant.dimension,AsteroidConstant.dimension,AsteroidConstant.dimension));
+			}
 		text = new TextField();
 		text_format = new TextFormat('Arial', 90, 0xFFFFFF, true);
 		//text_format.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = text_format;
 		text.selectable = false;
 		//text.autoSize = TextFieldAutoSize.CENTER;
-		addChild(text);
-		active = false;										// Inactive by default
-		
 		//Setting size
 		text.text = initialize_text;
 		var textSize:Float = asteroidBitmap.width * 0.7;
@@ -49,6 +94,7 @@ class Asteroid extends Sprite {
 				text_format.size+=2;
 				text.setTextFormat(text_format);
 			}
+		initialState();
 	}
 	public function initializeText(displayText:String)
 	{
@@ -58,6 +104,48 @@ class Asteroid extends Sprite {
 		text.x = (asteroidBitmap.width - text.textWidth) / 2;
 		text.width = text.textWidth * 1.1;
 		text.height = text.textHeight;
+	}
+	var index:Int;
+	private function initialState()
+	{
+		graphics.clear();							// Making sure there is nothing on the sprite 
+		addChild(asteroidBitmap);					// Adding bitmap	
+		addChild(text);								// Adding text 
+		active = false;								// Inactive by default
+		// Initial state of cells of bitmap
+		for (y in 0...AsteroidConstant.matrix_dimesion)
+			for (x in 0...AsteroidConstant.matrix_dimesion)
+			{
+				index = (y * AsteroidConstant.matrix_dimesion + x) * AsteroidConstant.total_values;
+				drawList[index] = x * AsteroidConstant.dimension;
+				drawList[index + 1] = y * AsteroidConstant.dimension;
+				drawList[index + 2] = index / AsteroidConstant.total_values;
+				drawList[index + 3] = 0;
+			}
+		this.alpha = 1;								// fully visible
+		this.visible = true;
+	}
+	public function explode()
+	{
+		removeChild(asteroidBitmap);
+		removeChild(text);
+		addEventListener(Event.ENTER_FRAME, update);
+		Actuate.tween(this, 1.8,{}).onComplete(function(){
+			Actuate.tween(this, 0.5, { alpha:0 } ).onComplete(function(){
+				removeEventListener(Event.ENTER_FRAME, update);
+				dispatchEvent(new Event("Asteroid Destroyed"));
+				initialState();
+			});
+		});
+	}
+	public function update(ev:Event)
+	{
+		graphics.clear();
+		for (x in 0...drawList.length)
+		{
+			drawList[x] += AsteroidConstant.updateList[x];
+		}
+		tiles.drawTiles(graphics, drawList,false,Tilesheet.TILE_ROTATION);
 	}
 }
 
@@ -87,6 +175,7 @@ class AsteroidContainer  extends Sprite
 	{
 		super();
 		this.level = level_instance;
+		AsteroidConstant.initialize();
 		stageWidth = GameConstant.stageWidth;
 		//Loading asteroid destruction sound
 		asteroid_destruction = Assets.getSound("assets/sounds/AsteroidExplosion.wav");
@@ -244,13 +333,17 @@ class AsteroidContainer  extends Sprite
 				if (asteroid.answer == level.laserValue)
 				{
 					level.spaceship.show_laser(asteroid.x + asteroid.height / 2 , asteroid.y + asteroid.width / 2);
-					removeChild(asteroid);
-					asteroid.active = false;
 					asteroid_destruction.play();
 					var score = asteroid.x / stageWidth / 0.75;			// Player will get full score in speed if he answer question 
 																		// within 25% of the total time 
 					if (score > 1.0)									// Maximum score is one. Total score for speed will be calculate by 
 						score = 1.0;									// total_sum/total_no_of_question 
+					asteroid.explode();
+					function eventHandler(ev:Event){
+						removeChild(asteroid);
+						asteroid.removeEventListener("Asteroid Destroyed",eventHandler);
+					}
+					asteroid.addEventListener("Asteroid Destroyed",eventHandler);
 					return {result:true,score:score};
 				}
 			}
