@@ -65,8 +65,8 @@ import com.eclecticdesignstudio.motion.Actuate;
 				vy = cast y * dimension - center;
 				distance = cast Math.sqrt(vx * vx + vy * vy);
 				index = (y * matrix_dimesion + x) * total_values;
-				updateListFront[index] = (Math.random() + 0.1) * vx / distance;
-				updateListFront[index + 1] = (Math.random() + 0.1) * vy / distance;
+				updateListFront[index] = (Math.random() - 0.3) * (temp.width - vx) / distance;
+				updateListFront[index + 1] = (Math.random() - 0.1) * vy / distance;
 				updateListFront[index + 2] = 0;								// Do not change this value
 				updateListFront[index + 3] = Math.random() * 0.04;
 			}
@@ -198,7 +198,7 @@ class AsteroidContainer  extends Sprite
 	var level:Level; 
 	var asteroidSpeed:Float;
 	var asteroid_destruction:Sound;
-	var asteroidLimit:Int; 
+	var asteroidLimit:Float; 
 	var stageWidth:Int;
 	public function new(level_instance:Level) 
 	{
@@ -225,8 +225,6 @@ class AsteroidContainer  extends Sprite
 			var temp = new SmallAsteroid();
 			small_asteroids.push(temp);
 		}
-		 
-		asteroidLimit = cast stageWidth / 3; 
 	}
 	
 	// This function will be used to set speed of asteroid based on game level.
@@ -355,7 +353,7 @@ class AsteroidContainer  extends Sprite
 		// Attacking main asteroid 
 		for (asteroid in asteroids)
 		{
-			if (asteroid.active == false)
+			if (asteroid.active == false || asteroid.exploding == true)				// Make sure user do not answer inactive or exploding asteroid
 				continue;
 			if (asteroid.isFactroid == false)								// Not a factor asteroid
 			{
@@ -402,6 +400,7 @@ class AsteroidContainer  extends Sprite
 	
 	public function handleAsteroid()						// This function will be responsible for updating  asteroid and autodestruction
 	{
+		asteroidLimit = level.spaceship.x + level.spaceship.width;
 		// For big main asteroids 
 		for (asteroid in asteroids)
 		{
