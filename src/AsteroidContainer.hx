@@ -23,14 +23,20 @@ import com.eclecticdesignstudio.motion.Actuate;
  {
 	public static var dimension:Float;													// Dimension of each side of the cell of matrix
 	public static var matrix_dimesion:Int;                                                  // Dimension of square matrix in which it will be broken
-	public static var updateList:Array<Float>;											// Used for updating asteroid pieces 
+	public static var updateListCenter:Array<Float>;											// Used for updating asteroid pieces 
+	public static var updateListFront:Array<Float>;
 	public static var total_values ;
+	public static var FRONT_EXPLOSION:Int;
+	public static var CENTER_EXPLOSION:Int;
 	public static function initialize()
 	{
 		matrix_dimesion = 25;                                       // It will ne divided into 25X25 matrix
 		var temp:BitmapData = Assets.getBitmapData("assets/asteroid/asteroid.png");
 		dimension = temp.width / matrix_dimesion;		// Dimension of individual cell side
-		updateList = new Array<Float>();
+		updateListCenter = new Array<Float>();
+		updateListFront = new Array<Float>();
+		FRONT_EXPLOSION = 0;
+		CENTER_EXPLOSION = 1;
 			// Calculating update list
 		var center:Int = cast temp.width / 2;
 		var vy:Int;
@@ -38,6 +44,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 		var index;
 		var distance;
 		total_values = 4;
+		// Explosion from center
 		for (y in 0...matrix_dimesion)
 			for (x in 0...matrix_dimesion)
 			{
@@ -45,10 +52,23 @@ import com.eclecticdesignstudio.motion.Actuate;
 				vy = cast (y * dimension - center);
 				distance = cast Math.sqrt(vx * vx + vy * vy);
 				index = (y * matrix_dimesion + x) * total_values;
-				updateList[index] = (Math.random() + 0.1) * vx / distance;
-				updateList[index + 1] = (Math.random() + 0.1) * vy / distance;
-				updateList[index + 2] = 0;								// Do not change this value
-				updateList[index + 3] = Math.random() * 0.04;
+				updateListCenter[index] = (Math.random() + 0.1) * vx / distance;
+				updateListCenter[index + 1] = (Math.random() + 0.1) * vy / distance;
+				updateListCenter[index + 2] = 0;								// Do not change this value
+				updateListCenter[index + 3] = Math.random() * 0.04;
+			}
+		// Explosion from front	
+		for (y in 0...matrix_dimesion)
+			for (x in 0...matrix_dimesion)
+			{
+				vx = cast x * dimension;
+				vy = cast y * dimension - center;
+				distance = cast Math.sqrt(vx * vx + vy * vy);
+				index = (y * matrix_dimesion + x) * total_values;
+				updateListFront[index] = (Math.random() + 0.1) * vx / distance;
+				updateListFront[index + 1] = (Math.random() + 0.1) * vy / distance;
+				updateListFront[index + 2] = 0;								// Do not change this value
+				updateListFront[index + 3] = Math.random() * 0.04;
 			}
 	}
  }
@@ -61,6 +81,8 @@ class Asteroid extends Sprite {
 	private var text_format:TextFormat;
 	var drawList:Array<Float>;
 	var tiles:Tilesheet;
+	var updateList:Array<Float>;
+	public var exploding:Bool;										// Whether exploding or not. Used so that it is not re-exploded when it crosses x limit while exploding  
 	public function new (path:String,initialize_text:String)
 	{
 		super();
@@ -112,6 +134,7 @@ class Asteroid extends Sprite {
 		addChild(asteroidBitmap);					// Adding bitmap	
 		addChild(text);								// Adding text 
 		active = false;								// Inactive by default
+		exploding = false;
 		// Initial state of cells of bitmap
 		for (y in 0...AsteroidConstant.matrix_dimesion)
 			for (x in 0...AsteroidConstant.matrix_dimesion)
@@ -125,10 +148,16 @@ class Asteroid extends Sprite {
 		this.alpha = 1;								// fully visible
 		this.visible = true;
 	}
-	public function explode()
+	public function explode(type:Int)
 	{
+		exploding = true;
 		removeChild(asteroidBitmap);
 		removeChild(text);
+		switch(type)
+		{
+			case AsteroidConstant.CENTER_EXPLOSION : updateList = AsteroidConstant.updateListCenter;
+			case AsteroidConstant.FRONT_EXPLOSION  : updateList = AsteroidConstant.updateListFront;
+		}
 		addEventListener(Event.ENTER_FRAME, update);
 		Actuate.tween(this, 1.8,{}).onComplete(function(){
 			Actuate.tween(this, 0.5, { alpha:0 } ).onComplete(function(){
@@ -143,7 +172,7 @@ class Asteroid extends Sprite {
 		graphics.clear();
 		for (x in 0...drawList.length)
 		{
-			drawList[x] += AsteroidConstant.updateList[x];
+			drawList[x] += updateList[x];
 		}
 		tiles.drawTiles(graphics, drawList,false,Tilesheet.TILE_ROTATION);
 	}
@@ -338,7 +367,7 @@ class AsteroidContainer  extends Sprite
 																		// within 25% of the total time 
 					if (score > 1.0)									// Maximum score is one. Total score for speed will be calculate by 
 						score = 1.0;									// total_sum/total_no_of_question 
-					asteroid.explode();
+					asteroid.explode(AsteroidConstant.CENTER_EXPLOSION);
 					function eventHandler(ev:Event){
 						removeChild(asteroid);
 						asteroid.removeEventListener("Asteroid Destroyed",eventHandler);
@@ -379,12 +408,17 @@ class AsteroidContainer  extends Sprite
 			if (asteroid.active == false)
 				continue;
 			asteroid.x -= level.diffTime * asteroidSpeed;
-			if (asteroid.x < asteroidLimit)
-			{
-				asteroid.active = false;
-				removeChild(asteroid);
-				asteroid_destruction.play();
-			}
+			if(!asteroid.exploding)								// Make sure we don't explode asteroid that are already exploding 
+				if (asteroid.x < asteroidLimit)
+				{
+					asteroid_destruction.play();
+					asteroid.explode(AsteroidConstant.FRONT_EXPLOSION);
+						function eventHandler(ev:Event){
+							removeChild(asteroid);
+							asteroid.removeEventListener("Asteroid Destroyed",eventHandler);
+						}
+						asteroid.addEventListener("Asteroid Destroyed",eventHandler);
+				}
 		}
 		
 		// For small asteroids 
