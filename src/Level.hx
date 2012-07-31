@@ -137,7 +137,8 @@ class Level extends Sprite
 		level_timer.stop();
 		asteroid_timer.stop();
 		// Stoping animation 
-		removeEventListener(Event.ENTER_FRAME, animate);
+		while(hasEventListener(Event.ENTER_FRAME))							// Somehow game doesn't pause when we play other level when we force quit a level 
+			removeEventListener(Event.ENTER_FRAME, animate);
 	}
 	
 	// For resuming game 

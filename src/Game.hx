@@ -21,6 +21,7 @@ class Game
 	public function pauseGame()
 	{
 		level_instance.pause();
+		trace("Paused");
 	}
 	
 	//Resume current game

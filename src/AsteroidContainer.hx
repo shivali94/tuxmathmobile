@@ -30,7 +30,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 	public static var CENTER_EXPLOSION:Int;
 	public static function initialize()
 	{
-		matrix_dimesion = 25;                                       // It will ne divided into 25X25 matrix
+		matrix_dimesion = 20;                                       // It will ne divided into 20X20 matrix
 		var temp:BitmapData = Assets.getBitmapData("assets/asteroid/asteroid.png");
 		dimension = temp.width / matrix_dimesion;		// Dimension of individual cell side
 		updateListCenter = new Array<Float>();
@@ -167,10 +167,12 @@ class Asteroid extends Sprite {
 			});
 		});
 	}
+	var length:Int;
 	public function update(ev:Event)
 	{
+		length = drawList.length;
 		graphics.clear();
-		for (x in 0...drawList.length)
+		for (x in 0...length)
 		{
 			drawList[x] += updateList[x];
 		}

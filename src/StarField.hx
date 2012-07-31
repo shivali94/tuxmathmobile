@@ -53,6 +53,7 @@ class StarField  extends Sprite
 	var starTile:Tilesheet;
 	var drawList:Array<Float>;
 	var starfieldSprite:Sprite;
+	var no_of_stars:Int;
 	public function new() 
 	{
 		super();
@@ -71,7 +72,8 @@ class StarField  extends Sprite
 		starTile.addTileRect(new Rectangle(0, 0, StarConstant.shape.width, StarConstant.shape.height));
 		starfieldSprite = new Sprite();
 		addChild(starfieldSprite);
-		for(x in 0...cast GameConstant.stageWidth/2) {
+		no_of_stars = cast GameConstant.stageWidth / 2; 
+		for(x in 0...no_of_stars) {
 				var s:Star = new Star();
 				s.x = Math.random() * 1000;
 				s.y = Math.random() * 650;
@@ -88,11 +90,11 @@ class StarField  extends Sprite
 	}
 	
 	var index:Int;
+	var star:Star;
 	public function update(ev:Event)
 	{
-		var star;
 		starfieldSprite.graphics.clear();
-		for (x in 0...cast GameConstant.stageWidth/2)
+		for (x in 0...no_of_stars)
 		{
 			index = 4 * x;
 			star = stars[x];

@@ -222,10 +222,17 @@ class Main
 		Lib.current.addChild(rectangle); // adds the rectangle to the stage
 		var tempfps = new FPS();
 		tempfps.x = 100;
+		tempfps.addEventListener(MouseEvent.CLICK, function(ev:Event) {
+			Lib.current.dispatchEvent(new KeyboardEvent(KeyboardEvent.KEY_UP, true, false,0, 27));
+		});
 		Lib.current.addChild(tempfps);
+		Lib.current.addEventListener(Event.ADDED, function(ev:Event) {
+			Lib.current.addChild(rectangle);
+			Lib.current.addChild(tempfps);
+		});
 		center = new Point(GameConstant.stageWidth / 2, GameConstant.stageHeight / 2);
 		//First rendering sprites
 		renderSprite();
-		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyHandler);	 
+		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
 	}
 }
