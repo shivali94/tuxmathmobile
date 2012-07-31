@@ -87,6 +87,19 @@ public class Deploy{
 		saveImage("../assets/asteroid/small_asteroid.png",resized);   					// saving image 
 	}
 	
+	static void resizeExplosion(int res_width, int res_height)
+	{
+		BufferedImage img = loadImage("assets/explosion/even_frame.png"); 		   		// Loading Image 
+		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,((int)(res_height/2.2))*4 ,((int)(res_height/2.2))*4);		 
+		saveImage("../assets/explosion/even_frame.png",resized);   					// saving image 
+		
+		img = loadImage("assets/explosion/odd_frame.png"); 		   		// Loading Image 
+		resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,((int)(res_height/2.2))*4 ,((int)(res_height/2.2))*4);		 
+		saveImage("../assets/explosion/odd_frame.png",resized);   					// saving image 
+	}
+	
 	static void resizePlanet(int res_width, int res_height)
 	{
 		float ratio = (float) res_height/1536;
@@ -138,5 +151,6 @@ public class Deploy{
 		resizeSpaceship(res_width,res_height);
 		resizeAsteroid(res_width,res_height);
 		resizePlanet(res_width,res_height);
+		resizeExplosion(res_width,res_height);
 	}
 }

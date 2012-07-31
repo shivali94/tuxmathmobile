@@ -28,6 +28,9 @@ import com.eclecticdesignstudio.motion.Actuate;
 	public static var total_values ;
 	public static var FRONT_EXPLOSION:Int;
 	public static var CENTER_EXPLOSION:Int;
+	public static var tile_even:Tilesheet;
+	public static var tile_odd:Tilesheet;
+	public static var tile_position:Float;
 	public static function initialize()
 	{
 		matrix_dimesion = 20;                                       // It will ne divided into 20X20 matrix
@@ -70,6 +73,19 @@ import com.eclecticdesignstudio.motion.Actuate;
 				updateListFront[index + 2] = 0;								// Do not change this value
 				updateListFront[index + 3] = Math.random() * 0.04;
 			}
+			
+		// Initializing explosion variables
+		tile_even = new Tilesheet(Assets.getBitmapData("assets/explosion/even_frame.png"));
+		tile_odd = new Tilesheet(Assets.getBitmapData("assets/explosion/odd_frame.png"));
+		var dimension = tile_even.nmeBitmap.width / 4;
+		for (y in 0...4)
+			for (x in 0...4) {
+				var rect = new Rectangle(x * dimension, y * dimension, dimension, dimension);
+				tile_even.addTileRect(rect);
+				tile_odd.addTileRect(rect);
+			}
+		// Calculating tile position to be drawn
+		tile_position = (temp.width - tile_even.nmeBitmap.width / 4) / 2; 
 	}
  }
 class Asteroid extends Sprite {
@@ -83,6 +99,8 @@ class Asteroid extends Sprite {
 	var tiles:Tilesheet;
 	var updateList:Array<Float>;
 	public var exploding:Bool;										// Whether exploding or not. Used so that it is not re-exploded when it crosses x limit while exploding  
+	private var explosion_frame:Int;								// Which frame of explosion to be shown 
+	private var even_explosion_frame:Bool;							// Even frame if true else off frame
 	public function new (path:String,initialize_text:String)
 	{
 		super();
@@ -147,6 +165,9 @@ class Asteroid extends Sprite {
 			}
 		this.alpha = 1;								// fully visible
 		this.visible = true;
+		// Initializing explosion frames variables for animations
+		explosion_frame = 0;
+		even_explosion_frame = true;
 	}
 	public function explode(type:Int)
 	{
@@ -172,6 +193,20 @@ class Asteroid extends Sprite {
 	{
 		length = drawList.length;
 		graphics.clear();
+		// Showing explosion effect
+		if (explosion_frame <= 15 )
+		{
+			if(even_explosion_frame == true){
+				AsteroidConstant.tile_even.drawTiles(graphics, [AsteroidConstant.tile_position, AsteroidConstant.tile_position, explosion_frame]);
+				even_explosion_frame = false;
+			}
+			else {
+				AsteroidConstant.tile_odd.drawTiles(graphics, [AsteroidConstant.tile_position, AsteroidConstant.tile_position, explosion_frame]);
+				even_explosion_frame = true;
+				explosion_frame++;
+			}
+		}
+		// Exploding asteroids 
 		for (x in 0...length)
 		{
 			drawList[x] += updateList[x];
