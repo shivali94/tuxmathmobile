@@ -33,11 +33,44 @@ class MenuHandler extends Sprite
 	public var sublevel:Int;
 	var sublevelmenu:SubLevelMenu;
 	var main_menu_screen:MainMenu;
+	var background_nebula_image:Bitmap; 							// Used to show background nebula image 
+	var nebula_gradient:Point;										// Used for calculating how much sprite should move with respect to planets sprite 
+	var galaxy:Tilesheet;
+	var galaxy_sprite:Sprite;
+	var galaxy_gradient:Float;										//  Gradient for galaxy Image
 	public function new() 
 	{
 		super();
-		addChild(new Bitmap(Assets.getBitmapData("assets/background/main_background.png")));
+		background_nebula_image = new Bitmap(Assets.getBitmapData("assets/background/nebula.png"));
+		addChild(background_nebula_image);
+		galaxy_sprite = new Sprite();
+		addChild(galaxy_sprite);
 		main_menu_screen = new MainMenu();
+		
+		// background_nebula_image
+		nebula_gradient = new Point();
+		nebula_gradient.x = (background_nebula_image.width - GameConstant.stageWidth) / (main_menu_screen.planets.width - GameConstant.stageWidth);
+		nebula_gradient.y = (background_nebula_image.height - GameConstant.stageHeight) / (main_menu_screen.planets.width - GameConstant.stageWidth);
+		   
+		// Galaxy image
+		galaxy = new Tilesheet(Assets.getBitmapData("assets/background/galaxy.png"));
+		galaxy.addTileRect(new Rectangle(0, 0, GameConstant.stageWidth, GameConstant.stageHeight));
+		galaxy_gradient = -(1 / (main_menu_screen.planets.width - GameConstant.stageWidth)) * 0.75;
+		
+		// Adding eventlistener 
+		var scale:Float;
+		var planet_x:Float = -10;
+		main_menu_screen.addEventListener(Event.ENTER_FRAME, function(ev:Event) {
+			if (main_menu_screen.planets.x == planet_x)	
+					return;
+			planet_x =  main_menu_screen.planets.x;
+			background_nebula_image.x = planet_x * nebula_gradient.x;
+			background_nebula_image.y = planet_x * nebula_gradient.y;
+			scale = Math.pow((planet_x * galaxy_gradient),2) + 0.45;
+			galaxy_sprite.graphics.clear();
+			galaxy.drawTiles(galaxy_sprite.graphics, [((1-scale) * GameConstant.stageWidth) * 1.3, (1-scale) * GameConstant.stageHeight/8, 0, scale], false, Tilesheet.TILE_SCALE);
+		});
+		
 		// Sublevel menu 
 		sublevelmenu = new SubLevelMenu();
 		//Centering it 

@@ -12,6 +12,7 @@ import nme.text.TextFieldAutoSize;
 import nme.display.Tilesheet;
 import nme.events.Event;
 import nme.geom.Rectangle;
+import nme.feedback.Haptic;
 import com.eclecticdesignstudio.motion.Actuate;
 
 /**
@@ -177,7 +178,13 @@ class Asteroid extends Sprite {
 		switch(type)
 		{
 			case AsteroidConstant.CENTER_EXPLOSION : updateList = AsteroidConstant.updateListCenter;
+													 #if !flash
+														Haptic.vibrate(0, 250);
+													 #end 
 			case AsteroidConstant.FRONT_EXPLOSION  : updateList = AsteroidConstant.updateListFront;
+													 #if !flash
+														Haptic.vibrate(0, 1800);
+													 #end 
 		}
 		addEventListener(Event.ENTER_FRAME, update);
 		Actuate.tween(this, 1.8,{}).onComplete(function(){

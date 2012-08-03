@@ -72,7 +72,7 @@ class StarDust extends Sprite
 		// Creating dust
 		createStarDust();
 		// Getting bitmap data
-		var dust_bitmapdata:BitmapData = new BitmapData(cast shape.width, cast shape.height);
+		var dust_bitmapdata:BitmapData = new BitmapData(cast shape.width, cast shape.height,true,0xFFD6C35E);
 		dust_bitmapdata.draw(shape);
 		//Initializing starTile
 		dustTile = new Tilesheet(dust_bitmapdata);

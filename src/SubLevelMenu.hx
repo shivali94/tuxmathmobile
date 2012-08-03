@@ -49,7 +49,7 @@ private class Constant
 	public static var angle_per_pixel:Float;						// angle moved when user swipe finger one pixel
 	public static var shape:Shape;
 	public static var text:TextField;
-	public static var render_sprite:Sprite;
+	public static var render_sprite:Sprite;							// Used for rendering options for submenulevel
 	public static function initialize()
 	{
 		var sprite_width = GameConstant.stageWidth * 0.8;
@@ -97,7 +97,7 @@ private class Constant
 		// Drawing main box
 		shape.graphics.clear();
 		shape.graphics.beginFill(0x2068C7);
-		shape.alpha = 0.6;
+		shape.alpha = 0.3;
 		shape.graphics.drawRect(0, 0, Constant.width, Constant.height);
 		shape.graphics.endFill();
 		// Drawing bottom strip that will contain stars 
@@ -149,7 +149,7 @@ class SubLevels extends Sprite
 		super();
 		value = param;
 		panel = new Sprite();
-		capture_bitmap = new BitmapData(Constant.width, Constant.height,true,0x00FFFFFF);
+		capture_bitmap = new BitmapData(Constant.width, Constant.height,true,0x00000000);
 		image = new Bitmap(capture_bitmap);
 		addChild(image);
 		refresh();
@@ -164,6 +164,7 @@ class SubLevels extends Sprite
 		// adding star panel
 		Constant.render_sprite.addChild(panel);
 		panel.y = Constant.height * 0.8 ;
+		capture_bitmap.fillRect(capture_bitmap.rect, 0x00000000);						// clearing everything
 		capture_bitmap.draw(Constant.render_sprite);
 		
 		// Removing all display object

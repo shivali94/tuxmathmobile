@@ -56,6 +56,20 @@ public class Deploy{
 			Scalr.Mode.AUTOMATIC,res_width,res_height);
 		resized = Scalr.crop(resized,res_width,res_height);      							// croping it 
 		saveImage("../assets/background/main_background.png",resized);   			// saving image 
+		
+		// Resizing galaxy image
+		img = loadImage("assets/background/galaxy.png");    // Loading Image 
+		resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,res_width,res_height);
+		resized = Scalr.crop(resized,res_width,res_height);      							// croping it 
+		saveImage("../assets/background/galaxy.png",resized);   			// saving image 
+		
+		// Resizing nebula
+		img = loadImage("assets/background/nebula.png");    // Loading Image 
+		resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,(int) (res_width*1.1),(int) (res_height*1.02));
+		resized = Scalr.crop(resized,(int) (res_width*1.1),(int) (res_height*1.02));      							// croping it 
+		saveImage("../assets/background/nebula.png",resized);   			// saving image 
 	}
 	
 	static void credits(int res_width, int res_height)
