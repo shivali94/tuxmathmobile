@@ -54,7 +54,7 @@ class MenuHandler extends Sprite
 		   
 		// Galaxy image
 		galaxy = new Tilesheet(Assets.getBitmapData("assets/background/galaxy.png"));
-		galaxy.addTileRect(new Rectangle(0, 0, GameConstant.stageWidth, GameConstant.stageHeight));
+		galaxy.addTileRect(new Rectangle(0, 0, galaxy.nmeBitmap.width, galaxy.nmeBitmap.height));
 		galaxy_gradient = -(1 / (main_menu_screen.planets.width - GameConstant.stageWidth)) * 0.75;
 		
 		// Adding eventlistener 

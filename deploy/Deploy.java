@@ -51,6 +51,7 @@ public class Deploy{
 	}
 	static void resizeMainBackground(int res_width, int res_height)
 	{
+		res_height = (int) (res_width*1.0/2048 * 1536);								// maintaining aspect ratio
 		BufferedImage img = loadImage("assets/background/main_background.png");    // Loading Image 
 		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
 			Scalr.Mode.AUTOMATIC,res_width,res_height);
@@ -67,8 +68,8 @@ public class Deploy{
 		// Resizing nebula
 		img = loadImage("assets/background/nebula.png");    // Loading Image 
 		resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
-			Scalr.Mode.AUTOMATIC,(int) (res_width*1.1),(int) (res_height*1.02));
-		resized = Scalr.crop(resized,(int) (res_width*1.1),(int) (res_height*1.02));      							// croping it 
+			Scalr.Mode.AUTOMATIC,(int) (res_width*1.2),(int) (res_height*1.02));
+		resized = Scalr.crop(resized,(int) (res_width*1.2),(int) (res_height*1.02));      							// croping it 
 		saveImage("../assets/background/nebula.png",resized);   			// saving image 
 	}
 	

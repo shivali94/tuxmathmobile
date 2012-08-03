@@ -67,7 +67,11 @@ class StarDust extends Sprite
 		var shape = new Sprite();
 		shape.graphics.clear();
 		shape.graphics.beginFill(0xD6C35E);
-		shape.graphics.drawCircle(0, 0, 0.02810 * GameConstant.stageHeight / 15);
+		var radius:Float = 0.02810 * GameConstant.stageHeight / 15;
+		// Atleast we should see something
+		if (radius < 0.5)
+			radius = 0.5;
+		shape.graphics.drawCircle(0, 0,radius );
 		shape.graphics.endFill();
 		// Creating dust
 		createStarDust();
