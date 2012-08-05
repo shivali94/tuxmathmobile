@@ -429,9 +429,13 @@ class AsteroidContainer  extends Sprite
 						if (asteroid.answer % level.laserValue == 0)
 						{
 							level.spaceship.show_laser(asteroid.x + asteroid.height / 2 , asteroid.y + asteroid.width / 2);
-							removeChild(asteroid);
-							asteroid.active = false;
 							asteroid_destruction.play();
+							asteroid.explode(AsteroidConstant.CENTER_EXPLOSION);
+							function eventHandler(ev:Event){
+								removeChild(asteroid);
+								asteroid.removeEventListener("Asteroid Destroyed",eventHandler);
+							}
+							asteroid.addEventListener("Asteroid Destroyed",eventHandler);
 							addSmallAsteroids(asteroid);                        // Adding small asteroids 
 							var score = asteroid.x / stageWidth / 0.75/2;		// Half score only because two more small asteroids will add having 0.25 value each	
 							if (score > 0.5)									// Maximum score is 0.5. Total score for speed will be calculate by 
