@@ -91,15 +91,19 @@ public class Deploy{
 	
 	static void resizeAsteroid(int res_width, int res_height)
 	{
-		BufferedImage img = loadImage("assets/asteroid/asteroid.png"); 		   		// Loading Image 
-		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
-			Scalr.Mode.AUTOMATIC,(int)(res_height/3) ,(int) (res_height/3));					// asteroids will be 1/3rd of the screen height 
-		saveImage("../assets/asteroid/asteroid.png",resized);   					// saving image 
-		//Resizing small asteroids 
-		img = loadImage("assets/asteroid/small_asteroid.png"); 		   		// Loading Image 
-		resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
-			Scalr.Mode.AUTOMATIC,(int)(res_height/5) ,(int) (res_height/5));					// asteroids will be 1/5th of the screen height 
-		saveImage("../assets/asteroid/small_asteroid.png",resized);   					// saving image 
+		int x;
+		for(x=0;x<3;x++)
+		{
+			BufferedImage img = loadImage("assets/asteroid/asteroid"+x+".png"); 		   		// Loading Image 
+			BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+				Scalr.Mode.AUTOMATIC,(int)(res_height/3) ,(int) (res_height/3));					// asteroids will be 1/3rd of the screen height 
+			saveImage("../assets/asteroid/asteroid"+x+".png",resized);   					// saving image 
+		}
+			//Resizing small asteroids 
+			BufferedImage img = loadImage("assets/asteroid/small_asteroid.png"); 		   		// Loading Image 
+			BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+				Scalr.Mode.AUTOMATIC,(int)(res_height/5) ,(int) (res_height/5));					// asteroids will be 1/5th of the screen height 
+			saveImage("../assets/asteroid/small_asteroid.png",resized);   					// saving image 
 	}
 	
 	static void resizeExplosion(int res_width, int res_height)

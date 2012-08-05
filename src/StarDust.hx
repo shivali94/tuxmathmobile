@@ -33,7 +33,7 @@ class StarDust extends Sprite
 	private var containerWidth:Int;
 	private var containerHeight:Int;
 	private var dustTile:Tilesheet;
-	private var update_vector:Point;
+	private var update_vector:Point;						// Used with accelerometer for giving y velocity according to device orientation 
 	private var register_sprite:Dynamic;					// Used for stardust movement effect with respect to a sprite
 	private var register_sprite_old_x:Float;
 	private var parallax_factor:Float;						// Used for parallax effect

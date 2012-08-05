@@ -35,7 +35,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 	public static function initialize()
 	{
 		matrix_dimesion = 20;                                       // It will ne divided into 20X20 matrix
-		var temp:BitmapData = Assets.getBitmapData("assets/asteroid/asteroid.png");
+		var temp:BitmapData = Assets.getBitmapData("assets/asteroid/asteroid0.png");
 		dimension = temp.width / matrix_dimesion;		// Dimension of individual cell side
 		updateListCenter = new Array<Float>();
 		updateListFront = new Array<Float>();
@@ -56,8 +56,9 @@ import com.eclecticdesignstudio.motion.Actuate;
 				vy = cast (y * dimension - center);
 				distance = cast Math.sqrt(vx * vx + vy * vy);
 				index = (y * matrix_dimesion + x) * total_values;
-				updateListCenter[index] = (Math.random() + 0.1) * vx / distance;
-				updateListCenter[index + 1] = (Math.random() + 0.1) * vy / distance;
+				// Taking 480  320 as reference
+				updateListCenter[index] = (Math.random() + 0.1) * vx / distance * GameConstant.stageWidth / 480;
+				updateListCenter[index + 1] = (Math.random() + 0.1) * vy / distance * GameConstant.stageHeight / 320;
 				updateListCenter[index + 2] = 0;								// Do not change this value
 				updateListCenter[index + 3] = Math.random() * 0.04;
 			}
@@ -69,8 +70,9 @@ import com.eclecticdesignstudio.motion.Actuate;
 				vy = cast y * dimension - center;
 				distance = cast Math.sqrt(vx * vx + vy * vy);
 				index = (y * matrix_dimesion + x) * total_values;
-				updateListFront[index] = (Math.random() - 0.3) * (temp.width - vx) / distance;
-				updateListFront[index + 1] = (Math.random() - 0.1) * vy / distance;
+				// Taking 480 X 320 as reference
+				updateListFront[index] = (Math.random() - 0.3) * (temp.width - vx) / distance * GameConstant.stageWidth / 480;
+				updateListFront[index + 1] = (Math.random() - 0.1) * vy / distance * GameConstant.stageHeight / 320;
 				updateListFront[index + 2] = 0;								// Do not change this value
 				updateListFront[index + 3] = Math.random() * 0.04;
 			}
@@ -260,7 +262,7 @@ class AsteroidContainer  extends Sprite
 		 // Adding three asteroids 
 		for (i in 0...3)
 		{
-			var temp = new Asteroid("assets/asteroid/asteroid.png","00+00=00");
+			var temp = new Asteroid("assets/asteroid/asteroid"+i+".png","00+00=00");
 			asteroids.push(temp);
 		}
 		 // Adding 6 small asteroids 
