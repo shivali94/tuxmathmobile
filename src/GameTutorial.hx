@@ -159,7 +159,6 @@ class GameTutorial extends Sprite
 		text_format = new TextFormat('Arial', 30, 0xffb717, true);
 		text_format.align = TextFormatAlign.CENTER;
 		text = new TextField();
-		addChild(new Bitmap(Assets.getBitmapData("assets/background/main_background.png")));
 		text.text = "tuxkids tuxkids tux";
 		text.text += text.text;
 		text.width = GameConstant.stageWidth * 0.7;

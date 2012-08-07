@@ -66,6 +66,7 @@ class Game
 		// Adding event listener for OK button 
 		game_tutorial.addEventListener("OK",function(ev:Event){
 			level_instance.initialize(menu_handler.level + 1, menu_handler.sublevel + 1);        // Initializing Handler
+			Lib.current.removeChild(game_tutorial);
 			Lib.current.addChild(level_instance);          										// Adding level sprite 
 			level_instance.play();
 			isPlaying = true;

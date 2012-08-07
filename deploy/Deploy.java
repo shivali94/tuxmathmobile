@@ -29,34 +29,27 @@ public class Deploy{
 	}
 	static void resizeBackground(int res_width, int res_height)
 	{
-		float sub_level_time= 3.0f;                   // time for which background will move in minutes 
-		float delta_movement=0.02f;                   // pixel at will move in one frame for avoiding flickering. (1/20 second- persistence of vision)
-		int width;
-		int height;
-		int no_of_images;
-		
-		// Calculating height and width 
-		height= (int) res_height ;
-		width= (int) ((sub_level_time*60*1000)*delta_movement) +res_width;  
-		no_of_images = width / res_width;
-		BufferedImage img = loadImage("assets/background/background_space.png");    // Loading Image 
-		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
-			Scalr.Mode.AUTOMATIC,width,height);
-		int x;
-		for(x=0;x<no_of_images;x++)
-		{
-			BufferedImage temp = Scalr.crop(resized,x*res_width,0,res_width,res_height);     // croping it 
-			saveImage("../assets/background/background_space"+x+".png",temp);   			// saving image 
-		}
-	}
-	static void resizeMainBackground(int res_width, int res_height)
-	{
 		res_height = (int) (res_width*1.0/2048 * 1536);								// maintaining aspect ratio
-		BufferedImage img = loadImage("assets/background/main_background.png");    // Loading Image 
+
+		// Resizing star
+		BufferedImage img = loadImage("assets/background/star.png");    // Loading Image 
 		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
 			Scalr.Mode.AUTOMATIC,res_width,res_height);
 		resized = Scalr.crop(resized,res_width,res_height);      							// croping it 
-		saveImage("../assets/background/main_background.png",resized);   			// saving image 
+		saveImage("../assets/background/star.png",resized);   			// saving image  
+
+		// Resizing star_cloud
+		img = loadImage("assets/background/star_cloud1.png");    // Loading Image 
+		resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,res_width,res_height);
+		resized = Scalr.crop(resized,res_width,res_height);      							// croping it 
+		saveImage("../assets/background/star_cloud1.png",resized);   			// saving image 
+
+		img = loadImage("assets/background/star_cloud2.png");    // Loading Image 
+		resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+			Scalr.Mode.AUTOMATIC,res_width,res_height);
+		resized = Scalr.crop(resized,res_width,res_height);      							// croping it 
+		saveImage("../assets/background/star_cloud2.png",resized);   			// saving image 
 		
 		// Resizing galaxy image
 		img = loadImage("assets/background/galaxy.png");    // Loading Image 
@@ -71,6 +64,16 @@ public class Deploy{
 			Scalr.Mode.AUTOMATIC,(int) (res_width*1.2),(int) (res_height*1.02));
 		resized = Scalr.crop(resized,(int) (res_width*1.2),(int) (res_height*1.02));      							// croping it 
 		saveImage("../assets/background/nebula.png",resized);   			// saving image 
+
+		float ratio = (res_width* 1.0f)/2048;
+		// Resizing small nebula
+		for(int i=1; i<= 10;i++)
+		{
+			img = loadImage("assets/background/nebula and fractals/galaxy_sprite_"+i+".png");    // Loading Image 
+			resized= Scalr.resize(img,Scalr.Method.ULTRA_QUALITY,            	// resizing image
+				Scalr.Mode.AUTOMATIC,(int)(img.getWidth() * ratio) , (int)(img.getHeight() * ratio)); 
+			saveImage("../assets/background/nebula and fractals/galaxy_sprite_"+i+".png",resized);   			// saving image
+		} 
 	}
 	
 	static void credits(int res_width, int res_height)
@@ -165,7 +168,6 @@ public class Deploy{
 		res_width=Integer.parseInt(args[0]);
 		res_height=Integer.parseInt(args[1]);
 		resizeBackground(res_width,res_height);
-		resizeMainBackground(res_width,res_height);
 		credits(res_width,res_height);
 		resizeSpaceship(res_width,res_height);
 		resizeAsteroid(res_width,res_height);

@@ -13,36 +13,30 @@ import nme.Lib;
 
 class Background extends Sprite
 {
-	private var stageWidth:Int;				// for stage width 
-	private var stageHeight:Int;			// for stage height 
+	var nebula1:Bitmap;
+	var nebula2:Bitmap;
+	var star_cloud1:Bitmap;
+	var star_cloud2:Bitmap;
 	private var deltaMovement:Float;
 	private var backroundScrollSpeed:Float;     // background scrolling speed
 	private var levelInstance:Level;
-	private var sprite1:Sprite;
-	private var sprite2:Sprite;
-	private var bitmap1:Bitmap;
-	private var bitmap2:Bitmap;
-	private static var current_sheet:Int = 0;
-	var array:Array<Float>;
+	private var limitx:Float;
 	public function new(param:Level) 
 	{
 		super();
-		stageHeight = GameConstant.stageHeight;    
-		stageWidth = GameConstant.stageWidth;
-		// Initializing bitmaps
-		bitmap1 = new Bitmap();
-		bitmap2 = new Bitmap();
+		nebula1 = new Bitmap();
+		nebula2 = new Bitmap();
+		star_cloud1 = new Bitmap(Assets.getBitmapData("assets/background/star_cloud1.png"));
+		star_cloud2 = new Bitmap(Assets.getBitmapData("assets/background/star_cloud2.png"));
+		addChild( new Bitmap(Assets.getBitmapData("assets/background/star.png")));
+		addChild(star_cloud1);
+		addChild(star_cloud2);
+		addChild(nebula1);
+		addChild(nebula2);
+		//star_cloud1.alpha = star_cloud2.alpha = 0.8;
 		levelInstance = param;
 		deltaMovement = 0.02;
 		backroundScrollSpeed = 1 * deltaMovement;
-		// Initializing sprites
-		sprite1 = new Sprite();
-		sprite2 = new Sprite();
-		// Adding bitmap to sprites
-		sprite1.addChild(bitmap1);
-		sprite2.addChild(bitmap2);
-		addChild(sprite1);
-		addChild(sprite2);
 		initializeBackground();												// Loading Background
 	}
 	
@@ -51,27 +45,25 @@ class Background extends Sprite
 	====================================================================================================*/
 	public  function initializeBackground()
 	{
-		bitmap1.bitmapData = Assets.getBitmapData("assets/background/background_space0.png");
-		bitmap2.bitmapData = Assets.getBitmapData("assets/background/background_space1.png");
-		sprite1.x = 0;
-		sprite2.x = sprite1.x + sprite1.width;
-		current_sheet = 2;
+		nebula1.bitmapData = Assets.getBitmapData("assets/background/nebula and fractals/galaxy_sprite_1.png");
+		nebula1.x = Lib.current.stage.stageWidth * (0.15 + 0.25 * Math.random());
+		nebula1.y = Lib.current.stage.stageHeight * 0.1 * Math.random();
+		nebula2.bitmapData = Assets.getBitmapData("assets/background/nebula and fractals/galaxy_sprite_2.png");
+		nebula2.x = Lib.current.stage.stageWidth * (0.65 + (Math.random() / 5));
+		nebula2.y = Lib.current.stage.stageHeight * (0.6 + (0.15 * Math.random()));
+		limitx = -star_cloud1.width;
+		star_cloud2.x = star_cloud1.width;
 	}
 	public function scrollBackground()
 	{
-		sprite1.x -= levelInstance.diffTime * backroundScrollSpeed;  
-		sprite2.x -= levelInstance.diffTime * backroundScrollSpeed;  
+		star_cloud1.x -= levelInstance.diffTime * backroundScrollSpeed;  
+		star_cloud2.x -= levelInstance.diffTime * backroundScrollSpeed;  
 
-		if (sprite1.x < -sprite1.width) {
-			bitmap1.bitmapData = Assets.getBitmapData("assets/background/background_space" + current_sheet + ".png");
-			sprite1.x = sprite2.x + sprite2.width;								// Placing sprite 
-			current_sheet++;
-		}else 
-			if (sprite2.x < -sprite2.width) {
-				bitmap2.bitmapData = Assets.getBitmapData("assets/background/background_space" + current_sheet + ".png");					 // Drawing new background to sprite 
-				sprite2.x = sprite1.x + sprite1.width;								// Placing sprite 
-				current_sheet++;
-			}
+		if (star_cloud1.x <= limitx) 
+			star_cloud1.x = star_cloud2.x + star_cloud2.width;								// Placing sprite 
+		else 
+			if (star_cloud2.x <= limitx) 			
+				star_cloud2.x = star_cloud1.x + star_cloud1.width;								// Placing sprite 
 	}
 	
 }
