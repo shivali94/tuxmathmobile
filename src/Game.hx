@@ -50,7 +50,7 @@ class Game
 	}
 	
 	// It will be responsible for loading main screen which will show all levels and sublevel with their corresponding star
-	public function mainGameScreen()
+	private function mainGameScreen()
 	{
 		//This should be done first so that initial loading time is low 
 		Lib.current.addChild(menu_handler);
@@ -64,13 +64,15 @@ class Game
 		Lib.current.removeChild(menu_handler);							// removing menu handler 
 		Lib.current.addChild(game_tutorial);
 		// Adding event listener for OK button 
-		game_tutorial.addEventListener("OK",function(ev:Event){
-			level_instance.initialize(menu_handler.level + 1, menu_handler.sublevel + 1);        // Initializing Handler
+		function call_back (ev:Event) {
+			game_tutorial.removeEventListener("OK", call_back);
 			Lib.current.removeChild(game_tutorial);
+			level_instance.initialize(menu_handler.level + 1, menu_handler.sublevel + 1);        // Initializing Handler
 			Lib.current.addChild(level_instance);          										// Adding level sprite 
 			level_instance.play();
 			isPlaying = true;
-		});
+		}
+		game_tutorial.addEventListener("OK",call_back);
 	}
 	
 	function gameComplete(ev:Event) {
