@@ -82,7 +82,7 @@ class Level extends Sprite
 	//This function will be called every time new level or sublevel starts  
 	public function initialize(level:Int , sublevel:Int)
 	{
-		background.initializeBackground();					// Resetting Background 
+		background.initializeBackground(level,sublevel);	// Resetting Background 
 		level_timer.reset();								// Resetting level timer 
 		stats.reset();										// Resetting level stats 
 		asteroid.stop();									// Making sure everything is clean before starting 

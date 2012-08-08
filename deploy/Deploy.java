@@ -38,18 +38,16 @@ public class Deploy{
 		resized = Scalr.crop(resized,res_width,res_height);      							// croping it 
 		saveImage("../assets/background/star.png",resized);   			// saving image  
 
-		// Resizing star_cloud
-		img = loadImage("assets/background/star_cloud1.png");    // Loading Image 
-		resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
-			Scalr.Mode.AUTOMATIC,res_width,res_height);
-		resized = Scalr.crop(resized,res_width,res_height);      							// croping it 
-		saveImage("../assets/background/star_cloud1.png",resized);   			// saving image 
+		for(int i=1; i<= 4;i++)
+		{
+			// Resizing star_cloud
+			img = loadImage("assets/background/cloud"+i+".png");    // Loading Image 
+			resized= Scalr.resize(img,Scalr.Method.ULTRA_QUALITY,            	// resizing image
+				Scalr.Mode.AUTOMATIC,res_width,res_height);
+			resized = Scalr.crop(resized,res_width,res_height);      							// croping it 
+			saveImage("../assets/background/cloud"+i+".png",resized);   			// saving image 
+		}
 
-		img = loadImage("assets/background/star_cloud2.png");    // Loading Image 
-		resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
-			Scalr.Mode.AUTOMATIC,res_width,res_height);
-		resized = Scalr.crop(resized,res_width,res_height);      							// croping it 
-		saveImage("../assets/background/star_cloud2.png",resized);   			// saving image 
 		
 		// Resizing galaxy image
 		img = loadImage("assets/background/galaxy.png");    // Loading Image 
