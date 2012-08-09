@@ -92,7 +92,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 	}
  }
 class Asteroid extends Sprite {
-	private var asteroidBitmap:Bitmap;
+	public var asteroidBitmap:Bitmap;
 	public var text:TextField;
 	public var active:Bool;									// Indicate whether asteroid is active or not 
 	public var answer:Int;
@@ -301,6 +301,7 @@ class AsteroidContainer  extends Sprite
 	// This function will be used to set speed of asteroid based on game level.
 	public function setAsteroidSpeed(speed:Float)
 	{
+		asteroidLimit = level.spaceship.x + level.spaceship.width;   //TODO FIXME I have to change it's position as it is showing a wierd behaviour when we update small asteroids 
 		asteroidSpeed = adjustDeltaMovement * speed; //Adjusting speed of asteroid according to level. Don't manipulate adjustDeltaMovement
 	}
 	
@@ -377,7 +378,7 @@ class AsteroidContainer  extends Sprite
 			addFactroidAsteroid(param);
 	}
 	
-	public function addSmallAsteroids(param:Asteroid)
+	public function addSmallAsteroids(param:Asteroid,position:Float)
 	{
 		//Adding first asteroid
 		for (small_asteroid in small_asteroids)
@@ -385,7 +386,7 @@ class AsteroidContainer  extends Sprite
 			if (small_asteroid.active == true)
 				continue;
 			small_asteroid.x =  param.x;                                 
-			small_asteroid.y = param.y - param.width * 0.3;
+			small_asteroid.y = position - param.asteroidBitmap.height * 0.3;
 			small_asteroid.answer = level.laserValue;  
 			small_asteroid.initializeText(small_asteroid.answer + "");
 			addChild(small_asteroid);
@@ -397,7 +398,7 @@ class AsteroidContainer  extends Sprite
 			if (small_asteroid.active == true)
 				continue;
 			small_asteroid.x =  param.x;                              
-			small_asteroid.y = param.y + param.width * 0.3;
+			small_asteroid.y = position + param.asteroidBitmap.height * 0.3;
 			small_asteroid.answer = cast param.answer / level.laserValue;  
 			small_asteroid.initializeText(small_asteroid.answer + "");
 			addChild(small_asteroid);
@@ -461,7 +462,7 @@ class AsteroidContainer  extends Sprite
 								asteroid.removeEventListener("Asteroid Destroyed",eventHandler);
 							}
 							asteroid.addEventListener("Asteroid Destroyed",eventHandler);
-							addSmallAsteroids(asteroid);                        // Adding small asteroids 
+							addSmallAsteroids(asteroid,asteroid.y);                        // Adding small asteroids 
 							var score = asteroid.x / stageWidth / 0.75/2;		// Half score only because two more small asteroids will add having 0.25 value each	
 							if (score > 0.5)									// Maximum score is 0.5. Total score for speed will be calculate by 
 								score = 0.5;									// total_sum/total_no_of_question 
@@ -477,7 +478,6 @@ class AsteroidContainer  extends Sprite
 	var asteroid_pieces_delta:Float;						// Used for updating asteroid pieces 
 	public function handleAsteroid()						// This function will be responsible for updating  asteroid and autodestruction
 	{
-		asteroidLimit = level.spaceship.x + level.spaceship.width;
 		// For big main asteroids 
 		for (asteroid in asteroids)
 		{
