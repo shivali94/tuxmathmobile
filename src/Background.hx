@@ -39,6 +39,7 @@ class Background extends Sprite
 		deltaMovement = 0.02;
 		backroundScrollSpeed = 1 * deltaMovement;
 		star_cloud2.x = star_cloud1.width + star_cloud1.x;
+		star_cloud1.alpha = star_cloud2.alpha = 0.8;
 	}
 	
 	/*===================================================================================================

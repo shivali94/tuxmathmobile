@@ -246,6 +246,10 @@ class AsteroidContainer  extends Sprite
 	var asteroid_destruction:Sound;
 	var asteroidLimit:Float; 
 	var stageWidth:Int;
+	var asteroid_pieces_sprite:Sprite;
+	var asteroid_pieces_tile:Tilesheet;
+	var asteroid_piece_dimension:Float;
+	var drawList:Array<Float>;
 	public function new(level_instance:Level) 
 	{
 		super();
@@ -270,6 +274,27 @@ class AsteroidContainer  extends Sprite
 		{
 			var temp = new SmallAsteroid();
 			small_asteroids.push(temp);
+		}
+		
+		// Adding asteroid_pieces_sprite
+		asteroid_pieces_sprite  = new Sprite();
+		addChild(asteroid_pieces_sprite);
+		asteroid_pieces_tile = new Tilesheet(Assets.getBitmapData("assets/asteroid/asteroid_pieces.png"));
+		asteroid_piece_dimension = asteroid_pieces_tile.nmeBitmap.width / 4;
+		for (y in 0...4)
+			for (x in 0...4)
+				asteroid_pieces_tile.addTileRect(new Rectangle(x * asteroid_piece_dimension, y * asteroid_piece_dimension,
+						asteroid_piece_dimension, asteroid_piece_dimension));
+		drawList = new Array<Float>();
+		// Initializing asteroid pieces position 
+		var index:Int;
+		for (i in 0...16)
+		{
+			index = i * 4;
+			drawList[index] = Math.random() * GameConstant.stageWidth;
+			drawList[index+1] = Math.random() * GameConstant.stageHeight;
+			drawList[index + 2] = i;
+			drawList[index + 3] = Math.random() - 0.6;
 		}
 	}
 	
@@ -448,6 +473,8 @@ class AsteroidContainer  extends Sprite
 		return {result:false,score:0.0};           //Nothing found return 
 	}
 	
+	var index:Int;
+	var asteroid_pieces_delta:Float;						// Used for updating asteroid pieces 
 	public function handleAsteroid()						// This function will be responsible for updating  asteroid and autodestruction
 	{
 		asteroidLimit = level.spaceship.x + level.spaceship.width;
@@ -483,6 +510,27 @@ class AsteroidContainer  extends Sprite
 				asteroid_destruction.play();
 			}
 		}
+		
+		// Animating asteroid pieces 
+		asteroid_pieces_sprite.graphics.clear();
+		asteroid_pieces_delta = 0.03 * level.diffTime;    // Time based animation
+		for (i in 0...16)
+		{
+			asteroid_pieces_delta *= 0.95;
+			index = i * 4;
+			drawList[index] -= asteroid_pieces_delta;
+			//drawList[i + 1] = ;                     No need to do it 
+			drawList[index + 2] = i;
+			// drawList[i + 3] ;                      Do not change it 
+			if (drawList[index]< -asteroid_piece_dimension)
+			{
+				drawList[index] = GameConstant.stageWidth;
+				drawList[index + 1] = Math.random() * GameConstant.stageHeight;
+				drawList[index + 2] = i;
+				drawList[index + 3] = Math.random() - 0.6;
+			}
+		}
+		asteroid_pieces_tile.drawTiles(asteroid_pieces_sprite.graphics, drawList, false, Tilesheet.TILE_ROTATION);
 	}
 	
 	// It is used to refresh everything and stop everything  

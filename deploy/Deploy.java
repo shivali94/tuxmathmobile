@@ -103,8 +103,15 @@ public class Deploy{
 			//Resizing small asteroids 
 			BufferedImage img = loadImage("assets/asteroid/small_asteroid.png"); 		   		// Loading Image 
 			BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
-				Scalr.Mode.AUTOMATIC,(int)(res_height/5) ,(int) (res_height/5));					// asteroids will be 1/5th of the screen height 
+				Scalr.Mode.AUTOMATIC,(int)(res_height/4) ,(int) (res_height/4));					// asteroids will be 1/4th of the screen height 
 			saveImage("../assets/asteroid/small_asteroid.png",resized);   					// saving image 
+			
+			//Resizing small asteroids 
+			img = loadImage("assets/asteroid/asteroid_pieces.png"); 		   		// Loading Image 
+			x = (int)((res_height*1.0/1536)* img.getWidth() * 0.9);
+			resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
+				Scalr.Mode.AUTOMATIC, x, x);					
+			saveImage("../assets/asteroid/asteroid_pieces.png",resized);   					// saving image 
 	}
 	
 	static void resizeExplosion(int res_width, int res_height)
