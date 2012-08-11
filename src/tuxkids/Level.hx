@@ -88,7 +88,7 @@ class Level extends Sprite
 		laserValue = 0;
 		question_instance = new GenerateQuestion();
 		// This timer will be responsible for stoping a game level. Reset - initialize, start - play.
-		level_timer = new Timer(GameConstant.level_time+3000,1);               					// Adding 3 sec more  
+		level_timer = new Timer(GameConstant.level_time+7000,1);               					// Adding 7 sec more  
 		level_timer.addEventListener(TimerEvent.TIMER, stop);
 		//Timer for generating asteroid.
 		asteroid_timer = new Timer(GameConstant.level_time/GameConstant.no_of_question,GameConstant.no_of_question-1);
