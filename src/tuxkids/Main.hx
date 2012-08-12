@@ -1,5 +1,6 @@
 package tuxkids;
 
+import haxe.Timer;
 import nme.geom.Point;
 import nme.display.Bitmap;
 import nme.display.Shape;
@@ -30,11 +31,12 @@ class Main
 	static var inGameSprite:Sprite;		//Pause menu to be displayed when player is playing game.
 	static var inMenuSprite:Sprite;		//Pause menu displayed when player is choosing level or sublevel.
 	static var center:Point;			// Used to store center of stage for animation 
-	static	var resume:Sprite;			// Resume button
-	static	var main_menu:Sprite;		// Main menu button
-	static	var play:Sprite;			// Play button 
-	static	var quit:Sprite;			// Quit button
-	static	var credits:Sprite;			// Credits button 
+	static var resume:Sprite;			// Resume button
+	static var main_menu:Sprite;		// Main menu button
+	static var play:Sprite;			// Play button 
+	static var quit:Sprite;			// Quit button
+	static var credits:Sprite;			// Credits button 
+	static var loading_screen_sprite:Sprite;	//loading screen sprite 
 	/**
 	 * Function for handling back button.
 	 * @param	event
@@ -245,30 +247,54 @@ class Main
 		var stage = Lib.current.stage;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
-		GameConstant.initialize();
-		Transition.intialize();
-		var rectangle:Shape = new Shape(); // initializing variable named rectangles
-		// Initializing game variable.
-		game = new Game();
-		// Code for displaying FPS on android screen
-		rectangle.graphics.beginFill(0xFFFFFF); // choosing colour for the fill, here it is red
-		rectangle.graphics.drawRect(100,0, 80,40); // (x spacing, y spacing, width, height)
-		rectangle.graphics.endFill(); // not always needed but I like to put it in to end the fill
-		Lib.current.addChild(rectangle); // adds the rectangle to the stage
-		var tempfps = new FPS();
-		tempfps.x = 100;
-		tempfps.addEventListener(MouseEvent.CLICK, function(ev:Event) {
-			Lib.current.dispatchEvent(new KeyboardEvent(KeyboardEvent.KEY_UP, true, false,0, 27));
-		});
-		Lib.current.addChild(tempfps);
-		Lib.current.addEventListener(Event.ADDED, function(ev:Event) {
-			Lib.current.addChild(rectangle);
+		// Initializing loading screen sprite.
+		loading_screen_sprite = new Sprite();
+		// Loading load screen.
+		loading_screen(1);			
+		Timer.delay(function() {
+			GameConstant.initialize();
+			Transition.intialize();
+			var rectangle:Shape = new Shape(); // initializing variable named rectangles
+			// Initializing game variable.
+			game = new Game();
+			// Code for displaying FPS on android screen
+			rectangle.graphics.beginFill(0xFFFFFF); // choosing colour for the fill, here it is red
+			rectangle.graphics.drawRect(100,0, 80,40); // (x spacing, y spacing, width, height)
+			rectangle.graphics.endFill(); // not always needed but I like to put it in to end the fill
+			Lib.current.addChild(rectangle); // adds the rectangle to the stage
+			var tempfps = new FPS();
+			tempfps.x = 100;
+			tempfps.addEventListener(MouseEvent.CLICK, function(ev:Event) {
+				Lib.current.dispatchEvent(new KeyboardEvent(KeyboardEvent.KEY_UP, true, false,0, 27));
+			});
 			Lib.current.addChild(tempfps);
-		});
-		// Getting center co-ordnates of stage
-		center = new Point(GameConstant.stageWidth / 2, GameConstant.stageHeight / 2);
-		//First rendering sprites
-		renderSprite();
-		Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
+			Lib.current.addEventListener(Event.ADDED, function(ev:Event) {
+				Lib.current.addChild(rectangle);
+				Lib.current.addChild(tempfps);
+			});
+			// Getting center co-ordnates of stage
+			center = new Point(GameConstant.stageWidth / 2, GameConstant.stageHeight / 2);
+			//First rendering sprites
+			renderSprite();                	
+			Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
+			loading_screen(0);
+			// Playing background sound
+			game.menu_handler.sound_instance = GameConstant.background_sound.play(0, -1);
+		},1200);
 	}
+	/**
+	 * Function for load and unload loading screen. <br>
+	 * 1 for loading screen and 0 to unload it.
+	 * @param	option
+	 */
+	static function loading_screen(option:Int)
+	{
+		switch(option)
+		{
+			case 1:		loading_screen_sprite.addChild( new Bitmap(Assets.getBitmapData("assets/background/galaxy.png")));
+						Lib.current.addChild(loading_screen_sprite);
+			case 0: 	Lib.current.removeChild(loading_screen_sprite);
+		}
+	}
+	
 }

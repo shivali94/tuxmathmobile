@@ -48,8 +48,13 @@ class MenuHandler extends Sprite
 	var galaxy_sprite:Sprite;
 	var galaxy_gradient:Float;										//  Gradient for galaxy Image
 	/**
-	 * Constructor.
+	 * Used for stopping playing sound.
 	 */
+	public var sound_instance:SoundChannel;
+	
+	/**
+	 * Constructor.
+	 */										
 	public function new() 
 	{
 		super();
@@ -100,10 +105,7 @@ class MenuHandler extends Sprite
 		addChild(main_menu_screen);
 		// Playing stardust
 		GameConstant.star_dust.play();
-		// Play sound when added to stage
-		var sound_instance:SoundChannel;											// Used for stopping playing sound
-		sound_instance = GameConstant.background_sound.play(0, -1);                	// Playing background sound
-		
+	
 		GameConstant.star_dust.register(main_menu_screen.planets);					// Registering planet sprite so that stardust move wih respect to it
 		// Displaying sublevels 
 		addEventListener(MouseEvent.CLICK, function(event:MouseEvent) {

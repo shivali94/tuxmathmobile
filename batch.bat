@@ -1,1 +1,1 @@
-nme test application.nmml android 
+nme test application.nmml android -xml

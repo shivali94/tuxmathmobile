@@ -15,7 +15,10 @@ import nme.Assets;
 class Game 
 {
 	var level_instance:Level;                 	// Used for playing game.
-	var menu_handler:MenuHandler;				// Used for displaying menu.
+	/**
+	 * Used for displaying main menu.
+	 */
+	public var menu_handler:MenuHandler;			
 	var game_tutorial:GameTutorial;
 	public var isPlaying:Bool;					// Indicate whether player is actually playing game of not.
 
@@ -132,5 +135,4 @@ class Game
 		mainGameScreen();										// Star showing menu screen
 		isPlaying = false;                            			// Setting isPlaying to false.
 	}
-	
 }
