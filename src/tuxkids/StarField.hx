@@ -25,7 +25,7 @@ private class StarConstant
 	public static function initialize()
 	{
 		stageCenter = new Point(GameConstant.stageWidth / 2, GameConstant.stageHeight / 2);
-		var size = 0.04010 * GameConstant.stageHeight / 10;
+		var size = 0.04010 * GameConstant.stageHeight / 15;
 		shape = new Sprite();
 		shape.graphics.clear();
 		shape.graphics.beginFill(0xFFFFFF);
@@ -41,15 +41,11 @@ private class Star
 		public var d:Float; // distance from center
 		public var r:Float ; // angle of travel in radians
 		public var speed:Float; // applies a random speed to stars so they do not all travel at the same speed.
-		public var x:Float;
-		public var y:Float;
 		public function new()
 		{
 			r = Math.random() * 6;
 			d = Math.random() * 150;
 			speed = Math.random() * 0.0510;
-			x = 0;
-			y = 0;
 		}	
 	} 
 	
@@ -85,10 +81,13 @@ class StarField  extends Sprite
 		starfieldSprite = new Sprite();
 		addChild(starfieldSprite);
 		no_of_stars = cast GameConstant.stageWidth / 2; 
-		for(x in 0...no_of_stars) {
+		var index:Int;
+		for (x in 0...no_of_stars) {
+				index = x * 4;
 				var s:Star = new Star();
-				s.x = Math.random() * 1000;
-				s.y = Math.random() * 650;
+				// Initializing x and y co-ordinate of star.
+				drawList[index] = Math.random() * 1000;
+				drawList[index+1] = Math.random() * 650;
 				stars.push(s);
 			} 
 	}
@@ -120,13 +119,14 @@ class StarField  extends Sprite
 		{
 			index = 4 * x;
 			star = stars[x];
-			star.d*= StarConstant.acceleration + (star.speed*0.25);
-			drawList[index] = star.x = StarConstant.stageCenter.x + Math.cos(star.r) * star.d/2;
-			drawList[index + 1] = star.y = StarConstant.stageCenter.y + Math.sin(star.r) * star.d / 2;
+			star.d *= StarConstant.acceleration + (star.speed * 0.25);
+			// Updating stars positions 
+			drawList[index] = StarConstant.stageCenter.x + Math.cos(star.r) * star.d/2;
+			drawList[index + 1] = StarConstant.stageCenter.y + Math.sin(star.r) * star.d / 2;
 			//drawList[index + 2] = 0;
 			drawList[index + 3] = star.d/500; // fades in the stars as they get closer.
 			// loop star when it goes off the stage.
-			if (star.x > StarConstant.stageCenter.x *2 || star.x < 0 || star.y > StarConstant.stageCenter.y *2 || star.y < 0) {
+			if (drawList[index] > StarConstant.stageCenter.x *2 || drawList[index] < 0 || drawList[index +1] > StarConstant.stageCenter.y *2 || drawList[index+1] < 0) {
 				star.r = Math.random() * 6;
 				star.d = Math.random() * 150;
 				star.speed = Math.random() * 0.0510;

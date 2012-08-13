@@ -15,20 +15,12 @@ import nme.events.Event;
 import nme.ui.Acceleration;
 import nme.ui.Accelerometer;
 import nme.geom.Point;
-private class Dust 
-{
-	public var x:Float;
-	public var y:Float;
-	public function new ()
-	{}
-}
 
 /**
  * Class for displaying spacedust  
  */
 class StarDust extends Sprite
 {
-	private var starsArray:Array<Dust>;
 	private var drawList:Array<Float>;
 	private var starArrayLength:Int;
 	private var containerX:Int;
@@ -44,14 +36,12 @@ class StarDust extends Sprite
 	 * Creating stardust.
 	 */
 	private function createStarDust()
-	{
-		var tempStar;		
+	{	
 		for (x in 0...starArrayLength)
 		{
-			tempStar = new Dust();
-			tempStar.x = (Math.random() * containerWidth ) + containerX;
-			tempStar.y = (Math.random() * containerHeight ) + containerY;
-			starsArray.push(tempStar);
+			index = x * 3;
+			drawList[index] = (Math.random() * containerWidth ) + containerX;
+			drawList[index+1] = (Math.random() * containerHeight ) + containerY;
 		}
 		update_vector = new Point();
 		update_vector.x = 0.4;          //x = 0.2 * cos(0)^2
@@ -65,9 +55,8 @@ class StarDust extends Sprite
 	public function new ()
 	{
 		super();
-		starsArray = new Array<Dust>();
 		drawList = new Array<Float>();
-		starArrayLength = cast GameConstant.stageWidth * 1.2;
+		starArrayLength = cast GameConstant.stageWidth * 0.8;
 		parallax_factor = 1 - 1 / (GameConstant.stageWidth * 0.5);
 		containerX = 0;
 		containerY = 0;
@@ -132,7 +121,6 @@ class StarDust extends Sprite
 		register_sprite = null;
 	}
 	var index:Int;
-	var tempStar:Dust;
 	var delta:Float;
 	#if !flash
 		var temp:Acceleration;
@@ -167,36 +155,35 @@ class StarDust extends Sprite
 		for(i in 0...starArrayLength)
 		{
 			index = i * 3;
-			tempStar = starsArray[i];
 			delta *= parallax_factor;                                          // Used for producing parallax effect
-			drawList[index] = tempStar.x += delta;         
-			drawList[index + 1] = tempStar.y += update_vector.y;
+			drawList[index] += delta;         
+			drawList[index + 1] += update_vector.y;
 			//Star boundres
 			//check X boudries
-			if (tempStar.x >= containerWidth + containerX)
+			if (drawList[index] >= containerWidth + containerX)
 			{
 				//outside boundry, move to other side of container
-				tempStar.x = containerX;
-				tempStar.y = (Math.random() * containerHeight) + containerY;
+				drawList[index] = containerX;
+				drawList[index + 1] = (Math.random() * containerHeight) + containerY;
 			}
-			else if (tempStar.x <= containerX)
+			else if (drawList[index]<= containerX)
 			{
 				//outside boundry, move to other side of container
-				tempStar.x = containerWidth + containerX;
-				tempStar.y = (Math.random() * containerHeight) + containerY;
+				drawList[index] = containerWidth + containerX;
+				drawList[index+1] = (Math.random() * containerHeight) + containerY;
 			}
 			//check Y boudries
-			if (tempStar.y >= containerHeight + containerY)
+			if (drawList[index+1] >= containerHeight + containerY)
 			{
 				//outside boundry, move to other side of container
-				tempStar.x = (Math.random() * containerWidth) + containerX;
-				tempStar.y = containerY;
+				drawList[index] = (Math.random() * containerWidth) + containerX;
+				drawList[index+1] = containerY;
 			}
-			else if (tempStar.y <= containerY)
+			else if (drawList[index+1] <= containerY)
 			{
 				//outside boundry, move to other side of container
-				tempStar.x = (Math.random() * containerWidth) + containerX;
-				tempStar.y = containerHeight + containerY;
+				drawList[index] = (Math.random() * containerWidth) + containerX;
+				drawList[index+1] = containerHeight + containerY;
 			}
 		}
 		// Drawing stars
