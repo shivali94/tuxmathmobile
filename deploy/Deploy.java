@@ -118,12 +118,12 @@ public class Deploy{
 	{
 		BufferedImage img = loadImage("assets/explosion/even_frame.png"); 		   		// Loading Image 
 		BufferedImage resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
-			Scalr.Mode.AUTOMATIC,((int)(res_height/2.2))*4 ,((int)(res_height/2.2))*4);		 
+			Scalr.Mode.AUTOMATIC,(int)(res_height*1.172) ,((int)(res_height * 1.172)));		 
 		saveImage("../assets/explosion/even_frame.png",resized);   					// saving image 
 		
 		img = loadImage("assets/explosion/odd_frame.png"); 		   		// Loading Image 
 		resized= Scalr.resize(img,Scalr.Method.QUALITY,            	// resizing image
-			Scalr.Mode.AUTOMATIC,((int)(res_height/2.2))*4 ,((int)(res_height/2.2))*4);		 
+			Scalr.Mode.AUTOMATIC,(int)(res_height*1.172) ,((int)(res_height * 1.172)));		 
 		saveImage("../assets/explosion/odd_frame.png",resized);   					// saving image 
 	}
 	

@@ -39,7 +39,7 @@ class Button
 				text.setTextFormat(text_format);
 			}
 		else
-			while (text.textHeight < Height)
+			while (text.textHeight < Height && text.textHeight < 254)
 			{
 				text_format.size+=2;
 				text.setTextFormat(text_format); 

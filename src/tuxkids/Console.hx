@@ -49,7 +49,7 @@ private class Constant
 				text.setTextFormat(text_format);
 			}
 		else
-			while (text.textHeight < textSize)
+			while (text.textHeight < textSize && text.textHeight < 254)
 			{
 				text_format.size+=2;
 				text.setTextFormat(text_format);
@@ -60,7 +60,7 @@ private class Constant
 }
 
 /**
- * Class for creating buttpons for entering text.
+ * Class for creating buttons for entering text.
  */
 private class Button extends Sprite
 {
@@ -83,6 +83,8 @@ private class Button extends Sprite
 		text.x = (Constant.width - text.textWidth) / 2;
 		//text.y = (Constant.height - text.textHeight) / 2;      		// TODO no need to do this as it is automatically centered while ajusting height by margin               
 		text.height = text.textHeight;
+		// Doing so that text doesn't cut.
+		text.width = text.textWidth * 1.2;
 		touchEnd();	
 		
 		/*

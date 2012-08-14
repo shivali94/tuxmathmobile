@@ -110,9 +110,12 @@ private class Constant
 		text.setTextFormat(Constant.text_format);
 		text.scaleX = text.scaleY = Constant.scale;
 		text.height = Constant.height * 0.8;
-		text.x = (Constant.width - text.width) / 2;
-		text.selectable = false;
-		
+		text.width  = text.textWidth;
+		text.width *= 1.2;
+		if(GameConstant.stageWidth > 2000)					// Ipad resolution 
+			text.x = (Constant.width - text.width) / 4;
+		else
+			text.x = (Constant.width - text.width) / 2;
 		render_sprite = new Sprite();
 		render_sprite.addChild(shape);
 	}

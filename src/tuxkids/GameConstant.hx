@@ -33,8 +33,9 @@ class GameConstant
 		// stageWidth and stage height
 		#if (iphone)
 			// Width and Height of stage are swapped in IOS 
-			stageWidth = Lib.current.stage.stageHeight;
-			stageHeight = Lib.current.stage.stageWidth;
+			stageWidth = Lib.current.stage.stageWidth;
+			trace(Lib.current.stage.stageHeight);
+			stageHeight = Lib.current.stage.stageHeight;
 		#else
 			stageWidth = Lib.current.stage.stageWidth;
 			stageHeight = Lib.current.stage.stageHeight;

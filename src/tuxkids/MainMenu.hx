@@ -36,7 +36,10 @@ class Planet extends Sprite {
 	 * Value of planet/
 	 */
 	public var value:Int;
-	var image:Bitmap;
+	/**
+	 * Used for blitting planets.
+	 */
+	var tileplanet:Tilesheet;
 	/**
 	 * Constructor. <br>
 	 * @param	val: Value of planet.
@@ -45,8 +48,11 @@ class Planet extends Sprite {
 	{
 		super();
 		// Adding planets 
-		addChild(new Bitmap(Assets.getBitmapData("assets/planet/planet" + val + ".png")));  
+		tileplanet = new Tilesheet(Assets.getBitmapData("assets/planet/planet" + val + ".png"));
+		tileplanet.addTileRect(new Rectangle(0, 0, tileplanet.nmeBitmap.width, tileplanet.nmeBitmap.height));
+		tileplanet.drawTiles(graphics, [0, 0, 0]);
 		value = val;
+		tileplanet = null;															// Releasing memory
 	}
 }
 

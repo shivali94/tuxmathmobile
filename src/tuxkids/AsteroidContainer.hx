@@ -34,7 +34,8 @@ import com.eclecticdesignstudio.motion.Actuate;
 	public static var tile_position:Float;												// Position of the tile that is to be blit (x,y) for showing explosion effect 
 	public static function initialize()
 	{
-		matrix_dimesion = 20;                                       					// Asteroid will be divided into 20X20 matrix
+		
+		matrix_dimesion = 20 + cast (GameConstant.stageWidth*20/2048);                                       					// Asteroid will be divided into 20X20 matrix and more depending upon screen resolution.
 		var temp:BitmapData = Assets.getBitmapData("assets/asteroid/asteroid0.png");	// Loading asteroid image so that we can pre calculate all variables 
 		dimension = temp.width / matrix_dimesion;										// Dimension of individual cell side
 		updateListCenter = new Array<Float>();											// Initialing arrays
@@ -90,7 +91,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 				tile_odd.addTileRect(rect);
 			}
 		// Calculating tile position to be drawn
-		tile_position = (temp.width - tile_even.nmeBitmap.width / 4) / 2; 
+		tile_position = (temp.width - tile_even.nmeBitmap.width / 2) / 2; 
 	}
  }
  /**
@@ -243,11 +244,11 @@ class Asteroid extends Sprite {
 		if (explosion_frame <= 15 )
 		{
 			if(even_explosion_frame == true){
-				AsteroidConstant.tile_even.drawTiles(graphics, [AsteroidConstant.tile_position, AsteroidConstant.tile_position, explosion_frame]);
+				AsteroidConstant.tile_even.drawTiles(graphics, [AsteroidConstant.tile_position, AsteroidConstant.tile_position, explosion_frame,2],false, Tilesheet.TILE_SCALE);
 				even_explosion_frame = false;
 			}
 			else {
-				AsteroidConstant.tile_odd.drawTiles(graphics, [AsteroidConstant.tile_position, AsteroidConstant.tile_position, explosion_frame]);
+				AsteroidConstant.tile_odd.drawTiles(graphics, [AsteroidConstant.tile_position, AsteroidConstant.tile_position, explosion_frame,2],false, Tilesheet.TILE_SCALE);
 				even_explosion_frame = true;
 				explosion_frame++;
 			}
