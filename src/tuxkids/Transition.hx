@@ -4,6 +4,7 @@ package tuxkids;
  * @author Deepak Aggarwal
  */
 
+import nme.display.Sprite;
 import nme.display.Bitmap;
 import nme.display.BitmapData;
 import nme.Lib;
@@ -16,10 +17,10 @@ import com.eclecticdesignstudio.motion.Actuate;
 class Transition 
 {
 	static var star_field:StarField;
-	static var capture:BitmapData;
-	static var pre_image:Bitmap ;
-	static var pos_trans:BitmapData;
-	static var pos_image:Bitmap;
+	/**
+	 * Used for transition zoom effect 
+	 */
+	static var animation_sprite:Sprite;
 	static public var dispatch:EventDispatcher;
 	static public var TRANSITION_COMPLETE:String;
 	/**
@@ -28,10 +29,7 @@ class Transition
 	public static function intialize()
 	{
 		star_field = new StarField();
-		capture = new BitmapData(GameConstant.stageWidth, GameConstant.stageHeight);
-		pre_image = new Bitmap(capture);
-		pos_trans = new BitmapData(GameConstant.stageWidth, GameConstant.stageHeight);
-		pos_image = new Bitmap(pos_trans);
+		animation_sprite = new Sprite();
 		dispatch = new EventDispatcher();
 		TRANSITION_COMPLETE = "transition completed";
 	}
@@ -43,12 +41,25 @@ class Transition
 	 */
 	public static function zoomIn(add:Array<Dynamic>,remove:Array<Dynamic>,target:Dynamic) 
 	{
-		star_field.alpha = 1;
+		// Resetting star field.
+		star_field.alpha = 0;
 		star_field.visible = true;
-		capture.draw(Lib.current.stage);
-		// Removing all image and sprites that are to be remove 
+		// Resetting animation sprite.
+		animation_sprite.scaleX = animation_sprite.scaleY = 1;
+		animation_sprite.visible = true;
+		animation_sprite.alpha = 1;
+		animation_sprite.x = animation_sprite.y = 0;
+	
+		// Removing all image and sprites that are to be remove and adding them to animation sprite. 
 		for (x in 0...remove.length)
-			target.removeChild(remove[x]);
+			animation_sprite.addChild(remove[x]);
+		// Adding star field.
+		Lib.current.addChild(star_field);
+		// Adding animation sprite on the top of everything.
+		Lib.current.addChild(animation_sprite);
+		
+		
+		/*
 		// Adding all images and sprites that are to be added
 		for (x in 0...add.length)
 			target.addChild(add[x]);
@@ -60,40 +71,53 @@ class Transition
 		pos_image.x = -GameConstant.stageWidth * (pos_image.scaleX-1) / 2;
 		pos_image.y = -GameConstant.stageHeight * (pos_image.scaleY - 1) / 2;
 		target.addChild(pos_image);
+		*/
 		
-		//Adding starfield 
-		target.addChild(star_field);
-		//Adding captured screen
-		pre_image.visible = true;
-		pre_image.scaleX = pre_image.scaleY = 1;
-		pre_image.x = pre_image.y = 0;
-		pre_image.alpha = 1;
-		target.addChild(pre_image);
 		
 		//Animation
 		// Zomming captured image. 
 		var temp_instance = GameConstant.space_travel.play();						// starting space_travel time sound 
-		Actuate.tween(pre_image, 1.5, { scaleX:3, scaleY:3, alpha:0 } ).onUpdate(function() {
-			pre_image.x = -GameConstant.stageWidth * (pre_image.scaleX-1) / 2;
-			pre_image.y = -GameConstant.stageHeight * (pre_image.scaleY - 1) / 2;
+		Actuate.tween(animation_sprite, 1, { scaleX:2, scaleY:2, alpha:0 } ).onUpdate(function() {
+			animation_sprite.x = -GameConstant.stageWidth * (animation_sprite.scaleX-1) / 2;
+			animation_sprite.y = -GameConstant.stageHeight * (animation_sprite.scaleY - 1) / 2;
+			star_field.alpha = 1 - animation_sprite.alpha;
 		}).onComplete(function() {			
-			// Removing captured image 
-			target.removeChild(pre_image);
-			// Fading starfield 
+			// Removing all images and sprite from the animation sprite
+				for (x in 0...remove.length)
+					animation_sprite.removeChild(remove[x]);
+			// Resetting animation sprite.
+				animation_sprite.scaleX = animation_sprite.scaleY = 1;
+				animation_sprite.visible = true;
+				animation_sprite.alpha = 0;
+				animation_sprite.x = animation_sprite.y = 0;
+				
 			Actuate.tween(star_field, 3, { } ).onComplete(function(){
-				Actuate.tween(star_field, 0.5, { alpha:0 } ).onComplete(function() { 
-					target.removeChild(star_field); 
+				Actuate.tween(star_field, 0.5, { alpha:0 } ).onUpdate(function() { animation_sprite.alpha = 1 - star_field.alpha; } ).onComplete(function() { 
+					Lib.current.removeChild(star_field); 
 					temp_instance.stop();                                     // stoping space_transition sound 
-					star_field.stop(); } );
-					GameConstant.transition_end.play();
-					Actuate.tween(pos_image, 2, { scaleX:1, scaleY:1 }).onUpdate(function() {
-						pos_image.x = -GameConstant.stageWidth * (pos_image.scaleX-1) / 2;
-						pos_image.y = -GameConstant.stageHeight * (pos_image.scaleY - 1) / 2;
-					}).onComplete(function () {  
-						target.removeChild(pos_image); 
-						dispatch.dispatchEvent(new Event(TRANSITION_COMPLETE));
+					star_field.stop(); 
 					});
+				GameConstant.transition_end.play();
+				Actuate.tween(animation_sprite, 2, { scaleX:1, scaleY:1 }).onUpdate(function() {
+					animation_sprite.x = -GameConstant.stageWidth * (animation_sprite.scaleX-1) / 2;
+					animation_sprite.y = -GameConstant.stageHeight * (animation_sprite.scaleY - 1) / 2;
+				}).onComplete(function () {  
+					for (x in 0...add.length)
+						target.addChild(add[x]);
+					dispatch.dispatchEvent(new Event(TRANSITION_COMPLETE));
+				});
 			});
+			
+			/*Doing it here so there is no slow down while animation.*/
+			// Adding all images and sprites that are to be added
+			for (x in 0...add.length)
+				animation_sprite.addChild(add[x]);
+			animation_sprite.scaleX = animation_sprite.scaleY = 2.5;
+			animation_sprite.x = -GameConstant.stageWidth * (animation_sprite.scaleX-1) / 2;
+			animation_sprite.y = -GameConstant.stageHeight * (animation_sprite.scaleY - 1) / 2;				
+			// Adding animation sprite to stage
+			Lib.current.addChild(animation_sprite);
+			Lib.current.addChild(star_field);
 		});
 		star_field.play();	
 	}

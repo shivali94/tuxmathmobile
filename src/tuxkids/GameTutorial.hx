@@ -168,7 +168,7 @@ class GameTutorial extends Sprite
 		text_format = new TextFormat('Arial', 30, 0xffb717, true);
 		text_format.align = TextFormatAlign.CENTER;
 		text = new TextField();
-		text.text = "tuxkids tuxkids tuxkids tuxkids tuxkids tuxkids";
+		text.text = "tuxkids tuxkids tuxkids ";
 		text.text += text.text;
 		text.width = GameConstant.stageWidth * 0.7;
 		text.height = GameConstant.stageHeight * 0.6;

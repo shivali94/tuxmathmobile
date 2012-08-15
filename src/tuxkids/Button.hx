@@ -4,6 +4,8 @@ package tuxkids;
  * ...
  * @author Deepak Aggarwal
  */
+import nme.display.Bitmap;
+import nme.display.BitmapData;
 import nme.filters.DropShadowFilter;
 import nme.filters.GlowFilter;
 import nme.text.TextField;
@@ -47,18 +49,21 @@ class Button
 		text.height = text.textHeight;
 		text.width = text.textWidth * 1.1;
 		// Drawing button background.
-		var shape:Shape = new Shape();
 		var sprite:Sprite = new Sprite();
-		shape.graphics.clear();
-		shape.graphics.beginFill(color);
-		shape.graphics.drawRect(0, 0, text.width, text.height);
-		sprite.addChild(shape);
-		shape.graphics.endFill();
+		sprite.graphics.clear();
+		sprite.graphics.beginFill(color);
+		sprite.graphics.drawRect(0, 0, text.width, text.height);
+		sprite.graphics.endFill();
 		// Adding text.
 		sprite.addChild(text);
 		// Applying glow effect.
 		sprite.filters = [new GlowFilter(color, 1, 6, 6, 2, 1)];
 		// Returning sprite containing button.
-		return sprite;										
+		// Capture Image and then return in a sprite. If we didn't do this then app will crash on ipad.
+		var bitmapdata:BitmapData = new BitmapData(cast sprite.width,cast sprite.height);
+		bitmapdata.draw(sprite);
+		var return_sprite:Sprite = new Sprite();
+		return_sprite.addChild(new Bitmap(bitmapdata));
+		return return_sprite;										
 	}
 }
