@@ -25,7 +25,7 @@ private class StarConstant
 	public static function initialize()
 	{
 		stageCenter = new Point(GameConstant.stageWidth / 2, GameConstant.stageHeight / 2);
-		var size = 0.04010 * GameConstant.stageHeight / 15;
+		var size = 0.04010 * GameConstant.stageHeight / 16;
 		shape = new Sprite();
 		shape.graphics.clear();
 		shape.graphics.beginFill(0xFFFFFF);
@@ -124,7 +124,7 @@ class StarField  extends Sprite
 			drawList[index] = StarConstant.stageCenter.x + Math.cos(star.r) * star.d/2;
 			drawList[index + 1] = StarConstant.stageCenter.y + Math.sin(star.r) * star.d / 2;
 			//drawList[index + 2] = 0;
-			drawList[index + 3] = star.d/500; // fades in the stars as they get closer.
+			drawList[index + 3] = star.d/1500; // fades in the stars as they get closer.
 			// loop star when it goes off the stage.
 			if (drawList[index] > StarConstant.stageCenter.x *2 || drawList[index] < 0 || drawList[index +1] > StarConstant.stageCenter.y *2 || drawList[index+1] < 0) {
 				star.r = Math.random() * 6;

@@ -72,6 +72,14 @@ public class Deploy{
 				Scalr.Mode.AUTOMATIC,(int)(img.getWidth() * ratio) , (int)(img.getHeight() * ratio)); 
 			saveImage("../assets/background/nebula and fractals/galaxy_sprite_"+i+".png",resized);   			// saving image
 		} 
+
+		// Resizing loading screen.
+		
+		img = loadImage("assets/background/loading/loading_screen.png");    // Loading Image 
+		resized= Scalr.resize(img,Scalr.Method.ULTRA_QUALITY,            	// resizing image
+				Scalr.Mode.AUTOMATIC,(int)(img.getWidth() * ratio) , (int)(img.getHeight() * ratio)); 
+		saveImage("../assets/background/loading/loading_screen.png",resized); 
+
 	}
 	
 	static void credits(int res_width, int res_height)

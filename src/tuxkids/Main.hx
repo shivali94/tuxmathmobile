@@ -277,6 +277,7 @@ class Main
 			//First rendering sprites
 			renderSprite();                	
 			Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyHandler);
+			Lib.current.addChild(loading_screen_sprite);
 			loading_screen(0);
 			// Playing background sound
 			game.menu_handler.sound_instance = GameConstant.background_sound.play(0, -1);
@@ -291,9 +292,15 @@ class Main
 	{
 		switch(option)
 		{
-			case 1:		loading_screen_sprite.addChild( new Bitmap(Assets.getBitmapData("assets/background/galaxy.png")));
+			case 1:		loading_screen_sprite.addChild( new Bitmap(Assets.getBitmapData("assets/background/loading/loading_screen.png")));
 						Lib.current.addChild(loading_screen_sprite);
-			case 0: 	Lib.current.removeChild(loading_screen_sprite);
+						loading_screen_sprite.addEventListener(MouseEvent.MOUSE_MOVE, function(param:Event) {
+							param.stopImmediatePropagation();
+						});
+			case 0: 	Actuate.tween(loading_screen_sprite, 2, { alpha:0 } ).onComplete(function() {	
+							Lib.current.removeChild(loading_screen_sprite);
+							loading_screen_sprite = null;
+						});
 		}
 	}
 	
