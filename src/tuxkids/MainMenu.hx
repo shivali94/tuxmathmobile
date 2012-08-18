@@ -113,7 +113,7 @@ class MainMenu extends Sprite
 		velocity_limit = 0.5 * GameConstant.stageWidth / 480;            // Taking 480 X 320 resolution as reference point 
 		planets = new Planets();
 		// Scrolling rectangles
-		var bounds:Rectangle = new Rectangle( -planets.x_scale + GameConstant.stageWidth, 0, planets.x_scale-GameConstant.stageWidth, 0);
+		var bounds:Rectangle = new Rectangle( -planets.x_scale + GameConstant.stageWidth/2, 0, planets.x_scale-GameConstant.stageWidth/2, 0);
 		// Necessary so that sprite could be dragged easily 
 		var shape:Shape = new Shape();
 		shape.graphics.beginFill(0x000000);

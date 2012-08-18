@@ -68,13 +68,13 @@ class MenuHandler extends Sprite
 		
 		// background_nebula_image
 		nebula_gradient = new Point();
-		nebula_gradient.x = (background_nebula_image.width - GameConstant.stageWidth) / (main_menu_screen.planets.width - GameConstant.stageWidth);
-		nebula_gradient.y = (background_nebula_image.height - GameConstant.stageHeight) / (main_menu_screen.planets.width - GameConstant.stageWidth);
+		nebula_gradient.x = (background_nebula_image.width - GameConstant.stageWidth) / (main_menu_screen.planets.width - GameConstant.stageWidth/2);
+		nebula_gradient.y = (background_nebula_image.height - GameConstant.stageHeight) / (main_menu_screen.planets.width - GameConstant.stageWidth/2);
 		   
 		// Galaxy image
 		galaxy = new Tilesheet(Assets.getBitmapData("assets/background/galaxy.png"));
 		galaxy.addTileRect(new Rectangle(0, 0, galaxy.nmeBitmap.width, galaxy.nmeBitmap.height));
-		galaxy_gradient = -(1 / (main_menu_screen.planets.width - GameConstant.stageWidth)) * 0.75;
+		galaxy_gradient = -(1 / (main_menu_screen.planets.width - GameConstant.stageWidth/2)) * 0.75;
 		
 		// Adding eventlistener 
 		var scale:Float;
