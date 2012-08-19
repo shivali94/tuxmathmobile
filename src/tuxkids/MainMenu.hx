@@ -4,9 +4,9 @@ package tuxkids;
  * ...
  * @author Deepak Aggarwal
  */
-import com.eclecticdesignstudio.motion.actuators.FilterActuator;
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import com.eclecticdesignstudio.motion.Actuate;
+import nme.geom.Point;
+import nme.geom.Rectangle;
 import nme.display.Bitmap;
 import nme.display.Shape;
 import nme.display.Sprite;
@@ -23,6 +23,8 @@ import nme.media.SoundChannel;
 import nme.text.TextField;
 import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
+import nme.utils.Timer;
+import nme.events.TimerEvent;
 /**
  * ...
  * @author Deepak Aggarwal
@@ -59,6 +61,10 @@ class Planet extends Sprite {
 private class Planets extends Sprite 
 {
 	/**
+	 * Array containing position of planet sprites
+	 */
+	public var planet_position:Array<Float>;
+	/**
 	 * For keeping tab on x dimension of sprite.
 	 */
 	public var x_scale:Int;
@@ -68,6 +74,7 @@ private class Planets extends Sprite
 	public function new ()
 	{
 		super();
+		planet_position = new Array<Float>();
 		// Distance between two adjacent planets  
 		var distance:Int = cast GameConstant.stageWidth / 4;
 		x_scale = 0;                              						 // For keeping tab on x dimension of sprite 
@@ -84,6 +91,7 @@ private class Planets extends Sprite
 			var temp = new Planet(x);
 			temp.x = x_scale;
 			temp.y = (GameConstant.stageHeight - temp.height) / 2;     // Puting it in middle
+			planet_position[x] = x_scale + temp.width / 2;
 			x_scale += cast temp.width;
 			addChild(temp);
  		}
@@ -95,6 +103,13 @@ private class Planets extends Sprite
  */
 class MainMenu extends Sprite
 {
+	// Variable for showing information
+	var information_sprite:Sprite;
+	var information_text:TextField;
+	var information_text_format:TextFormat;
+	var information_overlay:Bitmap;
+	var update_timer:Timer;
+	
 	var start_x:Int;
 	var stop_x:Int;
 	var start_time:Int;
@@ -105,12 +120,19 @@ class MainMenu extends Sprite
 	 */
 	public var planets:Planets;
 	var velocity:Float;
-	var velocity_limit:Float;    // Threshold value of velocity for terminate scrolling of sprite 
+	var velocity_limit:Float;    // Threshold value of velocity for terminate scrolling of sprite.
+	/**
+	 * Planet which is currently visible.
+	 */
+	var visible_planet_no:Int;
+	/**
+	 * Constructor
+	 */
 	public function new()
 	{
 		super();
 		friction = 0.90;
-		velocity_limit = 0.5 * GameConstant.stageWidth / 480;            // Taking 480 X 320 resolution as reference point 
+		velocity_limit = 0.5 * GameConstant.stageWidth / 480;            // Taking 480 X 320 resolution as reference.
 		planets = new Planets();
 		// Scrolling rectangles
 		var bounds:Rectangle = new Rectangle( -planets.x_scale + GameConstant.stageWidth/2, 0, planets.x_scale-GameConstant.stageWidth/2, 0);
@@ -129,6 +151,7 @@ class MainMenu extends Sprite
 			start_time = Lib.getTimer();
 			if (this.hasEventListener(Event.ENTER_FRAME))
 				this.removeEventListener(Event.ENTER_FRAME, startMove);
+			animate_information();
 		});
 		addEventListener(MouseEvent.MOUSE_UP, function(ev:MouseEvent) {
 			planets.stopDrag();
@@ -146,7 +169,123 @@ class MainMenu extends Sprite
 			velocity =  (stop_x - start_x) / GameConstant.stageWidth / (stop_time - start_time) * 25000 ;
 			this.addEventListener(Event.ENTER_FRAME, startMove);
 		});
+		
+		information_overlay = new Bitmap(Assets.getBitmapData("assets/overlay/overlay_white.png"));
+		addChild(information_overlay);
 		addChild(planets);
+		information_sprite = new Sprite();
+		addChild(information_sprite);
+		initialize_information_sprite();
+		
+		//Code for updating information.
+		update_timer = new Timer(500, 0);
+		addEventListener(Event.ADDED_TO_STAGE, function(ev:Event) {
+			update_timer.start();
+		});
+		addEventListener(Event.REMOVED_FROM_STAGE, function(ev:Event) {
+			update_timer.stop();
+		});
+	}
+	
+	/**
+	 * Function for updating information.
+	 * @param	ev
+	 */
+	function update_information(ev:Event)
+	{
+		// Find fisrt planet which is visible 
+		for (x in 0...8)
+		{
+			if (planets.x + planets.planet_position[x] > 0 )
+			{
+				visible_planet_no = x;
+				break;
+			}
+		}
+		// Checking planet(visible_plant_no and next planet) which is nearest to the center of screen.
+		if ( Math.abs((planets.planet_position[visible_planet_no] + planets.x - GameConstant.stageWidth / 2) / (planets.planet_position[visible_planet_no + 1] + planets.x - GameConstant.stageWidth / 2)) < 1)
+			visible_planet_no = visible_planet_no + 0;
+		else
+			visible_planet_no = visible_planet_no + 1;
+			
+		switch(visible_planet_no)
+		{
+			case 0 : information_text.text = "Addition questions";
+			case 1 : information_text.text = "Subtraction questions";
+			case 2 : information_text.text = "Addition and Subtraction questions";
+			case 3 : information_text.text = "Multiplication questions";
+			case 4 : information_text.text = "Multiplication and revision questions";
+			case 5 : information_text.text = "Division questions";
+			case 6 : information_text.text = "Division and revision questions";
+			case 7 : information_text.text = "Factroid questions";
+			case 8 : information_text.text = "All types of questions";
+		}
+		information_text.setTextFormat(information_text_format);
+	}
+	
+	/**
+	 * Function for animating information.
+	 */
+	function animate_information()
+	{
+		if (!update_timer.hasEventListener(TimerEvent.TIMER))
+			update_timer.addEventListener(TimerEvent.TIMER, update_information);
+		Actuate.tween(information_sprite, 1, { alpha:0 } )
+		.onUpdate(function() {
+			// Inorder to avoid distorted animation of fading out of information_overlay.
+			if(information_overlay.alpha>=0.1)
+				information_overlay.alpha = information_sprite.alpha;
+		})
+		.onComplete(function() {
+			information_overlay.visible = true;
+			Actuate.tween(information_sprite, 3, { alpha:1 } )
+			.onUpdate(function() {
+				information_overlay.alpha = information_sprite.alpha;
+			})
+			.onComplete(function() {
+				Actuate.tween(information_overlay, 0.8, { alpha:0 } );
+			});
+		});
+	}
+	/**
+	 * Function for initializing information sprite.
+	 */
+	function initialize_information_sprite()
+	{
+		information_text =  new TextField();
+		information_text_format = new TextFormat('Arial', 30, 0xffffff);
+		information_text_format.align = TextFormatAlign.CENTER;
+		information_text = new TextField();
+		information_text.text = "Slide across the screen and select a planet.";
+		information_text.setTextFormat(information_text_format);
+		var textSize:Float = GameConstant.stageWidth;                         //  Will cover 100% of button height
+		// Setting size of text. 
+		if (information_text.textWidth > textSize)
+			while (information_text.textWidth > textSize)
+			{
+				information_text_format.size--;
+				information_text.setTextFormat(information_text_format);
+			}
+		else
+			while (information_text.textWidth < textSize)
+			{
+				trace("Increasing" + information_text.textWidth);
+				information_text_format.size++;
+				information_text.setTextFormat(information_text_format); 
+			}
+			
+		information_text.width = GameConstant.stageWidth * 0.65 ;
+		information_text.height = information_text.textHeight;
+		information_text.wordWrap = true;	
+		information_text.selectable = false;
+
+		// Setting position.
+		information_text.y = GameConstant.stageHeight * 0.10;
+		information_text.x = (GameConstant.stageWidth - information_text.textWidth) / 2;
+		
+		information_overlay.alpha = 0;
+		information_overlay.visible = false;
+		information_sprite.addChild(information_text);
 	}
 	
 	/**

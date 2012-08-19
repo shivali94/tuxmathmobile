@@ -79,6 +79,17 @@ public class Deploy{
 		resized= Scalr.resize(img,Scalr.Method.ULTRA_QUALITY,            	// resizing image
 				Scalr.Mode.AUTOMATIC,(int)(img.getWidth() * ratio) , (int)(img.getHeight() * ratio)); 
 		saveImage("../assets/background/loading/loading_screen.png",resized); 
+		
+		// Resizing overlays
+		img = loadImage("assets/overlay/overlay_white.png");    // Loading Image 
+		resized= Scalr.resize(img,Scalr.Method.ULTRA_QUALITY,            	// resizing image
+				Scalr.Mode.AUTOMATIC,(int)(img.getWidth() * ratio) , (int)(img.getHeight() * ratio)); 
+		saveImage("../assets/overlay/overlay_white.png",resized); 
+		
+		img = loadImage("assets/overlay/overlay_red.png");    // Loading Image 
+		resized= Scalr.resize(img,Scalr.Method.ULTRA_QUALITY,            	// resizing image
+				Scalr.Mode.AUTOMATIC,(int)(img.getWidth() * ratio) , (int)(img.getHeight() * ratio)); 
+		saveImage("../assets/overlay/overlay_red.png",resized); 
 
 	}
 	

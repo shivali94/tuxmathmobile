@@ -138,7 +138,7 @@ class StarDust extends Sprite
 			if (temp.x < -0)									// Rotate only when mobile is tilted 
 			{
 				// r(cosx^2 + sinx^2) = r ,    angle = temp.y * 100 *1.2
-				update_vector.y = 0.6 * Math.sin(temp.y * Math.PI / 1.8);     
+				update_vector.y = 0.35 * Math.sin(temp.y * Math.PI / 1.8);     
 				//update_vector.x = 0.2 * Math.cos(temp.y * Math.PI/1.8);
 			}
 		#end
