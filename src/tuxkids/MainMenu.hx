@@ -104,8 +104,8 @@ private class Planets extends Sprite
 class MainMenu extends Sprite
 {
 	// Variable for showing information
-	var information_sprite:Sprite;
-	var information_text:TextField;
+	public var information_sprite:Sprite;
+	public var information_text:TextField;
 	var information_text_format:TextFormat;
 	var information_overlay:Bitmap;
 	var update_timer:Timer;
@@ -269,13 +269,12 @@ class MainMenu extends Sprite
 		else
 			while (information_text.textWidth < textSize)
 			{
-				trace("Increasing" + information_text.textWidth);
 				information_text_format.size++;
 				information_text.setTextFormat(information_text_format); 
 			}
 			
 		information_text.width = GameConstant.stageWidth * 0.65 ;
-		information_text.height = information_text.textHeight;
+		information_text.height = information_text.textHeight* 2.1;
 		information_text.wordWrap = true;	
 		information_text.selectable = false;
 

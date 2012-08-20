@@ -112,6 +112,8 @@ class MenuHandler extends Sprite
 			if (!Std.is(event.target, Planet))
 				return;
 				level = event.target.value;
+				// Removing in order to increase performance while zooming and to solve crashing of app on iPad 3.
+				main_menu_screen.information_sprite.removeChild(main_menu_screen.information_text);
 				// Initializing star score of sublevels
 				sublevelmenu.initializeScore(SavedData.score[level]);
 				sound_instance.stop();
@@ -158,6 +160,7 @@ class MenuHandler extends Sprite
 				{
 					sound_instance = GameConstant.background_sound.play(0, -1);
 					GameConstant.star_dust.play();										// Playing stardust again
+					main_menu_screen.information_sprite.addChild(main_menu_screen.information_text);
 					Transition.dispatch.removeEventListener(Transition.TRANSITION_COMPLETE, temp_function);
 				}
 				Transition.dispatch.addEventListener(Transition.TRANSITION_COMPLETE, temp_function); 

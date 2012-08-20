@@ -1,4 +1,5 @@
 package tuxkids;
+import haxe.Timer;
 import nme.display.BitmapData;
 import nme.display.Bitmap;
 import nme.display.Sprite;
@@ -290,6 +291,12 @@ class AsteroidContainer  extends Sprite
 	var asteroid_pieces_tile:Tilesheet;																// Tile for blitting asteroids pieces.
 	var asteroid_piece_dimension:Float;																// Dimension of a each asteroid piece in combined sprite.
 	var drawList:Array<Float>;																		// Array for drawing asteroid pieces which is used by asteroid_pieces_tile.
+	
+	// For showing warning 
+	var showing_warning:Bool;
+	var warning_overlay:Bitmap;
+	var warning_sound:Sound;
+	
 	/**
 	 * Constructor  <br>
 	 * @param	level_instance  :- Instance of level class which is used to access laservalue 
@@ -340,6 +347,13 @@ class AsteroidContainer  extends Sprite
 			drawList[index + 2] = i;
 			drawList[index + 3] = Math.random() - 0.6;
 		}
+		
+		// Initializing warning variables 
+		showing_warning = false;
+		warning_overlay = new Bitmap(Assets.getBitmapData("assets/overlay/overlay_red.png"));
+		warning_overlay.alpha = 0;
+		addChild(warning_overlay);
+		warning_sound = Assets.getSound("assets/sounds/warning.mp3");
 	}
 	
 	/**
@@ -541,6 +555,24 @@ class AsteroidContainer  extends Sprite
 		return {result:false,score:0.0};          											 //Nothing found return. 
 	}
 	
+	/**
+	 * Function for showing warning.
+	 */
+	function show_warning()
+	{
+		if (showing_warning == true)
+			return;
+		showing_warning = true;
+		warning_sound.play();
+		Actuate.tween(warning_overlay, 0.5, { alpha:1 } )
+		.onComplete(function() {
+			Actuate.tween(warning_overlay, 0.7, { alpha:0 } )
+			.onComplete(function() {
+				showing_warning = false;
+			});
+		});
+	}
+	
 	var index:Int;
 	var asteroid_pieces_delta:Float;														// Used for updating asteroid pieces.
 	/**
@@ -565,6 +597,13 @@ class AsteroidContainer  extends Sprite
 						}
 						asteroid.addEventListener("Asteroid Destroyed",eventHandler);
 				}
+				else
+				if (asteroid.x < (GameConstant.stageWidth/1.7 ))
+				{
+					if (showing_warning == false)
+						show_warning();
+				}
+				
 		}
 		
 		// For small asteroids 
