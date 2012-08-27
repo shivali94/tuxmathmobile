@@ -1,0 +1,17 @@
+==========================================================================================================
+
+						TUXMATH
+
+==========================================================================================================
+
+
+		LICENSE
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	Except as otherwise noted, the content of this folders and subfolders is 
+	licensed under the Creative Attribution-ShareAlike 3.0  License, and 
+	code samples are licensed under the MPL 2.0 License.
+
+	Copyright (c) 2012 by Tux4kids
+	
+	Author : Deepak Aggarwal 
