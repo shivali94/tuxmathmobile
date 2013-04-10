@@ -24,6 +24,7 @@ package tuxkids;
 import haxe.Timer;
 import nme.geom.Point;
 import nme.display.Bitmap;
+import nme.display.BitmapData;
 import nme.display.Shape;
 import nme.display.Sprite;
 import nme.display.StageAlign;
@@ -34,6 +35,7 @@ import nme.Lib;
 import nme.events.MouseEvent;
 import nme.display.FPS;
 import nme.Assets;
+import nme.geom.Matrix;
 import com.eclecticdesignstudio.motion.Actuate;
 /**
  * ...
@@ -313,7 +315,17 @@ class Main
 	{
 		switch(option)
 		{
-			case 1:		loading_screen_sprite.addChild( new Bitmap(Assets.getBitmapData("assets/background/loading/loading_screen.png")));
+			case 1:	
+						trace("width: "+Lib.current.stage.stageWidth);	
+						trace("height: "+Lib.current.stage.stageHeight);	
+						var matrix:Matrix = new Matrix();
+                                                var WID:Int = 1920;    // quick hack: keep original assets in 1920x1200
+                                                var HEI:Int = 1200;
+                                                matrix.scale(Lib.current.stage.stageWidth/WID, Lib.current.stage.stageHeight/HEI);
+						var loadingBitmap:BitmapData = Assets.getBitmapData("assets/background/loading/loading_screen.png");
+						var scaledLoadingBitmap:BitmapData = new BitmapData(Std.int(loadingBitmap.width*Lib.current.stage.stageWidth/WID), Std.int(loadingBitmap.height*Lib.current.stage.stageHeight/HEI), true, 0x000000);
+					        scaledLoadingBitmap.draw(loadingBitmap, matrix, null, null, true);	
+						loading_screen_sprite.addChild(new Bitmap(scaledLoadingBitmap));
 						Lib.current.addChild(loading_screen_sprite);
 						loading_screen_sprite.addEventListener(MouseEvent.MOUSE_MOVE, function(param:Event) {
 							param.stopImmediatePropagation();
