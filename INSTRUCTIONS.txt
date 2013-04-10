@@ -5,21 +5,22 @@
 
 =======================================================================
 
-	Prerequisites
-   ------------------------
+Prerequisites
+------------------------
 
  NME should be installed on your system in order to compile and should be 
  setup according to targeted platform (IOS, Android and Flash)
 
 
-	Steps for compiling 
-  ----------------------------
+Steps for compiling 
+------------------------
 
  1. Resizing all assets according to resoltion.
 	a. Go to deploy directory
-	b. execute command  -  java -cp ;imgscalr.jar Delpoy "width" "height"
+	b. execute command  -  java -cp .;imgscalr.jar Delpoy "width" "height"
 
 			where width and height will be resolution in landscape mode.
+                        # Use (:) instead of (;) in b. if on *nix/Solaris.
 
  2. Compiling it for testing 
 
