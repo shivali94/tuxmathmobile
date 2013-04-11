@@ -20,7 +20,8 @@ Steps for compiling
 	b. execute command  -  java -cp .;imgscalr.jar Delpoy "width" "height"
 
 			where width and height will be resolution in landscape mode.
-                        # Use (:) instead of (;) in b. if on *nix/Solaris.
+
+ Note: Use (:) instead of (;) in b. if on *nix/Solaris. Use dimensions (1920, 1200), as the code scales the assets assuming the original assets were for this dimension.
 
  2. Compiling it for testing 
 
