@@ -20,12 +20,16 @@
   =======================================================================================================*/
 
 package tuxkids;
+import nme.display.Bitmap;
+import nme.display.BitmapData;
 import nme.display.Sprite;
 import nme.Assets ;
 import nme.display.Bitmap;
 import nme.display.Tilesheet;
+import nme.geom.Matrix;
 import nme.geom.Rectangle;
 import nme.Lib;
+import tuxkids.Main;
 
 /**
  * ...
@@ -57,10 +61,22 @@ class Background extends Sprite
 		nebula2 = new Bitmap();
 		addChild(nebula1);
 		addChild(nebula2);
-		star_cloud1 = new Bitmap(Assets.getBitmapData("assets/background/cloud3.png"));
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+		var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+		var cloud3Data:BitmapData = Assets.getBitmapData("assets/background/cloud3.png");
+		var scaledCloud3Data:BitmapData = new BitmapData(Std.int(cloud3Data.width*widthRatio),
+		    Std.int(cloud3Data.height*heightRatio), true, 0x000000);
+		scaledCloud3Data.draw(cloud3Data, matrix, null, null, true);	
+		star_cloud1 = new Bitmap(scaledCloud3Data);
 		star_cloud2 = new Bitmap();
 		star_cloud2.bitmapData = star_cloud1.bitmapData;
-		addChild( new Bitmap(Assets.getBitmapData("assets/background/star.png")));
+		var starData:BitmapData = Assets.getBitmapData("assets/background/star.png");
+		var scaledStarData:BitmapData = new BitmapData(Std.int(starData.width*widthRatio),
+		    Std.int(starData.height*heightRatio), true, 0x000000);
+		scaledStarData.draw(starData, matrix, null, null, true);	
+		addChild(new Bitmap(scaledStarData));
 		addChild(star_cloud1);
 		addChild(star_cloud2);
 		levelInstance = param;
@@ -79,33 +95,60 @@ class Background extends Sprite
 	public  function initializeBackground(level:Int , sublevel:Int)
 	{
 		// Loading nebula Images based on level and placing then randomly.
-		nebula1.bitmapData = Assets.getBitmapData("assets/background/nebula and fractals/galaxy_sprite_"+level+".png");
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+		var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+		var nebulaData:BitmapData = Assets.getBitmapData("assets/background/nebula and fractals/galaxy_sprite_"+level+
+			".png");
+		var scaledNebulaData:BitmapData = new BitmapData(Std.int(nebulaData.width*widthRatio),
+		    Std.int(nebulaData.height*heightRatio), true, 0x000000);
+		scaledNebulaData.draw(nebulaData, matrix, null, null, true);	
+		nebula1.bitmapData = scaledNebulaData;
 		nebula1.x = Lib.current.stage.stageWidth * (0.15 + 0.25 * Math.random());
 		nebula1.y = Lib.current.stage.stageHeight * 0.1 * Math.random();
-		nebula2.bitmapData = Assets.getBitmapData("assets/background/nebula and fractals/galaxy_sprite_"+(level+1)+".png");
+		nebulaData = Assets.getBitmapData("assets/background/nebula and fractals/galaxy_sprite_"+(level+1)+".png");
+                scaledNebulaData = new BitmapData(Std.int(nebulaData.width*widthRatio), Std.int(nebulaData.height*heightRatio),
+			true, 0x000000);
+		scaledNebulaData.draw(nebulaData, matrix, null, null, true);
+		nebula2.bitmapData = scaledNebulaData;
 		nebula2.x = Lib.current.stage.stageWidth * (0.65 + (Math.random() / 5));
 		nebula2.y = Lib.current.stage.stageHeight * (0.6 + (0.15 * Math.random()));
 		
 		limitx = -star_cloud1.width;													// Initializing limitx value.
 		// Loading clouds based on level.
 		if(level <= 2){
-			star_cloud1.bitmapData = Assets.getBitmapData("assets/background/cloud1.png");
-			star_cloud2.bitmapData = star_cloud1.bitmapData;
+		    var cData:BitmapData = Assets.getBitmapData("assets/background/cloud1.png");
+                    var scaledCData:BitmapData = new BitmapData(Std.int(cData.width*widthRatio), Std.int(cData.height*heightRatio),
+			true, 0x000000);
+		    scaledCData.draw(cData, matrix, null, null, true);
+	            star_cloud1.bitmapData = scaledCData;
+		    star_cloud2.bitmapData = star_cloud1.bitmapData;
 		}	
-		else
-			if(level <= 4){
-				star_cloud1.bitmapData = Assets.getBitmapData("assets/background/cloud2.png");
-				star_cloud2.bitmapData = star_cloud1.bitmapData;
-			}	
-			else
-				if(level <= 6){
-					star_cloud1.bitmapData = Assets.getBitmapData("assets/background/cloud3.png");
-					star_cloud2.bitmapData = star_cloud1.bitmapData;
-				}	
-				else{
-					star_cloud1.bitmapData = Assets.getBitmapData("assets/background/cloud4.png");
-					star_cloud2.bitmapData = star_cloud1.bitmapData;
-				}	
+		else if(level <= 4) {
+		    var cData:BitmapData = Assets.getBitmapData("assets/background/cloud2.png");
+                    var scaledCData:BitmapData = new BitmapData(Std.int(cData.width*widthRatio), Std.int(cData.height*heightRatio),
+			true, 0x000000);
+		    scaledCData.draw(cData, matrix, null, null, true);
+	            star_cloud1.bitmapData = scaledCData;
+		    star_cloud2.bitmapData = star_cloud1.bitmapData;
+		}	
+		else if (level <= 6) {
+		    var cData:BitmapData = Assets.getBitmapData("assets/background/cloud3.png");
+                    var scaledCData:BitmapData = new BitmapData(Std.int(cData.width*widthRatio), Std.int(cData.height*heightRatio),
+			true, 0x000000);
+		    scaledCData.draw(cData, matrix, null, null, true);
+	            star_cloud1.bitmapData = scaledCData;
+		    star_cloud2.bitmapData = star_cloud1.bitmapData;
+		}	
+		else {
+		    var cData:BitmapData = Assets.getBitmapData("assets/background/cloud4.png");
+                    var scaledCData:BitmapData = new BitmapData(Std.int(cData.width*widthRatio), Std.int(cData.height*heightRatio),
+			true, 0x000000);
+		    scaledCData.draw(cData, matrix, null, null, true);
+	            star_cloud1.bitmapData = scaledCData;
+		    star_cloud2.bitmapData = star_cloud1.bitmapData;
+		}	
 	}
 	/**
 	 * Function for scrolling background using time based animation.

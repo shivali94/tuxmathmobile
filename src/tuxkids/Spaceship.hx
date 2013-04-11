@@ -20,12 +20,16 @@
   =======================================================================================================*/
 
 package tuxkids;
+import nme.display.Bitmap;
+import nme.display.BitmapData;
 import nme.display.Shape;
 import nme.display.Sprite;
 import nme.Assets;
 import nme.display.Bitmap;
 import nme.Lib;
+import nme.geom.Matrix;
 import haxe.Timer;
+import tuxkids.Main;
 
 /**
  * ...
@@ -48,7 +52,15 @@ class Spaceship extends Sprite
 	{
 		super();
 		// Loading spaceship image.
-		spaceship = new Bitmap(Assets.getBitmapData("assets/spaceship/spaceship.png"));
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+		var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+		var spaceshipData:BitmapData = Assets.getBitmapData("assets/spaceship/spaceship.png");
+		var scaledSpaceshipData:BitmapData = new BitmapData(Std.int(spaceshipData.width*widthRatio),
+			Std.int(spaceshipData.height*heightRatio), true, 0x000000);
+		scaledSpaceshipData.draw(spaceshipData, matrix, null, null, true);	
+		spaceship = new Bitmap(scaledSpaceshipData);
 		// Centering it.
 		spaceship.y = (GameConstant.stageHeight - spaceship.height) / 2;
 		// Ading it to the stage.

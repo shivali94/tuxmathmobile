@@ -29,6 +29,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 import nme.geom.Point;
 import nme.geom.Rectangle;
 import nme.display.Bitmap;
+import nme.display.BitmapData;
 import nme.display.Shape;
 import nme.display.Sprite;
 import nme.display.StageAlign;
@@ -39,6 +40,7 @@ import nme.Assets;
 import nme.events.Event;
 import nme.events.MouseEvent;
 import nme.events.TouchEvent;
+import nme.geom.Matrix;
 import nme.geom.Rectangle;
 import nme.media.SoundChannel;
 import nme.text.TextField;
@@ -46,6 +48,8 @@ import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
 import nme.utils.Timer;
 import nme.events.TimerEvent;
+import tuxkids.Main;
+
 /**
  * ...
  * @author Deepak Aggarwal
@@ -70,8 +74,16 @@ class Planet extends Sprite {
 	public function new (val:Int)
 	{
 		super();
-		// Adding planets 
-		tileplanet = new Tilesheet(Assets.getBitmapData("assets/planet/planet" + val + ".png"));
+		// Adding planets
+		var matrix:Matrix = new Matrix();
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+                matrix.scale(widthRatio, heightRatio);
+		var planetData:BitmapData = Assets.getBitmapData("assets/planet/planet" + val+ ".png");
+		var scaledPlanetData:BitmapData = new BitmapData(Std.int(planetData.width*widthRatio), 
+			Std.int(planetData.height*heightRatio), true, 0x000000);
+		scaledPlanetData.draw(planetData, matrix, null, null, true);	
+		tileplanet = new Tilesheet(scaledPlanetData);
 		tileplanet.addTileRect(new Rectangle(0, 0, tileplanet.nmeBitmap.width, tileplanet.nmeBitmap.height));
 		tileplanet.drawTiles(graphics, [0, 0, 0]);
 		value = val;
@@ -100,7 +112,15 @@ private class Planets extends Sprite
 		var distance:Int = cast GameConstant.stageWidth / 4;
 		x_scale = 0;                              						 // For keeping tab on x dimension of sprite 
 		// First displaying sun
-		var sun = new Bitmap(Assets.getBitmapData("assets/planet/sun.png"));
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+		var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+		var unscaledSun:BitmapData = Assets.getBitmapData("assets/planet/sun.png");
+		var scaledSun:BitmapData = new BitmapData(Std.int(unscaledSun.width*widthRatio),
+		Std.int(unscaledSun.height*heightRatio), true, 0x000000);
+		scaledSun.draw(unscaledSun, matrix, null, null, true);
+                var sun:Bitmap = new Bitmap(scaledSun);
 		x_scale = cast sun.width;
 		sun.x = 0;
 		sun.y = (GameConstant.stageHeight - sun.height) / 2;
@@ -191,7 +211,15 @@ class MainMenu extends Sprite
 			this.addEventListener(Event.ENTER_FRAME, startMove);
 		});
 		
-		information_overlay = new Bitmap(Assets.getBitmapData("assets/overlay/overlay_white.png"));
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+                var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+		var overlayData:BitmapData = Assets.getBitmapData("assets/overlay/overlay_white.png");
+		var scaledOverlayData:BitmapData = new BitmapData(Std.int(overlayData.width*widthRatio), 
+			Std.int(overlayData.height*heightRatio), true, 0x000000);
+		scaledOverlayData.draw(overlayData, matrix, null, null, true);	
+		information_overlay = new Bitmap(scaledOverlayData);
 		addChild(information_overlay);
 		addChild(planets);
 		information_sprite = new Sprite();

@@ -33,9 +33,11 @@ import nme.text.TextFormatAlign;
 import nme.text.TextFieldAutoSize;
 import nme.display.Tilesheet;
 import nme.events.Event;
+import nme.geom.Matrix;
 import nme.geom.Rectangle;
 import nme.feedback.Haptic;
 import com.eclecticdesignstudio.motion.Actuate;
+import tuxkids.Main;
 
 /**
  * ...
@@ -58,7 +60,15 @@ import com.eclecticdesignstudio.motion.Actuate;
 	{
 		
 		matrix_dimesion = 20 + cast (GameConstant.stageWidth*20/2048);                                       					// Asteroid will be divided into 20X20 matrix and more depending upon screen resolution.
-		var temp:BitmapData = Assets.getBitmapData("assets/asteroid/asteroid0.png");	// Loading asteroid image so that we can pre calculate all variables 
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+	        var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+                var tempData:BitmapData = Assets.getBitmapData("assets/asteroid/asteroid0.png");
+	        var scaledTempData:BitmapData = new BitmapData(Std.int(tempData.width*widthRatio),
+			Std.int(tempData.height*heightRatio), true, 0x000000);
+                scaledTempData.draw(tempData, matrix, null, null, true);
+		var temp:BitmapData = scaledTempData;	// Loading asteroid image so that we can pre calculate all variables 
 		dimension = temp.width / matrix_dimesion;										// Dimension of individual cell side
 		updateListCenter = new Array<Float>();											// Initialing arrays
 		updateListFront = new Array<Float>();
@@ -101,8 +111,20 @@ import com.eclecticdesignstudio.motion.Actuate;
 			}
 			
 		// Loading bitmap sprites into tilesheet 
-		tile_even = new Tilesheet(Assets.getBitmapData("assets/explosion/even_frame.png"));
-		tile_odd = new Tilesheet(Assets.getBitmapData("assets/explosion/odd_frame.png"));
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+	        var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+                var tempData:BitmapData = Assets.getBitmapData("assets/explosion/even_frame.png");
+	        var scaledTempData:BitmapData = new BitmapData(Std.int(tempData.width*widthRatio),
+			Std.int(tempData.height*heightRatio), true, 0x000000);
+                scaledTempData.draw(tempData, matrix, null, null, true);
+		tile_even = new Tilesheet(scaledTempData);
+                tempData = Assets.getBitmapData("assets/explosion/odd_frame.png");
+	        scaledTempData = new BitmapData(Std.int(tempData.width*widthRatio),
+			Std.int(tempData.height*heightRatio), true, 0x000000);
+                scaledTempData.draw(tempData, matrix, null, null, true);
+		tile_odd = new Tilesheet(scaledTempData);
 		// Dimension of each frame
 		var dimension = tile_even.nmeBitmap.width / 4;						
 		// Initializing frames 
@@ -351,7 +373,15 @@ class AsteroidContainer  extends Sprite
 		asteroid_pieces_sprite  = new Sprite();
 		addChild(asteroid_pieces_sprite);
 		// Initializing asteroid_pieces_tile for blitting 
-		asteroid_pieces_tile = new Tilesheet(Assets.getBitmapData("assets/asteroid/asteroid_pieces.png"));
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+	        var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+                var asteroidData:BitmapData = Assets.getBitmapData("assets/asteroid/asteroid_pieces.png");
+	        var scaledAsteroidData:BitmapData = new BitmapData(Std.int(asteroidData.width*widthRatio),
+				Std.int(asteroidData.height*heightRatio), true, 0x000000);
+                scaledAsteroidData.draw(asteroidData, matrix, null, null, true);
+		asteroid_pieces_tile = new Tilesheet(scaledAsteroidData);
 		asteroid_piece_dimension = asteroid_pieces_tile.nmeBitmap.width / 4;
 		for (y in 0...4)
 			for (x in 0...4)
@@ -371,7 +401,15 @@ class AsteroidContainer  extends Sprite
 		
 		// Initializing warning variables 
 		showing_warning = false;
-		warning_overlay = new Bitmap(Assets.getBitmapData("assets/overlay/overlay_red.png"));
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+	        var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+                var tempData:BitmapData = Assets.getBitmapData("assets/overlay/overlay_red.png");
+	        var scaledTempData:BitmapData = new BitmapData(Std.int(tempData.width*widthRatio),
+			Std.int(tempData.height*heightRatio), true, 0x000000);
+                scaledTempData.draw(tempData, matrix, null, null, true);
+		warning_overlay = new Bitmap(scaledTempData);
 		warning_overlay.alpha = 0;
 		addChild(warning_overlay);
 		warning_sound = Assets.getSound("assets/sounds/warning.mp3");

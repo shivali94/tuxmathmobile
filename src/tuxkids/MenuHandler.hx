@@ -29,6 +29,7 @@ import com.eclecticdesignstudio.motion.actuators.FilterActuator;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import nme.display.Bitmap;
+import nme.display.BitmapData;
 import nme.display.Shape;
 import nme.display.Sprite;
 import nme.display.StageAlign;
@@ -39,6 +40,7 @@ import nme.Assets;
 import nme.events.Event;
 import nme.events.MouseEvent;
 import nme.events.TouchEvent;
+import nme.geom.Matrix;
 import nme.geom.Rectangle;
 import nme.media.SoundChannel;
 import nme.text.TextField;
@@ -46,6 +48,7 @@ import nme.text.TextFormat;
 import nme.text.TextFormatAlign;
 import tuxkids.MainMenu;
 import tuxkids.SubLevelMenu;
+import tuxkids.Main;
 
  /**
   *  Class for displaying menu and submenus 
@@ -80,7 +83,15 @@ class MenuHandler extends Sprite
 	{
 		super();
 		// Loading background image.
-		background_nebula_image = new Bitmap(Assets.getBitmapData("assets/background/nebula.png"));
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+		var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+		var nebulaData:BitmapData = Assets.getBitmapData("assets/background/nebula.png");
+		var scaledNebulaData:BitmapData = new BitmapData(Std.int(nebulaData.width*widthRatio),
+			Std.int(nebulaData.height*heightRatio), true, 0x000000);
+		scaledNebulaData.draw(nebulaData, matrix, null, null, true);	
+		background_nebula_image = new Bitmap(scaledNebulaData);
 		addChild(background_nebula_image);
 		galaxy_sprite = new Sprite();
 		addChild(galaxy_sprite);
@@ -93,7 +104,15 @@ class MenuHandler extends Sprite
 		nebula_gradient.y = (background_nebula_image.height - GameConstant.stageHeight) / (main_menu_screen.planets.width - GameConstant.stageWidth/2);
 		   
 		// Galaxy image
-		galaxy = new Tilesheet(Assets.getBitmapData("assets/background/galaxy.png"));
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+		var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+		var galaxyData:BitmapData = Assets.getBitmapData("assets/background/galaxy.png");
+		var scaledGalaxyData:BitmapData = new BitmapData(Std.int(galaxyData.width*widthRatio),
+			Std.int(galaxyData.height*heightRatio), true, 0x000000);
+		scaledGalaxyData.draw(galaxyData, matrix, null, null, true);	
+		galaxy = new Tilesheet(scaledGalaxyData);
 		galaxy.addTileRect(new Rectangle(0, 0, galaxy.nmeBitmap.width, galaxy.nmeBitmap.height));
 		galaxy_gradient = -(1 / (main_menu_screen.planets.width - GameConstant.stageWidth/2)) * 0.75;
 		

@@ -40,6 +40,7 @@ import nme.Assets;
 import nme.events.Event;
 import nme.events.MouseEvent;
 import nme.events.TouchEvent;
+import nme.geom.Matrix;
 import nme.geom.Rectangle;
 import nme.media.SoundChannel;
 import nme.text.TextField;
@@ -105,10 +106,22 @@ private class Constant
 				scale = textSize / text.textHeight;				
 			}
 		// Loading star tile	
-		starTile = new Tilesheet( Assets.getBitmapData("assets/star.png"));
+                var widthRatio:Float = Lib.current.stage.stageWidth/Main.ASSETS_WIDTH;
+                var heightRatio:Float = Lib.current.stage.stageHeight/Main.ASSETS_HEIGHT;
+		var matrix:Matrix = new Matrix();
+                matrix.scale(widthRatio, heightRatio);
+                var starData:BitmapData = Assets.getBitmapData("assets/star.png");
+	        var scaledStarData:BitmapData = new BitmapData(Std.int(starData.width*widthRatio),
+			Std.int(starData.height*heightRatio), true, 0x000000);
+                scaledStarData.draw(starData, matrix, null, null, true);
+		starTile = new Tilesheet(scaledStarData);
 		starTile.addTileRect( new Rectangle(0, 0, starTile.nmeBitmap.width, starTile.nmeBitmap.height));
 		//Loading empty star tile 
-		empty_starTile = new Tilesheet( Assets.getBitmapData("assets/empty_star.png"));
+                starData = Assets.getBitmapData("assets/empty_star.png");
+	        scaledStarData = new BitmapData(Std.int(starData.width*widthRatio),
+			Std.int(starData.height*heightRatio), true, 0x000000);
+                scaledStarData.draw(starData, matrix, null, null, true);
+		empty_starTile = new Tilesheet(scaledStarData);
 		empty_starTile.addTileRect( new Rectangle(0, 0, empty_starTile.nmeBitmap.width, empty_starTile.nmeBitmap.height));
 		
 		angle_per_pixel = 0.5 * 480 / GameConstant.stageWidth;       // Taking 480 X 320 as a reference 
