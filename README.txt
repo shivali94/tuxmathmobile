@@ -1,35 +1,52 @@
 
 =======================================================================
 
-			HOW TO COMPILE IT 
+			HOW TO COMPILE IT
 
 =======================================================================
 
 Prerequisites
 ------------------------
 
- NME should be installed on your system in order to compile and should be 
+ NME should be installed on your system in order to compile and should be
  setup according to targeted platform (IOS, Android and Flash)
 
 
-Steps for compiling 
+Steps for compiling
 ------------------------
 
- 1. Resizing all assets according to resoltion.
+ 1. Resizing all assets according to resolution.
+
 	a. Go to deploy directory
-	b. execute command  -  java -cp .;imgscalr.jar Delpoy "width" "height"
 
-			where width and height will be resolution in landscape mode.
+	b. Compile the Deploy.java program by running the following:
 
- Note: Use (:) instead of (;) in b. if on *nix/Solaris. Use dimensions (1920, 1200), as the code scales the assets assuming the original assets were for this dimension.
+		# Use (:) instead of (;) in b. if on *nix/Solaris.
+		javac -cp .;imgscalr.jar Deploy.java
 
- 2. Compiling it for testing 
+
+	c. execute command
+
+		# Use (:) instead of (;) in b. if on *nix/Solaris.
+		java -cp .;imgscalr.jar Deploy "width" "height"
+
+		# (where width and height will be resolution in landscape mode.)
+
+		Use dimensions (1920, 1200), as the code scales the assets assuming
+		the original assets were for this dimension.
+
+
+
+ 2. Compiling it for testing
+
+	Go back to the root directory if not already there
 
 	For compiling it execute command
+
 		nme test application.nmml target
 
 	Where target can be:
-	  a. ios
+	  a. ios (to run in simulator add `-simulator` at the end of the command)
 	  b. android
 	  c. flash
 
