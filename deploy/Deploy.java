@@ -30,6 +30,7 @@ public class Deploy{
 	{
 		try{
 			File outfile = new File(saveas);
+			outfile.getParentFile().mkdirs();
 			ImageIO.write(resized,"png",outfile);
 		}
 		catch( Exception ex){
